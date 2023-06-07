@@ -32,3 +32,5 @@ coverage.txt
 .terraform*
 terraform*
 /examples/awslambdaechobot/awslambdaechobot
+
+.vscode
