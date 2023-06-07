@@ -343,10 +343,10 @@ func (m *Message) MessageSig() (string, int64) {
 
 func (m *Message) IsDeletable() bool {
 	fact := true
-	fact = fact && m.ForumTopicCreated != nil
-	fact = fact && m.ForumTopicEdited != nil
-	fact = fact && m.ForumTopicClosed != nil
-	fact = fact && m.ForumTopicReopened != nil
+	fact = fact && m.ForumTopicCreated == nil
+	fact = fact && m.ForumTopicEdited == nil
+	fact = fact && m.ForumTopicClosed == nil
+	fact = fact && m.ForumTopicReopened == nil
 
 	return fact
 }
