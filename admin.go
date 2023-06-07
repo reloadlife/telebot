@@ -11,17 +11,24 @@ type Rights struct {
 	// Anonymous is true, if the user's presence in the chat is hidden.
 	Anonymous bool `json:"is_anonymous"`
 
-	CanBeEdited         bool `json:"can_be_edited"`
-	CanChangeInfo       bool `json:"can_change_info"`
-	CanPostMessages     bool `json:"can_post_messages"`
-	CanEditMessages     bool `json:"can_edit_messages"`
-	CanDeleteMessages   bool `json:"can_delete_messages"`
-	CanPinMessages      bool `json:"can_pin_messages"`
-	CanInviteUsers      bool `json:"can_invite_users"`
-	CanRestrictMembers  bool `json:"can_restrict_members"`
-	CanPromoteMembers   bool `json:"can_promote_members"`
-	CanSendMessages     bool `json:"can_send_messages"`
-	CanSendMedia        bool `json:"can_send_media_messages"`
+	CanBeEdited        bool `json:"can_be_edited"`
+	CanChangeInfo      bool `json:"can_change_info"`
+	CanPostMessages    bool `json:"can_post_messages"`
+	CanEditMessages    bool `json:"can_edit_messages"`
+	CanDeleteMessages  bool `json:"can_delete_messages"`
+	CanPinMessages     bool `json:"can_pin_messages"`
+	CanInviteUsers     bool `json:"can_invite_users"`
+	CanRestrictMembers bool `json:"can_restrict_members"`
+	CanPromoteMembers  bool `json:"can_promote_members"`
+	CanSendMessages    bool `json:"can_send_messages"`
+
+	CanSendAudios     bool `json:"can_send_audios"`
+	CanSendDocuments  bool `json:"can_send_documents"`
+	CanSendPhotos     bool `json:"can_send_photos"`
+	CanSendVideos     bool `json:"can_send_videos"`
+	CanSendVideoNotes bool `json:"can_send_video_notes"`
+	CanSendVoiceNotes bool `json:"can_send_voice_notes"`
+
 	CanSendPolls        bool `json:"can_send_polls"`
 	CanSendOther        bool `json:"can_send_other_messages"`
 	CanAddPreviews      bool `json:"can_add_web_page_previews"`
@@ -50,7 +57,12 @@ func NoRestrictions() Rights {
 		CanPinMessages:      false,
 		CanPromoteMembers:   false,
 		CanSendMessages:     true,
-		CanSendMedia:        true,
+		CanSendAudios:       true,
+		CanSendDocuments:    true,
+		CanSendPhotos:       true,
+		CanSendVideos:       true,
+		CanSendVideoNotes:   true,
+		CanSendVoiceNotes:   true,
 		CanSendPolls:        true,
 		CanSendOther:        true,
 		CanAddPreviews:      true,
@@ -72,7 +84,12 @@ func AdminRights() Rights {
 		CanPinMessages:      true,
 		CanPromoteMembers:   true,
 		CanSendMessages:     true,
-		CanSendMedia:        true,
+		CanSendAudios:       true,
+		CanSendDocuments:    true,
+		CanSendPhotos:       true,
+		CanSendVideos:       true,
+		CanSendVideoNotes:   true,
+		CanSendVoiceNotes:   true,
 		CanSendPolls:        true,
 		CanSendOther:        true,
 		CanAddPreviews:      true,
@@ -124,13 +141,14 @@ func (b *Bot) Unban(chat *Chat, user *User, forBanned ...bool) error {
 //   - can send media
 //   - can send other
 //   - can add web page previews
-func (b *Bot) Restrict(chat *Chat, member *ChatMember) error {
+func (b *Bot) Restrict(chat *Chat, member *ChatMember, useIndependentChatPermissions bool) error {
 	prv, until := member.Rights, member.RestrictedUntil
 
 	params := map[string]interface{}{
-		"chat_id":    chat.Recipient(),
-		"user_id":    member.User.Recipient(),
-		"until_date": strconv.FormatInt(until, 10),
+		"chat_id":                          chat.Recipient(),
+		"user_id":                          member.User.Recipient(),
+		"until_date":                       strconv.FormatInt(until, 10),
+		"use_independent_chat_permissions": useIndependentChatPermissions,
 	}
 	embedRights(params, prv)
 

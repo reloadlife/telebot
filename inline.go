@@ -53,14 +53,7 @@ type QueryResponse struct {
 	// pagination. Offset length can’t exceed 64 bytes.
 	NextOffset string `json:"next_offset"`
 
-	// (Optional) If passed, clients will display a button with specified
-	// text that switches the user to a private chat with the bot and sends
-	// the bot a start message with the parameter switch_pm_parameter.
-	SwitchPMText string `json:"switch_pm_text,omitempty"`
-
-	// (Optional) Parameter for the start message sent to the bot when user
-	// presses the switch button.
-	SwitchPMParameter string `json:"switch_pm_parameter,omitempty"`
+	Button *InlineQueryResultsButton `json:"button,omitempty"`
 }
 
 // InlineResult represents a result of an inline query that was chosen
@@ -136,4 +129,10 @@ func inferIQR(result Result) error {
 	}
 
 	return nil
+}
+
+type InlineQueryResultsButton struct {
+	Text           string  `json:"text"`
+	WebApp         *WebApp `json:"web_app,omitempty"`
+	StartParameter string  `json:"start_parameter,omitempty"`
 }

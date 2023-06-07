@@ -154,6 +154,8 @@ type ChatMemberUpdate struct {
 	// (Optional) InviteLink which was used by the user to
 	// join the chat; for joining by invite link events only.
 	InviteLink *ChatInviteLink `json:"invite_link"`
+
+	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
 }
 
 // Time returns the moment of the change in local time.
@@ -199,6 +201,9 @@ type ChatJoinRequest struct {
 	// InviteLink is the chat invite link that was used by
 	//the user to send the join request, optional.
 	InviteLink *ChatInviteLink `json:"invite_link"`
+
+	// Identifier of a private chat with the user who sent the join request.
+	UserChatID int64 `json:"user_chat_id"`
 }
 
 // ChatInviteLink object represents an invite for a chat.

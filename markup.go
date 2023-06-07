@@ -206,10 +206,12 @@ func (r *ReplyMarkup) WebApp(text string, app *WebApp) Btn {
 type ReplyButton struct {
 	Text string `json:"text"`
 
-	Contact  bool     `json:"request_contact,omitempty"`
-	Location bool     `json:"request_location,omitempty"`
-	Poll     PollType `json:"request_poll,omitempty"`
-	WebApp   *WebApp  `json:"web_app,omitempty"`
+	Contact     bool     `json:"request_contact,omitempty"`
+	Location    bool     `json:"request_location,omitempty"`
+	Poll        PollType `json:"request_poll,omitempty"`
+	WebApp      *WebApp  `json:"web_app,omitempty"`
+	RequestUser bool     `json:"request_user_phone_number,omitempty"`
+	RequestChat bool     `json:"request_user_location,omitempty"`
 }
 
 // MarshalJSON implements json.Marshaler. It allows passing PollType as a
@@ -220,6 +222,14 @@ func (pt PollType) MarshalJSON() ([]byte, error) {
 	}{
 		Type: string(pt),
 	})
+}
+
+type SwitchInlineQueryChosenChat struct {
+	Query             string `json:"query"`
+	AllowUserChats    bool   `json:"allow_user_chats"`
+	AllowBotChats     bool   `json:"allow_bot_chats"`
+	AllowGroupChats   bool   `json:"allow_group_chats"`
+	AllowChannelChats bool   `json:"allow_channel_chats"`
 }
 
 // InlineButton represents a button displayed in the message.
@@ -237,6 +247,11 @@ type InlineButton struct {
 	InlineQueryChat string  `json:"switch_inline_query_current_chat"`
 	Login           *Login  `json:"login_url,omitempty"`
 	WebApp          *WebApp `json:"web_app,omitempty"`
+
+	RequestUser bool `json:"request_user_phone_number,omitempty"`
+	RequestChat bool `json:"request_user_location,omitempty"`
+
+	SwitchInlineQueryChosenChat *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`
 }
 
 // MarshalJSON implements json.Marshaler interface.

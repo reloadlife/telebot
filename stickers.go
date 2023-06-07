@@ -8,9 +8,9 @@ import (
 type StickerSetType = string
 
 const (
-	StickerRegular     = "regular"
-	StickerMask        = "mask"
-	StickerCustomEmoji = "custom_emoji"
+	StickerRegular     StickerSetType = "regular"
+	StickerMask        StickerSetType = "mask"
+	StickerCustomEmoji StickerSetType = "custom_emoji"
 )
 
 // StickerSet represents a sticker set.
@@ -21,7 +21,7 @@ type StickerSet struct {
 	Animated      bool           `json:"is_animated"`
 	Video         bool           `json:"is_video"`
 	Stickers      []Sticker      `json:"stickers"`
-	Thumbnail     *Photo         `json:"thumb"`
+	Thumbnail     *Photo         `json:"thumbnail"`
 	PNG           *File          `json:"png_sticker"`
 	TGS           *File          `json:"tgs_sticker"`
 	WebM          *File          `json:"webm_sticker"`
@@ -50,12 +50,13 @@ const (
 )
 
 // UploadSticker uploads a PNG file with a sticker for later use.
-func (b *Bot) UploadSticker(to Recipient, png *File) (*File, error) {
+func (b *Bot) UploadSticker(to Recipient, png *File, emoji string) (*File, error) {
 	files := map[string]File{
 		"png_sticker": *png,
 	}
 	params := map[string]string{
 		"user_id": to.Recipient(),
+		"emoji":   emoji,
 	}
 
 	data, err := b.sendFiles("uploadStickerFile", files, params)
@@ -89,7 +90,18 @@ func (b *Bot) StickerSet(name string) (*StickerSet, error) {
 }
 
 // CreateStickerSet creates a new sticker set.
+// todo: https://core.telegram.org/bots/api#createnewstickerset
+// update to the new version
 func (b *Bot) CreateStickerSet(to Recipient, s StickerSet) error {
+	params := map[string]string{
+		"user_id":          to.Recipient(),
+		"sticker_type":     s.Type,
+		"name":             s.Name,
+		"title":            s.Title,
+		"contains_masks":   strconv.FormatBool(s.ContainsMasks),
+		"needs_repainting": strconv.FormatBool(s.Type == StickerCustomEmoji),
+	}
+
 	files := make(map[string]File)
 	if s.PNG != nil {
 		files["png_sticker"] = *s.PNG
@@ -100,16 +112,6 @@ func (b *Bot) CreateStickerSet(to Recipient, s StickerSet) error {
 	if s.WebM != nil {
 		files["webm_sticker"] = *s.WebM
 	}
-
-	params := map[string]string{
-		"user_id":        to.Recipient(),
-		"sticker_type":   s.Type,
-		"name":           s.Name,
-		"title":          s.Title,
-		"emojis":         s.Emojis,
-		"contains_masks": strconv.FormatBool(s.ContainsMasks),
-	}
-
 	if s.MaskPosition != nil {
 		data, _ := json.Marshal(&s.MaskPosition)
 		params["mask_position"] = string(data)
@@ -119,26 +121,26 @@ func (b *Bot) CreateStickerSet(to Recipient, s StickerSet) error {
 	return err
 }
 
+type InputSticker struct {
+	Name         string        `json:"-"`
+	Sticker      File          `json:"-"`
+	EmojiList    [20]string    `json:"emojis"`
+	MaskPosition *MaskPosition `json:"mask_position"`
+	Keywords     [20]string    `json:"keywords"`
+}
+
 // AddSticker adds a new sticker to the existing sticker set.
-func (b *Bot) AddSticker(to Recipient, s StickerSet) error {
+// todo: test and see if it works
+func (b *Bot) AddSticker(to Recipient, s InputSticker) error {
 	files := make(map[string]File)
-	if s.PNG != nil {
-		files["png_sticker"] = *s.PNG
-	} else if s.TGS != nil {
-		files["tgs_sticker"] = *s.TGS
-	} else if s.WebM != nil {
-		files["webm_sticker"] = *s.WebM
-	}
+	files["sticker.sticker"] = s.Sticker
+
+	data, _ := json.Marshal(&s)
 
 	params := map[string]string{
 		"user_id": to.Recipient(),
 		"name":    s.Name,
-		"emojis":  s.Emojis,
-	}
-
-	if s.MaskPosition != nil {
-		data, _ := json.Marshal(&s.MaskPosition)
-		params["mask_position"] = string(data)
+		"sticker": string(data),
 	}
 
 	_, err := b.sendFiles("addStickerToSet", files, params)
@@ -171,13 +173,12 @@ func (b *Bot) DeleteSticker(sticker string) error {
 // up to 32 kilobytes in size.
 //
 // Animated sticker set thumbnail can't be uploaded via HTTP URL.
-//
 func (b *Bot) SetStickerSetThumb(to Recipient, s StickerSet) error {
 	files := make(map[string]File)
 	if s.PNG != nil {
-		files["thumb"] = *s.PNG
+		files["thumbnail"] = *s.PNG
 	} else if s.TGS != nil {
-		files["thumb"] = *s.TGS
+		files["thumbnail"] = *s.TGS
 	}
 
 	params := map[string]string{
@@ -210,3 +211,6 @@ func (b *Bot) CustomEmojiStickers(ids []string) ([]Sticker, error) {
 	}
 	return resp.Result, nil
 }
+
+// todo: https://core.telegram.org/bots/api-changelog#march-9-2023
+//   update stickers

@@ -577,7 +577,7 @@ func (b *Bot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) (*M
 		files = make(map[string]File)
 
 		thumb     *Photo
-		thumbName = "thumb"
+		thumbName = "thumbnail"
 	)
 
 	switch {

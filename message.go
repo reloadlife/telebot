@@ -260,6 +260,9 @@ type Message struct {
 	GeneralForumTopicUnhidden *GeneralForumTopicUnhidden `json:"general_forum_topic_unhidden,omitempty"`
 	WriteAccessAllowed        *WriteAccessAllowed        `json:"write_access_allowed,omitempty"`
 
+	UserShared *UserShared `json:"user_shared,omitempty"`
+	ChatShared *ChatShared `json:"chat_shared,omitempty"`
+
 	// For a service message, represents about a change in auto-delete timer settings.
 	AutoDeleteTimer *AutoDeleteTimer `json:"message_auto_delete_timer_changed,omitempty"`
 

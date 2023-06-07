@@ -18,7 +18,6 @@ type Recipient interface {
 // This is pretty cool, since it lets bots implement
 // custom Sendables for complex kind of media or
 // chat objects spanning across multiple messages.
-//
 type Sendable interface {
 	Send(*Bot, Recipient, *SendOptions) (*Message, error)
 }
@@ -402,7 +401,7 @@ func (g *Game) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 
 func thumbnailToFilemap(thumb *Photo) map[string]File {
 	if thumb != nil {
-		return map[string]File{"thumb": thumb.File}
+		return map[string]File{"thumbnail": thumb.File}
 	}
 	return nil
 }
