@@ -40,6 +40,10 @@ func (c *Callback) MessageSig() (string, int64) {
 	return c.Message.MessageSig()
 }
 
+func (c *Callback) IsDeletable() bool {
+	return true
+}
+
 // IsInline says whether message is an inline message.
 func (c *Callback) IsInline() bool {
 	return c.MessageID != ""

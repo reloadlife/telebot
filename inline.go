@@ -71,6 +71,10 @@ func (ir *InlineResult) MessageSig() (string, int64) {
 	return ir.MessageID, 0
 }
 
+func (ir *InlineResult) IsDeletable() bool {
+	return true
+}
+
 // Result represents one result of an inline query.
 type Result interface {
 	ResultID() string

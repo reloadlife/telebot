@@ -341,6 +341,16 @@ func (m *Message) MessageSig() (string, int64) {
 	return strconv.Itoa(m.ID), m.Chat.ID
 }
 
+func (m *Message) IsDeletable() bool {
+	fact := true
+	fact = fact && m.ForumTopicCreated != nil
+	fact = fact && m.ForumTopicEdited != nil
+	fact = fact && m.ForumTopicClosed != nil
+	fact = fact && m.ForumTopicReopened != nil
+
+	return fact
+}
+
 // Time returns the moment of message creation in local time.
 func (m *Message) Time() time.Time {
 	return time.Unix(m.Unixtime, 0)
@@ -448,14 +458,4 @@ func (m *Message) Media() Media {
 	default:
 		return nil
 	}
-}
-
-func (m *Message) IsDeletable() bool {
-	fact := true
-	fact = fact && m.ForumTopicCreated != nil
-	fact = fact && m.ForumTopicEdited != nil
-	fact = fact && m.ForumTopicClosed != nil
-	fact = fact && m.ForumTopicReopened != nil
-
-	return fact
 }
