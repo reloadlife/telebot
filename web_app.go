@@ -16,3 +16,7 @@ type WebAppData struct {
 	Data string `json:"data"`
 	Text string `json:"button_text"`
 }
+
+type WriteAccessAllowed struct {
+	WebAppName string `json:"web_app_name,omitempty"`
+}

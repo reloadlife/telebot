@@ -34,6 +34,8 @@ const (
 
 	// RemoveKeyboard = ReplyMarkup.RemoveKeyboard
 	RemoveKeyboard
+
+	HasSpoiler
 )
 
 type IconColor int
@@ -92,6 +94,8 @@ type SendOptions struct {
 	// Protected protects the contents of the sent message from forwarding and saving
 	Protected bool
 
+	HasSpoiler bool
+
 	IconColor         IconColor
 	IconCustomEmojiID CustomEmoji
 }
@@ -140,6 +144,8 @@ func extractOptions(how []interface{}) *SendOptions {
 				opts.ReplyMarkup.RemoveKeyboard = true
 			case Protected:
 				opts.Protected = true
+			case HasSpoiler:
+				opts.HasSpoiler = true
 			default:
 				panic("telebot: unsupported flag-option")
 			}
@@ -211,6 +217,10 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 
 	if opt.Protected {
 		params["protect_content"] = "true"
+	}
+
+	if opt.HasSpoiler {
+		params["has_spoiler"] = "true"
 	}
 
 }

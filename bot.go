@@ -684,6 +684,8 @@ func (b *Bot) Delete(msg Editable) error {
 //
 // Currently, Telegram supports only a narrow range of possible
 // actions, these are aligned as constants of this package.
+// todo: https://core.telegram.org/bots/api-changelog#december-30-2022
+// add thread_message_id
 func (b *Bot) Notify(to Recipient, action ChatAction) error {
 	if to == nil {
 		return ErrBadRecipient

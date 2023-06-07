@@ -29,6 +29,12 @@ type ForumTopic struct {
 	IconCustomEmojiID CustomEmoji `json:"icon_custom_emoji_id,omitempty"`
 }
 
+type GeneralForumTopicHidden struct {
+}
+
+type GeneralForumTopicUnhidden struct {
+}
+
 func (b *Bot) CreateTopic(where Recipient, name string, opts ...interface{}) (*ForumTopic, error) {
 	params := map[string]string{
 		"chat_id": where.Recipient(),

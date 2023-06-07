@@ -46,22 +46,24 @@ type Chat struct {
 	IsForum bool `json:"is_forum"`
 
 	// Returns only in getChat
-	Bio                      string        `json:"bio,omitempty"`
-	Photo                    *ChatPhoto    `json:"photo,omitempty"`
-	Description              string        `json:"description,omitempty"`
-	InviteLink               string        `json:"invite_link,omitempty"`
-	PinnedMessage            *Message      `json:"pinned_message,omitempty"`
-	Permissions              *Rights       `json:"permissions,omitempty"`
-	SlowMode                 int           `json:"slow_mode_delay,omitempty"`
-	StickerSet               string        `json:"sticker_set_name,omitempty"`
-	CanSetStickerSet         bool          `json:"can_set_sticker_set,omitempty"`
-	LinkedChatID             int64         `json:"linked_chat_id,omitempty"`
-	ChatLocation             *ChatLocation `json:"location,omitempty"`
-	Private                  bool          `json:"has_private_forwards,omitempty"`
-	Protected                bool          `json:"has_protected_content,omitempty"`
-	NoVoiceAndVideo          bool          `json:"has_restricted_voice_and_video_messages"`
-	ActiveUsernames          []string      `json:"active_usernames,omitempty"`
-	EmojiStatusCustomEmojiID string        `json:"emoji_status_custom_emoji_id,omitempty"`
+	Bio                          string        `json:"bio,omitempty"`
+	Photo                        *ChatPhoto    `json:"photo,omitempty"`
+	Description                  string        `json:"description,omitempty"`
+	InviteLink                   string        `json:"invite_link,omitempty"`
+	PinnedMessage                *Message      `json:"pinned_message,omitempty"`
+	Permissions                  *Rights       `json:"permissions,omitempty"`
+	SlowMode                     int           `json:"slow_mode_delay,omitempty"`
+	StickerSet                   string        `json:"sticker_set_name,omitempty"`
+	CanSetStickerSet             bool          `json:"can_set_sticker_set,omitempty"`
+	LinkedChatID                 int64         `json:"linked_chat_id,omitempty"`
+	ChatLocation                 *ChatLocation `json:"location,omitempty"`
+	Private                      bool          `json:"has_private_forwards,omitempty"`
+	Protected                    bool          `json:"has_protected_content,omitempty"`
+	NoVoiceAndVideo              bool          `json:"has_restricted_voice_and_video_messages"`
+	ActiveUsernames              []string      `json:"active_usernames,omitempty"`
+	EmojiStatusCustomEmojiID     string        `json:"emoji_status_custom_emoji_id,omitempty"`
+	HasHiddenMembers             bool          `json:"has_hidden_members,omitempty"`
+	HasAggressiveAntiSpamEnabled bool          `json:"has_aggressive_anti_spam_enabled,omitempty"`
 }
 
 // Recipient returns chat ID (see Recipient interface).

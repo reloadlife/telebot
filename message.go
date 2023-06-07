@@ -92,6 +92,8 @@ type Message struct {
 	// bot commands, etc. that appear in the caption.
 	CaptionEntities Entities `json:"caption_entities,omitempty"`
 
+	HasMediaSpoiler bool `json:"has_media_spoiler,omitempty"`
+
 	// For an audio recording, information about it.
 	Audio *Audio `json:"audio"`
 
@@ -253,6 +255,10 @@ type Message struct {
 	ForumTopicEdited   *ForumTopicEdited   `json:"forum_topic_edited,omitempty"`
 	ForumTopicClosed   *ForumTopicClosed   `json:"forum_topic_closed,omitempty"`
 	ForumTopicReopened *ForumTopicReopened `json:"forum_topic_reopened,omitempty"`
+
+	GeneralForumTopicHidden   *GeneralForumTopicHidden   `json:"general_forum_topic_hidden,omitempty"`
+	GeneralForumTopicUnhidden *GeneralForumTopicUnhidden `json:"general_forum_topic_unhidden,omitempty"`
+	WriteAccessAllowed        *WriteAccessAllowed        `json:"write_access_allowed,omitempty"`
 
 	// For a service message, represents about a change in auto-delete timer settings.
 	AutoDeleteTimer *AutoDeleteTimer `json:"message_auto_delete_timer_changed,omitempty"`

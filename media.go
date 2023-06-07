@@ -22,6 +22,7 @@ type InputMedia struct {
 	Thumbnail            string   `json:"thumb,omitempty"`
 	ParseMode            string   `json:"parse_mode,omitempty"`
 	Entities             Entities `json:"caption_entities,omitempty"`
+	HasSpoiler           bool     `json:"has_spoiler,omitempty"`
 	Width                int      `json:"width,omitempty"`
 	Height               int      `json:"height,omitempty"`
 	Duration             int      `json:"duration,omitempty"`
