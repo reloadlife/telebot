@@ -11,7 +11,6 @@ import (
 // flags instead.
 //
 // Supported options are defined as iota-constants.
-//
 type Option int
 
 const (
@@ -37,6 +36,19 @@ const (
 	RemoveKeyboard
 )
 
+type IconColor int
+
+const (
+	IconColorBlue      IconColor = 7322096
+	IconColorOrange    IconColor = 16766590
+	IconColorPurple    IconColor = 13338331
+	IconColorGreen     IconColor = 9367192
+	IconColorRed       IconColor = 16749490
+	IconColorOrangeRed IconColor = 16478047
+)
+
+type CustomEmoji string
+
 // Placeholder is used to set input field placeholder as a send option.
 func Placeholder(text string) *SendOptions {
 	return &SendOptions{
@@ -54,10 +66,10 @@ func Placeholder(text string) *SendOptions {
 // Despite its power, SendOptions is rather inconvenient to use all
 // the way through bot logic, so you might want to consider storing
 // and re-using it somewhere or be using Option flags instead.
-//
 type SendOptions struct {
 	// If the message is a reply, original message.
-	ReplyTo *Message
+	ReplyTo         *Message
+	ThreadMessageID *Message
 
 	// See ReplyMarkup struct definition.
 	ReplyMarkup *ReplyMarkup
@@ -79,6 +91,9 @@ type SendOptions struct {
 
 	// Protected protects the contents of the sent message from forwarding and saving
 	Protected bool
+
+	IconColor         IconColor
+	IconCustomEmojiID CustomEmoji
 }
 
 func (og *SendOptions) copy() *SendOptions {
@@ -128,6 +143,10 @@ func extractOptions(how []interface{}) *SendOptions {
 			default:
 				panic("telebot: unsupported flag-option")
 			}
+		case IconColor:
+			opts.IconColor = opt
+		case CustomEmoji:
+			opts.IconCustomEmojiID = opt
 		case ParseMode:
 			opts.ParseMode = opt
 		case Entities:
@@ -151,6 +170,10 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 
 	if opt.ReplyTo != nil && opt.ReplyTo.ID != 0 {
 		params["reply_to_message_id"] = strconv.Itoa(opt.ReplyTo.ID)
+	}
+
+	if opt.ThreadMessageID != nil && opt.ThreadMessageID.ID != 0 {
+		params["message_thread_id"] = strconv.Itoa(opt.ThreadMessageID.ID)
 	}
 
 	if opt.DisableWebPagePreview {
@@ -189,6 +212,7 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	if opt.Protected {
 		params["protect_content"] = "true"
 	}
+
 }
 
 func processButtons(keys [][]InlineButton) {

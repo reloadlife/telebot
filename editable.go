@@ -14,6 +14,7 @@ type Editable interface {
 	//
 	// For inline messages, return chatID = 0.
 	MessageSig() (messageID string, chatID int64)
+	IsDeletable() (deletable bool)
 }
 
 // StoredMessage is an example struct suitable for being

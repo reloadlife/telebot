@@ -8,7 +8,8 @@ import (
 
 // Message object represents a message.
 type Message struct {
-	ID int `json:"message_id"`
+	ID       int `json:"message_id"`
+	ThreadID int `json:"message_thread_id"`
 
 	// For message sent to channels, Sender will be nil
 	Sender *User `json:"from"`
@@ -42,6 +43,9 @@ type Message struct {
 
 	// For forwarded messages, unixtime of the original message.
 	OriginalUnixtime int `json:"forward_date"`
+
+	// For replies, the original message.
+	IsTopicMessage bool `json:"is_topic_message"`
 
 	// Message is a channel post that was automatically forwarded to the connected discussion group.
 	AutomaticForward bool `json:"is_automatic_forward"`
@@ -245,6 +249,11 @@ type Message struct {
 	// sent whenever a user in the chat triggers a proximity alert set by another user.
 	ProximityAlert *ProximityAlert `json:"proximity_alert_triggered,omitempty"`
 
+	ForumTopicCreated  *ForumTopicCreated  `json:"forum_topic_created,omitempty"`
+	ForumTopicEdited   *ForumTopicEdited   `json:"forum_topic_edited,omitempty"`
+	ForumTopicClosed   *ForumTopicClosed   `json:"forum_topic_closed,omitempty"`
+	ForumTopicReopened *ForumTopicReopened `json:"forum_topic_reopened,omitempty"`
+
 	// For a service message, represents about a change in auto-delete timer settings.
 	AutoDeleteTimer *AutoDeleteTimer `json:"message_auto_delete_timer_changed,omitempty"`
 
@@ -365,7 +374,6 @@ func (m *Message) FromChannel() bool {
 // Service messages are automatically sent messages, which
 // typically occur on some global action. For instance, when
 // anyone leaves the chat or chat title changes.
-//
 func (m *Message) IsService() bool {
 	fact := false
 
@@ -378,6 +386,12 @@ func (m *Message) IsService() bool {
 	fact = fact || m.GroupCreated || m.SuperGroupCreated
 	fact = fact || (m.MigrateTo != m.MigrateFrom)
 
+	// Forum events
+	fact = fact || m.ForumTopicCreated != nil
+	fact = fact || m.ForumTopicEdited != nil
+	fact = fact || m.ForumTopicClosed != nil
+	fact = fact || m.ForumTopicReopened != nil
+
 	return fact
 }
 
@@ -386,7 +400,6 @@ func (m *Message) IsService() bool {
 //
 // It's safer than manually slicing Text because Telegram uses
 // UTF-16 indices whereas Go string are []byte.
-//
 func (m *Message) EntityText(e MessageEntity) string {
 	text := m.Text
 	if text == "" {
@@ -426,4 +439,14 @@ func (m *Message) Media() Media {
 	default:
 		return nil
 	}
+}
+
+func (m *Message) IsDeletable() bool {
+	fact := true
+	fact = fact && m.ForumTopicCreated != nil
+	fact = fact && m.ForumTopicEdited != nil
+	fact = fact && m.ForumTopicClosed != nil
+	fact = fact && m.ForumTopicReopened != nil
+
+	return fact
 }
