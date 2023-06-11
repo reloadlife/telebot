@@ -27,3 +27,9 @@ func (g *Group) Use(middleware ...MiddlewareFunc) {
 func (g *Group) Handle(endpoint interface{}, h HandlerFunc, m ...MiddlewareFunc) {
 	g.b.Handle(endpoint, h, append(g.middleware, m...)...)
 }
+
+func (g *Group) HandleGroup(endpoints []interface{}, h HandlerFunc, m ...MiddlewareFunc) {
+	for _, endpoint := range endpoints {
+		g.Handle(endpoint, h, m...)
+	}
+}

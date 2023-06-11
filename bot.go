@@ -20,12 +20,12 @@ func NewBot(pref Settings) (*Bot, error) {
 	if pref.Updates == 0 {
 		pref.Updates = 100
 	}
-
+	
 	client := pref.Client
 	if client == nil {
 		client = &http.Client{Timeout: time.Minute}
 	}
-
+	
 	if pref.URL == "" {
 		pref.URL = DefaultApiURL
 	}
@@ -35,23 +35,23 @@ func NewBot(pref Settings) (*Bot, error) {
 	if pref.OnError == nil {
 		pref.OnError = defaultOnError
 	}
-
+	
 	bot := &Bot{
 		Token:   pref.Token,
 		URL:     pref.URL,
 		Poller:  pref.Poller,
 		onError: pref.OnError,
-
+		
 		Updates:  make(chan Update, pref.Updates),
 		handlers: make(map[string]HandlerFunc),
 		stop:     make(chan chan struct{}),
-
+		
 		synchronous: pref.Synchronous,
 		verbose:     pref.Verbose,
 		parseMode:   pref.ParseMode,
 		client:      client,
 	}
-
+	
 	if pref.Offline {
 		bot.Me = &User{}
 	} else {
@@ -61,7 +61,7 @@ func NewBot(pref Settings) (*Bot, error) {
 		}
 		bot.Me = user
 	}
-
+	
 	bot.group = bot.Group()
 	return bot, nil
 }
@@ -74,7 +74,7 @@ type Bot struct {
 	Updates chan Update
 	Poller  Poller
 	onError func(error, Context)
-
+	
 	group       *Group
 	handlers    map[string]HandlerFunc
 	synchronous bool
@@ -90,34 +90,34 @@ type Bot struct {
 type Settings struct {
 	URL   string
 	Token string
-
+	
 	// Updates channel capacity, defaulted to 100.
 	Updates int
-
+	
 	// Poller is the provider of Updates.
 	Poller Poller
-
+	
 	// Synchronous prevents handlers from running in parallel.
 	// It makes ProcessUpdate return after the handler is finished.
 	Synchronous bool
-
+	
 	// Verbose forces bot to log all upcoming requests.
 	// Use for debugging purposes only.
 	Verbose bool
-
+	
 	// ParseMode used to set default parse mode of all sent messages.
 	// It attaches to every send, edit or whatever method. You also
 	// will be able to override the default mode by passing a new one.
 	ParseMode ParseMode
-
+	
 	// OnError is a callback function that will get called on errors
 	// resulted from the handler. It is used as post-middleware function.
 	// Notice that context can be nil.
 	OnError func(error, Context)
-
+	
 	// HTTP Client used to make requests to telegram api
 	Client *http.Client
-
+	
 	// Offline allows to create a bot without network for testing purposes.
 	Offline bool
 }
@@ -172,20 +172,23 @@ var (
 // Middleware usage:
 //
 //	b.Handle("/ban", onBan, middleware.Whitelist(ids...))
+// TODO: Fix Regex Matching
 func (b *Bot) Handle(endpoint interface{}, h HandlerFunc, m ...MiddlewareFunc) {
 	if len(b.group.middleware) > 0 {
 		m = append(b.group.middleware, m...)
 	}
-
+	
 	handler := func(c Context) error {
 		return applyMiddleware(h, m...)(c)
 	}
-
+	
 	switch end := endpoint.(type) {
 	case string:
 		b.handlers[end] = handler
 	case CallbackEndpoint:
 		b.handlers[end.CallbackUnique()] = handler
+	case *regexp.Regexp:
+		b.handlers["\r"+end.String()] = handler
 	default:
 		panic("telebot: unsupported endpoint")
 	}
@@ -197,21 +200,21 @@ func (b *Bot) Start() {
 	if b.Poller == nil {
 		panic("telebot: can't start without a poller")
 	}
-
+	
 	// do nothing if called twice
 	if b.stopClient != nil {
 		return
 	}
 	b.stopClient = make(chan struct{})
-
+	
 	stop := make(chan struct{})
 	stopConfirm := make(chan struct{})
-
+	
 	go func() {
 		b.Poller.Poll(b, b.Updates, stop)
 		close(stopConfirm)
 	}()
-
+	
 	for {
 		select {
 		// handle incoming updates
@@ -270,9 +273,9 @@ func (b *Bot) Send(to Recipient, what interface{}, opts ...interface{}) (*Messag
 	if to == nil {
 		return nil, ErrBadRecipient
 	}
-
+	
 	sendOpts := extractOptions(opts)
-
+	
 	switch object := what.(type) {
 	case string:
 		return b.sendText(to, object, sendOpts)
@@ -289,18 +292,18 @@ func (b *Bot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Message, 
 	if to == nil {
 		return nil, ErrBadRecipient
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	media := make([]string, len(a))
 	files := make(map[string]File)
-
+	
 	for i, x := range a {
 		var (
 			repr string
 			data []byte
 			file = x.MediaFile()
 		)
-
+		
 		switch {
 		case file.InCloud():
 			repr = file.FileID
@@ -312,42 +315,42 @@ func (b *Bot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Message, 
 		default:
 			return nil, fmt.Errorf("telebot: album entry #%d does not exist", i)
 		}
-
+		
 		im := x.InputMedia()
 		im.Media = repr
-
+		
 		if len(sendOpts.Entities) > 0 {
 			im.Entities = sendOpts.Entities
 		} else {
 			im.ParseMode = sendOpts.ParseMode
 		}
-
+		
 		data, _ = json.Marshal(im)
 		media[i] = string(data)
 	}
-
+	
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"media":   "[" + strings.Join(media, ",") + "]",
 	}
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.sendFiles("sendMediaGroup", files, params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result []Message
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
 		return nil, wrapError(err)
 	}
-
+	
 	for attachName := range files {
 		i, _ := strconv.Atoi(attachName)
 		r := resp.Result[i]
-
+		
 		var newID string
 		switch {
 		case r.Photo != nil:
@@ -359,10 +362,10 @@ func (b *Bot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Message, 
 		case r.Document != nil:
 			newID = r.Document.FileID
 		}
-
+		
 		a[i].MediaFile().FileID = newID
 	}
-
+	
 	return resp.Result, nil
 }
 
@@ -373,7 +376,7 @@ func (b *Bot) Reply(to *Message, what interface{}, opts ...interface{}) (*Messag
 	if sendOpts == nil {
 		sendOpts = &SendOptions{}
 	}
-
+	
 	sendOpts.ReplyTo = to
 	return b.Send(to.Chat, what, sendOpts)
 }
@@ -385,21 +388,21 @@ func (b *Bot) Forward(to Recipient, msg Editable, opts ...interface{}) (*Message
 		return nil, ErrBadRecipient
 	}
 	msgID, chatID := msg.MessageSig()
-
+	
 	params := map[string]string{
 		"chat_id":      to.Recipient(),
 		"from_chat_id": strconv.FormatInt(chatID, 10),
 		"message_id":   msgID,
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.Raw("forwardMessage", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -411,21 +414,21 @@ func (b *Bot) Copy(to Recipient, msg Editable, options ...interface{}) (*Message
 		return nil, ErrBadRecipient
 	}
 	msgID, chatID := msg.MessageSig()
-
+	
 	params := map[string]string{
 		"chat_id":      to.Recipient(),
 		"from_chat_id": strconv.FormatInt(chatID, 10),
 		"message_id":   msgID,
 	}
-
+	
 	sendOpts := extractOptions(options)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.Raw("copyMessage", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -449,7 +452,7 @@ func (b *Bot) Edit(msg Editable, what interface{}, opts ...interface{}) (*Messag
 		method string
 		params = make(map[string]string)
 	)
-
+	
 	switch v := what.(type) {
 	case *ReplyMarkup:
 		return b.EditReplyMarkup(msg, v)
@@ -462,7 +465,7 @@ func (b *Bot) Edit(msg Editable, what interface{}, opts ...interface{}) (*Messag
 		method = "editMessageLiveLocation"
 		params["latitude"] = fmt.Sprintf("%f", v.Lat)
 		params["longitude"] = fmt.Sprintf("%f", v.Lng)
-
+		
 		if v.HorizontalAccuracy != nil {
 			params["horizontal_accuracy"] = fmt.Sprintf("%f", *v.HorizontalAccuracy)
 		}
@@ -475,24 +478,24 @@ func (b *Bot) Edit(msg Editable, what interface{}, opts ...interface{}) (*Messag
 	default:
 		return nil, ErrUnsupportedWhat
 	}
-
+	
 	msgID, chatID := msg.MessageSig()
-
+	
 	if chatID == 0 { // if inline message
 		params["inline_message_id"] = msgID
 	} else {
 		params["chat_id"] = strconv.FormatInt(chatID, 10)
 		params["message_id"] = msgID
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.Raw(method, params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -505,28 +508,28 @@ func (b *Bot) Edit(msg Editable, what interface{}, opts ...interface{}) (*Messag
 func (b *Bot) EditReplyMarkup(msg Editable, markup *ReplyMarkup) (*Message, error) {
 	msgID, chatID := msg.MessageSig()
 	params := make(map[string]string)
-
+	
 	if chatID == 0 { // if inline message
 		params["inline_message_id"] = msgID
 	} else {
 		params["chat_id"] = strconv.FormatInt(chatID, 10)
 		params["message_id"] = msgID
 	}
-
+	
 	if markup == nil {
 		// will delete reply markup
 		markup = &ReplyMarkup{}
 	}
-
+	
 	processButtons(markup.InlineKeyboard)
 	data, _ := json.Marshal(markup)
 	params["reply_markup"] = string(data)
-
+	
 	data, err := b.Raw("editMessageReplyMarkup", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -537,26 +540,26 @@ func (b *Bot) EditReplyMarkup(msg Editable, markup *ReplyMarkup) (*Message, erro
 // otherwise returns nil and ErrTrueResult.
 func (b *Bot) EditCaption(msg Editable, caption string, opts ...interface{}) (*Message, error) {
 	msgID, chatID := msg.MessageSig()
-
+	
 	params := map[string]string{
 		"caption": caption,
 	}
-
+	
 	if chatID == 0 { // if inline message
 		params["inline_message_id"] = msgID
 	} else {
 		params["chat_id"] = strconv.FormatInt(chatID, 10)
 		params["message_id"] = msgID
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.Raw("editMessageCaption", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -575,11 +578,11 @@ func (b *Bot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) (*M
 		repr  string
 		file  = media.MediaFile()
 		files = make(map[string]File)
-
+		
 		thumb     *Photo
 		thumbName = "thumbnail"
 	)
-
+	
 	switch {
 	case file.InCloud():
 		repr = file.FileID
@@ -592,13 +595,13 @@ func (b *Bot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) (*M
 		} else if s == thumbName {
 			thumbName = "thumb2"
 		}
-
+		
 		repr = "attach://" + s
 		files[s] = *file
 	default:
 		return nil, fmt.Errorf("telebot: cannot edit media, it does not exist")
 	}
-
+	
 	switch m := media.(type) {
 	case *Video:
 		thumb = m.Thumbnail
@@ -609,42 +612,42 @@ func (b *Bot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) (*M
 	case *Animation:
 		thumb = m.Thumbnail
 	}
-
+	
 	msgID, chatID := msg.MessageSig()
 	params := make(map[string]string)
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	im := media.InputMedia()
 	im.Media = repr
-
+	
 	if len(sendOpts.Entities) > 0 {
 		im.Entities = sendOpts.Entities
 	} else {
 		im.ParseMode = sendOpts.ParseMode
 	}
-
+	
 	if thumb != nil {
 		im.Thumbnail = "attach://" + thumbName
 		files[thumbName] = *thumb.MediaFile()
 	}
-
+	
 	data, _ := json.Marshal(im)
 	params["media"] = string(data)
-
+	
 	if chatID == 0 { // if inline message
 		params["inline_message_id"] = msgID
 	} else {
 		params["chat_id"] = strconv.FormatInt(chatID, 10)
 		params["message_id"] = msgID
 	}
-
+	
 	data, err := b.sendFiles("editMessageMedia", files, params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -661,16 +664,16 @@ func (b *Bot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) (*M
 //     channel, it can delete any message there.
 func (b *Bot) Delete(msg Editable) error {
 	msgID, chatID := msg.MessageSig()
-
+	
 	if !msg.IsDeletable() {
 		return errors.New("telebot: message is not deletable")
 	}
-
+	
 	params := map[string]string{
 		"chat_id":    strconv.FormatInt(chatID, 10),
 		"message_id": msgID,
 	}
-
+	
 	_, err := b.Raw("deleteMessage", params)
 	return err
 }
@@ -690,12 +693,12 @@ func (b *Bot) Notify(to Recipient, action ChatAction) error {
 	if to == nil {
 		return ErrBadRecipient
 	}
-
+	
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"action":  string(action),
 	}
-
+	
 	_, err := b.Raw("sendChatAction", params)
 	return err
 }
@@ -712,7 +715,7 @@ func (b *Bot) Ship(query *ShippingQuery, what ...interface{}) error {
 	params := map[string]string{
 		"shipping_query_id": query.ID,
 	}
-
+	
 	if len(what) == 0 {
 		params["ok"] = "true"
 	} else if s, ok := what[0].(string); ok {
@@ -727,12 +730,12 @@ func (b *Bot) Ship(query *ShippingQuery, what ...interface{}) error {
 			}
 			opts = append(opts, opt)
 		}
-
+		
 		params["ok"] = "true"
 		data, _ := json.Marshal(opts)
 		params["shipping_options"] = string(data)
 	}
-
+	
 	_, err := b.Raw("answerShippingQuery", params)
 	return err
 }
@@ -742,14 +745,14 @@ func (b *Bot) Accept(query *PreCheckoutQuery, errorMessage ...string) error {
 	params := map[string]string{
 		"pre_checkout_query_id": query.ID,
 	}
-
+	
 	if len(errorMessage) == 0 {
 		params["ok"] = "true"
 	} else {
 		params["ok"] = "False"
 		params["error_message"] = errorMessage[0]
 	}
-
+	
 	_, err := b.Raw("answerPreCheckoutQuery", params)
 	return err
 }
@@ -769,7 +772,7 @@ func (b *Bot) Respond(c *Callback, resp ...*CallbackResponse) error {
 	} else {
 		r = resp[0]
 	}
-
+	
 	r.CallbackID = c.ID
 	_, err := b.Raw("answerCallbackQuery", r)
 	return err
@@ -780,11 +783,11 @@ func (b *Bot) Respond(c *Callback, resp ...*CallbackResponse) error {
 // will result in an error.
 func (b *Bot) Answer(query *Query, resp *QueryResponse) error {
 	resp.QueryID = query.ID
-
+	
 	for _, result := range resp.Results {
 		result.Process(b)
 	}
-
+	
 	_, err := b.Raw("answerInlineQuery", resp)
 	return err
 }
@@ -793,24 +796,24 @@ func (b *Bot) Answer(query *Query, resp *QueryResponse) error {
 // information about an inline message sent by a Web App on behalf of a user
 func (b *Bot) AnswerWebApp(query *Query, r Result) (*WebAppMessage, error) {
 	r.Process(b)
-
+	
 	params := map[string]interface{}{
 		"web_app_query_id": query.ID,
 		"result":           r,
 	}
-
+	
 	data, err := b.Raw("answerWebAppQuery", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result *WebAppMessage
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
 		return nil, wrapError(err)
 	}
-
+	
 	return resp.Result, err
 }
 
@@ -823,12 +826,12 @@ func (b *Bot) FileByID(fileID string) (File, error) {
 	params := map[string]string{
 		"file_id": fileID,
 	}
-
+	
 	data, err := b.Raw("getFile", params)
 	if err != nil {
 		return File{}, err
 	}
-
+	
 	var resp struct {
 		Result File
 	}
@@ -846,18 +849,18 @@ func (b *Bot) Download(file *File, localFilename string) error {
 		return err
 	}
 	defer reader.Close()
-
+	
 	out, err := os.Create(localFilename)
 	if err != nil {
 		return wrapError(err)
 	}
 	defer out.Close()
-
+	
 	_, err = io.Copy(out, reader)
 	if err != nil {
 		return wrapError(err)
 	}
-
+	
 	file.FileLocal = localFilename
 	return nil
 }
@@ -868,25 +871,25 @@ func (b *Bot) File(file *File) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	
 	url := b.URL + "/file/bot" + b.Token + "/" + f.FilePath
 	file.FilePath = f.FilePath // saving file path
-
+	
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, wrapError(err)
 	}
-
+	
 	resp, err := b.client.Do(req)
 	if err != nil {
 		return nil, wrapError(err)
 	}
-
+	
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
 		return nil, fmt.Errorf("telebot: expected status 200 but got %s", resp.Status)
 	}
-
+	
 	return resp.Body, nil
 }
 
@@ -900,20 +903,20 @@ func (b *Bot) File(file *File) (io.ReadCloser, error) {
 // otherwise returns nil and ErrTrueResult.
 func (b *Bot) StopLiveLocation(msg Editable, opts ...interface{}) (*Message, error) {
 	msgID, chatID := msg.MessageSig()
-
+	
 	params := map[string]string{
 		"chat_id":    strconv.FormatInt(chatID, 10),
 		"message_id": msgID,
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.Raw("stopMessageLiveLocation", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return extractMessage(data)
 }
 
@@ -924,20 +927,20 @@ func (b *Bot) StopLiveLocation(msg Editable, opts ...interface{}) (*Message, err
 // This function will panic upon nil Editable.
 func (b *Bot) StopPoll(msg Editable, opts ...interface{}) (*Poll, error) {
 	msgID, chatID := msg.MessageSig()
-
+	
 	params := map[string]string{
 		"chat_id":    strconv.FormatInt(chatID, 10),
 		"message_id": msgID,
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	data, err := b.Raw("stopPoll", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result *Poll
 	}
@@ -952,7 +955,7 @@ func (b *Bot) Leave(chat *Chat) error {
 	params := map[string]string{
 		"chat_id": chat.Recipient(),
 	}
-
+	
 	_, err := b.Raw("leaveChat", params)
 	return err
 }
@@ -963,15 +966,15 @@ func (b *Bot) Leave(chat *Chat) error {
 // This function will panic upon nil Editable.
 func (b *Bot) Pin(msg Editable, opts ...interface{}) error {
 	msgID, chatID := msg.MessageSig()
-
+	
 	params := map[string]string{
 		"chat_id":    strconv.FormatInt(chatID, 10),
 		"message_id": msgID,
 	}
-
+	
 	sendOpts := extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
-
+	
 	_, err := b.Raw("pinChatMessage", params)
 	return err
 }
@@ -985,7 +988,7 @@ func (b *Bot) Unpin(chat *Chat, messageID ...int) error {
 	if len(messageID) > 0 {
 		params["message_id"] = strconv.Itoa(messageID[0])
 	}
-
+	
 	_, err := b.Raw("unpinChatMessage", params)
 	return err
 }
@@ -996,7 +999,7 @@ func (b *Bot) UnpinAll(chat *Chat) error {
 	params := map[string]string{
 		"chat_id": chat.Recipient(),
 	}
-
+	
 	_, err := b.Raw("unpinAllChatMessages", params)
 	return err
 }
@@ -1014,12 +1017,12 @@ func (b *Bot) ChatByUsername(name string) (*Chat, error) {
 	params := map[string]string{
 		"chat_id": name,
 	}
-
+	
 	data, err := b.Raw("getChat", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result *Chat
 	}
@@ -1037,12 +1040,12 @@ func (b *Bot) ProfilePhotosOf(user *User) ([]Photo, error) {
 	params := map[string]string{
 		"user_id": user.Recipient(),
 	}
-
+	
 	data, err := b.Raw("getUserProfilePhotos", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result struct {
 			Count  int     `json:"total_count"`
@@ -1061,12 +1064,12 @@ func (b *Bot) ChatMemberOf(chat, user Recipient) (*ChatMember, error) {
 		"chat_id": chat.Recipient(),
 		"user_id": user.Recipient(),
 	}
-
+	
 	data, err := b.Raw("getChatMember", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result *ChatMember
 	}
@@ -1082,12 +1085,12 @@ func (b *Bot) MenuButton(chat *User) (*MenuButton, error) {
 	params := map[string]string{
 		"chat_id": chat.Recipient(),
 	}
-
+	
 	data, err := b.Raw("getChatMenuButton", params)
 	if err != nil {
 		return nil, err
 	}
-
+	
 	var resp struct {
 		Result *MenuButton
 	}
@@ -1108,14 +1111,14 @@ func (b *Bot) SetMenuButton(chat *User, mb interface{}) error {
 	params := map[string]interface{}{
 		"chat_id": chat.Recipient(),
 	}
-
+	
 	switch v := mb.(type) {
 	case MenuButtonType:
 		params["menu_button"] = MenuButton{Type: v}
 	case *MenuButton:
 		params["menu_button"] = v
 	}
-
+	
 	_, err := b.Raw("setChatMenuButton", params)
 	return err
 }
@@ -1126,14 +1129,14 @@ func (b *Bot) Logout() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
+	
 	var resp struct {
 		Result bool `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
 		return false, wrapError(err)
 	}
-
+	
 	return resp.Result, nil
 }
 
@@ -1143,13 +1146,13 @@ func (b *Bot) Close() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
+	
 	var resp struct {
 		Result bool `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
 		return false, wrapError(err)
 	}
-
+	
 	return resp.Result, nil
 }
