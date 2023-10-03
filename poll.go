@@ -10,7 +10,7 @@ const (
 	// Despite "any" type isn't described in documentation,
 	// it needed for proper KeyboardButtonPollType marshaling.
 	PollAny PollType = "any"
-
+	
 	PollQuiz    PollType = "quiz"
 	PollRegular PollType = "regular"
 )
@@ -22,7 +22,7 @@ type Poll struct {
 	Question   string       `json:"question"`
 	Options    []PollOption `json:"options"`
 	VoterCount int          `json:"total_voter_count"`
-
+	
 	// (Optional)
 	Closed          bool            `json:"is_closed,omitempty"`
 	CorrectOption   int             `json:"correct_option_id,omitempty"`
@@ -30,10 +30,10 @@ type Poll struct {
 	Explanation     string          `json:"explanation,omitempty"`
 	ParseMode       ParseMode       `json:"explanation_parse_mode,omitempty"`
 	Entities        []MessageEntity `json:"explanation_entities"`
-
+	
 	// True by default, shouldn't be omitted.
 	Anonymous bool `json:"is_anonymous"`
-
+	
 	// (Mutually exclusive)
 	OpenPeriod    int   `json:"open_period,omitempty"`
 	CloseUnixdate int64 `json:"close_date,omitempty"`
@@ -47,9 +47,10 @@ type PollOption struct {
 
 // PollAnswer represents an answer of a user in a non-anonymous poll.
 type PollAnswer struct {
-	PollID  string `json:"poll_id"`
-	Sender  *User  `json:"user"`
-	Options []int  `json:"option_ids"`
+	PollID     string `json:"poll_id"`
+	Sender     *User  `json:"user"`
+	Options    []int  `json:"option_ids"`
+	VotersChat *Chat  `json:"voters_chat"`
 }
 
 // IsRegular says whether poll is a regular.
