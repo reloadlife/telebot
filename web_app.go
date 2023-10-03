@@ -18,5 +18,7 @@ type WebAppData struct {
 }
 
 type WriteAccessAllowed struct {
-	WebAppName string `json:"web_app_name,omitempty"`
+	WebAppName         string `json:"web_app_name,omitempty"`
+	FormRequest        bool   `json:"form_request,omitempty"`
+	FromAttachmentMenu bool   `json:"from_attachment_menu"`
 }
