@@ -2,7 +2,8 @@ package middleware
 
 import (
 	"errors"
-
+	`fmt`
+	
 	tele "go.mamad.dev/telebot"
 )
 
@@ -12,7 +13,12 @@ func AutoRespond() tele.MiddlewareFunc {
 	return func(next tele.HandlerFunc) tele.HandlerFunc {
 		return func(c tele.Context) error {
 			if c.Callback() != nil {
-				defer c.Respond()
+				defer func(c tele.Context, resp ...*tele.CallbackResponse) {
+					err := c.Respond(resp...)
+					if err != nil {
+						fmt.Printf("[telebot] Error, failed to AutoRespond: %s", err.Error())
+					}
+				}(c)
 			}
 			return next(c)
 		}
@@ -45,17 +51,18 @@ func Recover(onError ...func(error)) tele.MiddlewareFunc {
 					c.Bot().OnError(err, nil)
 				}
 			}
-
+			
 			defer func() {
 				if r := recover(); r != nil {
-					if err, ok := r.(error); ok {
-						f(err)
-					} else if s, ok := r.(string); ok {
-						f(errors.New(s))
+					switch er := r.(type) {
+					case error:
+						f(er)
+					case string:
+						f(errors.New(er))
 					}
 				}
 			}()
-
+			
 			return next(c)
 		}
 	}
