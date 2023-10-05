@@ -1,4 +1,4 @@
-module telebot
+module go.mamad.dev/telebot
 
 go 1.20
 
@@ -6,7 +6,6 @@ require (
 	github.com/goccy/go-yaml v1.11.2
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	go.mamad.dev/telebot v1.0.0
 )
 
 require (
