@@ -76,7 +76,7 @@ markups:
     keyboard:
       - [ contact ]
     one_time_keyboard: true
-    placeholder: Hello World
+    placeholder: 'Hello World'
   inline:
     - [ stop ]
   web_app:

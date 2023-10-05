@@ -168,7 +168,7 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 			// 2. Extended reply markup
 			
 			var markup struct {
-				Markup   `yaml:"inline"`
+				Markup   `yaml:",inline"`
 				Keyboard [][]string `yaml:"keyboard"`
 			}
 			if err := yaml.Unmarshal(data, &markup); err != nil {
