@@ -411,6 +411,7 @@ func (lt *Layout) MarkupLocale(locale, k string, args ...interface{}) *tele.Repl
 		r.OneTimeKeyboard = markup.OneTimeKeyboard
 		r.RemoveKeyboard = markup.RemoveKeyboard
 		r.Selective = markup.Selective
+		r.Placeholder = markup.Placeholder
 		
 		if err := yaml.Unmarshal(buf.Bytes(), &r.ReplyKeyboard); err != nil {
 			log.Println("telebot/layout:", err)
