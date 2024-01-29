@@ -4,6 +4,7 @@
 
 [![GoDoc](https://godoc.org/go.mamad.dev/telebot?status.svg)](https://godoc.org/go.mamad.dev/telebot)
 [![GitHub Actions](https://github.com/reloadlife/telebot/actions/workflows/go.yml/badge.svg)](https://github.com/reloadlife/telebot/actions)
+[![codecov](https://codecov.io/github/reloadlife/telebot/graph/badge.svg?token=HEQNZTCRUG)](https://codecov.io/github/reloadlife/telebot)
 
 ```bash
 go get -u go.mamad.dev/telebot
