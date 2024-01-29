@@ -93,8 +93,11 @@ func (m *MessageOriginChannel) OriginType() string {
 	return m.Type
 }
 
-type MessageOrigin interface {
-	OriginType() string
+type MessageOrigin struct {
+	*MessageOriginChannel
+	*MessageOriginChat
+	*MessageOriginHiddenUser
+	*MessageOriginUser
 }
 
 // Message object represents a message.
