@@ -4,7 +4,7 @@ import (
 	"strconv"
 )
 
-type MessageReactionUpdated struct {
+type MessageReaction struct {
 	Chat        *Chat          `json:"chat"`
 	MessageId   int            `json:"message_id"`
 	User        *User          `json:"user,omitempty"`
@@ -109,7 +109,7 @@ type MessageReactionCountUpdated struct {
 }
 
 func (b *Bot) SetMessageReaction(where Recipient, messageId int, isBig bool, reaction ...ReactionType) (bool, error) {
-	params := map[string]string{
+	params := map[string]any{
 		"chat_id":    where.Recipient(),
 		"message_id": strconv.Itoa(messageId),
 		"is_big":     isBig,
