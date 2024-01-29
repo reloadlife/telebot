@@ -297,6 +297,7 @@ func extractMessage(data []byte) (*Message, error) {
 		Result *Message
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
+		fmt.Printf("extractMessage: %s assuming that it is Bool\n", err.Error())
 		var resp struct {
 			Result bool
 		}
