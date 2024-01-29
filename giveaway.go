@@ -76,8 +76,10 @@ func (c ChatBoostSourceGiveaway) GetSource() string {
 	return c.Source
 }
 
-type ChatBoostSource interface {
-	GetSource() string
+type ChatBoostSource struct {
+	*ChatBoostSourcePremium
+	*ChatBoostSourceGiftCode
+	*ChatBoostSourceGiveaway
 }
 
 type ChatBoost struct {

@@ -110,7 +110,7 @@ type Message struct {
 
 	SenderChat *Chat `json:"sender_chat"`
 
-	ForwardOrigin MessageOrigin `json:"forward_origin,omitempty"`
+	ForwardOrigin *MessageOrigin `json:"forward_origin,omitempty"`
 
 	// For replies, the original message.
 	IsTopicMessage bool `json:"is_topic_message"`
