@@ -102,7 +102,7 @@ func (b *Bot) sendFiles(method string, files map[string]File, params map[string]
 			}
 		}
 		for field, value := range params {
-			if err := writer.WriteField(field, value); err != nil {
+			if err := writer.WriteField(field, fmt.Sprintf("%v", value)); err != nil {
 				pipeWriter.CloseWithError(err)
 				return
 			}

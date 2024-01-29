@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
-	
+
 	"github.com/goccy/go-yaml"
 	"github.com/spf13/viper"
 	tele "go.mamad.dev/telebot"
@@ -17,11 +17,11 @@ type Settings struct {
 	URL     string `yaml:"api_url"`
 	Token   string `yaml:"token"`
 	Updates int
-	
+
 	LocalesDir string `yaml:"locales_dir"`
 	TokenEnv   string `yaml:"token_env"`
 	ParseMode  string `yaml:"parse_mode"`
-	
+
 	Webhook    *tele.Webhook    `yaml:"webhook"`
 	LongPoller *tele.LongPoller `yaml:"long_poller"`
 }
@@ -39,15 +39,15 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 	if err := yaml.Unmarshal(data, &aux); err != nil {
 		return err
 	}
-	
+
 	v := viper.New()
 	if err := v.MergeConfigMap(aux.Config); err != nil {
 		return err
 	}
-	
+
 	lt.Config = Config{v: v}
 	lt.commands = aux.Commands
-	
+
 	if pref := aux.Settings; pref != nil {
 		lt.pref = &tele.Settings{
 			URL:       pref.URL,
@@ -55,42 +55,42 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 			Updates:   pref.Updates,
 			ParseMode: pref.ParseMode,
 		}
-		
+
 		if pref.TokenEnv != "" {
 			lt.pref.Token = os.Getenv(pref.TokenEnv)
 		}
-		
+
 		if pref.Webhook != nil {
 			lt.pref.Poller = pref.Webhook
 		} else if pref.LongPoller != nil {
 			lt.pref.Poller = pref.LongPoller
 		}
 	}
-	
+
 	lt.buttons = make(map[string]Button, len(aux.Buttons))
 	for _, item := range aux.Buttons {
 		k, v := item.Key.(string), item.Value
-		
+
 		// 1. Shortened reply button
-		
+
 		if v, ok := v.(string); ok {
 			btn := tele.Btn{Text: v}
 			lt.buttons[k] = Button{Btn: btn}
 			continue
 		}
-		
+
 		// 2. Extended reply or inline button
-		
+
 		data, err := yaml.MarshalWithOptions(v, yaml.JSON())
 		if err != nil {
 			return err
 		}
-		
+
 		var btn Button
 		if err := yaml.Unmarshal(data, &btn); err != nil {
 			return err
 		}
-		
+
 		if !btn.IsReply && btn.Data != nil {
 			if a, ok := btn.Data.([]interface{}); ok {
 				s := make([]string, len(a))
@@ -104,23 +104,23 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 				return fmt.Errorf("telebot/layout: invalid callback_data for %s button", k)
 			}
 		}
-		
+
 		lt.buttons[k] = btn
 	}
-	
+
 	lt.markups = make(map[string]Markup, len(aux.Markups))
 	for _, item := range aux.Markups {
 		k, v := item.Key.(string), item.Value
-		
+
 		data, err := yaml.Marshal(v)
 		if err != nil {
 			return err
 		}
-		
+
 		var shortenedMarkup [][]string
 		if yaml.Unmarshal(data, &shortenedMarkup) == nil {
 			// 1. Shortened reply or inline markup
-			
+
 			kb := make([][]Button, len(shortenedMarkup))
 			for i, btns := range shortenedMarkup {
 				row := make([]Button, len(btns))
@@ -133,17 +133,17 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 				}
 				kb[i] = row
 			}
-			
+
 			data, err := yaml.Marshal(kb)
 			if err != nil {
 				return err
 			}
-			
+
 			tmpl, err := template.New(k).Funcs(lt.funcs).Parse(string(data))
 			if err != nil {
 				return err
 			}
-			
+
 			markup := Markup{keyboard: tmpl}
 			for _, row := range kb {
 				for _, btn := range row {
@@ -154,7 +154,7 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 						btn.Login != nil ||
 						btn.WebApp != nil
 					inline = !btn.IsReply && inline
-					
+
 					if markup.inline == nil {
 						markup.inline = &inline
 					} else if *markup.inline != inline {
@@ -162,11 +162,11 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 					}
 				}
 			}
-			
+
 			lt.markups[k] = markup
 		} else {
 			// 2. Extended reply markup
-			
+
 			var markup struct {
 				Markup   `yaml:",inline"`
 				Keyboard [][]string `yaml:"keyboard"`
@@ -174,7 +174,7 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 			if err := yaml.Unmarshal(data, &markup); err != nil {
 				return err
 			}
-			
+
 			kb := make([][]tele.ReplyButton, len(markup.Keyboard))
 			for i, btns := range markup.Keyboard {
 				row := make([]tele.ReplyButton, len(btns))
@@ -183,77 +183,77 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 				}
 				kb[i] = row
 			}
-			
+
 			data, err := yaml.Marshal(kb)
 			if err != nil {
 				return err
 			}
-			
+
 			tmpl, err := template.New(k).Funcs(lt.funcs).Parse(string(data))
 			if err != nil {
 				return err
 			}
-			
+
 			markup.inline = new(bool)
 			markup.Markup.keyboard = tmpl
 			lt.markups[k] = markup.Markup
 		}
 	}
-	
+
 	lt.results = make(map[string]Result, len(aux.Results))
 	for _, item := range aux.Results {
 		k, v := item.Key.(string), item.Value
-		
+
 		data, err := yaml.Marshal(v)
 		if err != nil {
 			return err
 		}
-		
+
 		tmpl, err := template.New(k).Funcs(lt.funcs).Parse(string(data))
 		if err != nil {
 			return err
 		}
-		
+
 		var result Result
 		if err := yaml.Unmarshal(data, &result); err != nil {
 			return err
 		}
-		
+
 		result.result = tmpl
 		lt.results[k] = result
 	}
-	
+
 	if aux.Locales == nil {
 		if aux.Settings.LocalesDir == "" {
 			aux.Settings.LocalesDir = "locales"
 		}
 		return lt.parseLocales(aux.Settings.LocalesDir)
 	}
-	
+
 	return nil
 }
 
 func (lt *Layout) parseLocales(dir string) error {
 	lt.locales = make(map[string]*template.Template)
-	
+
 	return filepath.Walk(dir, func(path string, fi os.FileInfo, _ error) error {
 		if fi == nil || fi.IsDir() {
 			return nil
 		}
-		
+
 		data, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
 		}
-		
+
 		var texts map[string]string
 		if err := yaml.Unmarshal(data, &texts); err != nil {
 			return err
 		}
-		
+
 		name := fi.Name()
 		name = strings.TrimSuffix(name, filepath.Ext(name))
-		
+
 		tmpl := template.New(name).Funcs(lt.funcs)
 		for key, text := range texts {
 			_, err = tmpl.New(key).Parse(strings.Trim(text, "\r\n"))
@@ -261,7 +261,7 @@ func (lt *Layout) parseLocales(dir string) error {
 				return err
 			}
 		}
-		
+
 		lt.locales[name] = tmpl
 		return nil
 	})

@@ -10,7 +10,7 @@ import (
 type Rights struct {
 	// Anonymous is true, if the user's presence in the chat is hidden.
 	Anonymous bool `json:"is_anonymous"`
-	
+
 	CanBeEdited        bool `json:"can_be_edited"`
 	CanChangeInfo      bool `json:"can_change_info"`
 	CanPostMessages    bool `json:"can_post_messages"`
@@ -21,21 +21,21 @@ type Rights struct {
 	CanRestrictMembers bool `json:"can_restrict_members"`
 	CanPromoteMembers  bool `json:"can_promote_members"`
 	CanSendMessages    bool `json:"can_send_messages"`
-	
+
 	CanSendAudios     bool `json:"can_send_audios"`
 	CanSendDocuments  bool `json:"can_send_documents"`
 	CanSendPhotos     bool `json:"can_send_photos"`
 	CanSendVideos     bool `json:"can_send_videos"`
 	CanSendVideoNotes bool `json:"can_send_video_notes"`
 	CanSendVoiceNotes bool `json:"can_send_voice_notes"`
-	
+
 	CanSendPolls        bool `json:"can_send_polls"`
 	CanSendOther        bool `json:"can_send_other_messages"`
 	CanAddPreviews      bool `json:"can_add_web_page_previews"`
 	CanManageVideoChats bool `json:"can_manage_video_chats"`
 	CanManageChat       bool `json:"can_manage_chat"`
 	CanManageTopics     bool `json:"can_manage_topics"`
-	
+
 	CanPostStories   bool `json:"can_post_stories"`
 	CanEditStories   bool `json:"can_edit_stories"`
 	CanDeleteStories bool `json:"can_delete_stories"`
@@ -117,7 +117,7 @@ func (b *Bot) Ban(chat *Chat, member *ChatMember, revokeMessages ...bool) error 
 	if len(revokeMessages) > 0 {
 		params["revoke_messages"] = strconv.FormatBool(revokeMessages[0])
 	}
-	
+
 	_, err := b.Raw("kickChatMember", params)
 	return err
 }
@@ -129,11 +129,11 @@ func (b *Bot) Unban(chat *Chat, user *User, forBanned ...bool) error {
 		"chat_id": chat.Recipient(),
 		"user_id": user.Recipient(),
 	}
-	
+
 	if len(forBanned) > 0 {
 		params["only_if_banned"] = strconv.FormatBool(forBanned[0])
 	}
-	
+
 	_, err := b.Raw("unbanChatMember", params)
 	return err
 }
@@ -147,7 +147,7 @@ func (b *Bot) Unban(chat *Chat, user *User, forBanned ...bool) error {
 //   - can add web page previews
 func (b *Bot) Restrict(chat *Chat, member *ChatMember, useIndependentChatPermissions bool) error {
 	prv, until := member.Rights, member.RestrictedUntil
-	
+
 	params := map[string]interface{}{
 		"chat_id":                          chat.Recipient(),
 		"user_id":                          member.User.Recipient(),
@@ -155,7 +155,7 @@ func (b *Bot) Restrict(chat *Chat, member *ChatMember, useIndependentChatPermiss
 		"use_independent_chat_permissions": useIndependentChatPermissions,
 	}
 	embedRights(params, prv)
-	
+
 	_, err := b.Raw("restrictChatMember", params)
 	return err
 }
@@ -172,14 +172,14 @@ func (b *Bot) Restrict(chat *Chat, member *ChatMember, useIndependentChatPermiss
 //   - can promote members
 func (b *Bot) Promote(chat *Chat, member *ChatMember) error {
 	prv := member.Rights
-	
+
 	params := map[string]interface{}{
 		"chat_id":      chat.Recipient(),
 		"user_id":      member.User.Recipient(),
 		"is_anonymous": member.Anonymous,
 	}
 	embedRights(params, prv)
-	
+
 	_, err := b.Raw("promoteChatMember", params)
 	return err
 }
@@ -195,12 +195,12 @@ func (b *Bot) AdminsOf(chat *Chat) ([]ChatMember, error) {
 	params := map[string]string{
 		"chat_id": chat.Recipient(),
 	}
-	
+
 	data, err := b.Raw("getChatAdministrators", params)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	var resp struct {
 		Result []ChatMember
 	}
@@ -215,12 +215,12 @@ func (b *Bot) Len(chat *Chat) (int, error) {
 	params := map[string]string{
 		"chat_id": chat.Recipient(),
 	}
-	
+
 	data, err := b.Raw("getChatMembersCount", params)
 	if err != nil {
 		return 0, err
 	}
-	
+
 	var resp struct {
 		Result int
 	}
@@ -238,7 +238,7 @@ func (b *Bot) SetAdminTitle(chat *Chat, user *User, title string) error {
 		"user_id":      user.Recipient(),
 		"custom_title": title,
 	}
-	
+
 	_, err := b.Raw("setChatAdministratorCustomTitle", params)
 	return err
 }
@@ -251,7 +251,7 @@ func (b *Bot) BanSenderChat(chat *Chat, sender Recipient) error {
 		"chat_id":        chat.Recipient(),
 		"sender_chat_id": sender.Recipient(),
 	}
-	
+
 	_, err := b.Raw("banChatSenderChat", params)
 	return err
 }
@@ -263,7 +263,7 @@ func (b *Bot) UnbanSenderChat(chat *Chat, sender Recipient) error {
 		"chat_id":        chat.Recipient(),
 		"sender_chat_id": sender.Recipient(),
 	}
-	
+
 	_, err := b.Raw("unbanChatSenderChat", params)
 	return err
 }
@@ -273,12 +273,12 @@ func (b *Bot) DefaultRights(forChannels bool) (*Rights, error) {
 	params := map[string]bool{
 		"for_channels": forChannels,
 	}
-	
+
 	data, err := b.Raw("getMyDefaultAdministratorRights", params)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	var resp struct {
 		Result *Rights
 	}
@@ -295,7 +295,7 @@ func (b *Bot) SetDefaultRights(rights Rights, forChannels bool) error {
 		"rights":       rights,
 		"for_channels": forChannels,
 	}
-	
+
 	_, err := b.Raw("setMyDefaultAdministratorRights", params)
 	return err
 }

@@ -175,7 +175,11 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	}
 
 	if opt.ReplyTo != nil && opt.ReplyTo.ID != 0 {
-		params["reply_to_message_id"] = strconv.Itoa(opt.ReplyTo.ID)
+		reply, _ := json.Marshal(ReplyParameters{
+			MessageID:                opt.ReplyTo.ID,
+			AllowSendingWithoutReply: opt.AllowWithoutReply,
+		})
+		params["reply_parameters"] = string(reply)
 	}
 
 	if opt.ThreadMessageID != nil && opt.ThreadMessageID.ID != 0 {
@@ -183,7 +187,10 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	}
 
 	if opt.DisableWebPagePreview {
-		params["disable_web_page_preview"] = "true"
+		linkPrev, _ := json.Marshal(LinkPreviewOptions{
+			IsDisabled: true,
+		})
+		params["LinkPreviewOptions"] = string(linkPrev)
 	}
 
 	if opt.DisableNotification {
@@ -203,10 +210,6 @@ func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 		} else {
 			params["entities"] = string(entities)
 		}
-	}
-
-	if opt.AllowWithoutReply {
-		params["allow_sending_without_reply"] = "true"
 	}
 
 	if opt.ReplyMarkup != nil {

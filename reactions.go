@@ -109,7 +109,7 @@ type MessageReactionCountUpdated struct {
 }
 
 func (b *Bot) SetMessageReaction(where Recipient, messageId int, isBig bool, reaction ...ReactionType) (bool, error) {
-	params := map[string]any{
+	params := map[string]string{
 		"chat_id":    where.Recipient(),
 		"message_id": strconv.Itoa(messageId),
 		"is_big":     isBig,
