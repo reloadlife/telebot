@@ -1,16 +1,38 @@
-name: Go
+name: Test and Checks
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
+    name: Test & coverage
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: 'stable'
+      - name: Configure sysctl limits
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
 
-    - name: Test
-      run: export TELEBOT_SECRET=${{ secrets.TELEBOT_SECRET }} && export CHAT_ID=${{ secrets.CHAT_ID }} && export USER_ID=${{ secrets.USER_ID }} && go test -v ./...
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run unit tests with coverage.
+        run: |
+          export TELEBOT_SECRET=${{ secrets.TELEBOT_SECRET }}
+          export CHAT_ID=${{ secrets.CHAT_ID }}
+          export USER_ID=${{ secrets.USER_ID }}
+          export GOPATH=$(go env GOPATH)
+          go clean -modcache
+          go mod tidy
+          make cover
+
+      - name: Upload Coverage report to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./resources/cover/cover.out
