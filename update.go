@@ -2,37 +2,6 @@ package telebot
 
 import "strings"
 
-// Update object represents an incoming update.
-type Update struct {
-	ID int `json:"update_id"`
-
-	Message           *Message `json:"message,omitempty"`
-	EditedMessage     *Message `json:"edited_message,omitempty"`
-	ChannelPost       *Message `json:"channel_post,omitempty"`
-	EditedChannelPost *Message `json:"edited_channel_post,omitempty"`
-
-	MessageReaction      *MessageReaction             `json:"message_reaction,omitempty"`
-	MessageReactionCount *MessageReactionCountUpdated `json:"message_reaction_count,omitempty"`
-
-	Query        *Query        `json:"inline_query,omitempty"`
-	InlineResult *InlineResult `json:"chosen_inline_result,omitempty"`
-
-	Callback *Callback `json:"callback_query,omitempty"`
-
-	ShippingQuery    *ShippingQuery    `json:"shipping_query,omitempty"`
-	PreCheckoutQuery *PreCheckoutQuery `json:"pre_checkout_query,omitempty"`
-
-	Poll       *Poll       `json:"poll,omitempty"`
-	PollAnswer *PollAnswer `json:"poll_answer,omitempty"`
-
-	MyChatMember    *ChatMemberUpdate `json:"my_chat_member,omitempty"`
-	ChatMember      *ChatMemberUpdate `json:"chat_member,omitempty"`
-	ChatJoinRequest *ChatJoinRequest  `json:"chat_join_request,omitempty"`
-
-	ChatBoost        *ChatBoost        `json:"chat_boost,omitempty"`
-	ChatBoostRemoved *ChatBoostRemoved `json:"removed_chat_boost,omitempty"`
-}
-
 // ProcessUpdate processes a single incoming update.
 // A started bot calls this function automatically.
 func (b *Bot) ProcessUpdate(u Update) {
