@@ -7,14 +7,13 @@ import (
 	"time"
 )
 
-// HandlerFunc represents a handler function, which is
-// used to handle actual endpoints.
+// HandlerFunc represents a handler function, which is used to handle actual endpoints.
 type HandlerFunc func(Context) error
 
-// Context wraps an update and represents the context of current event.
+// Context wraps an update and represents the context of the current event.
 type Context interface {
 	// Bot returns the bot instance.
-	Bot() *Bot
+	Bot() Bot
 
 	// Update returns the original update.
 	Update() Update
@@ -156,16 +155,15 @@ type Context interface {
 	Set(key string, val interface{})
 }
 
-// nativeContext is a native implementation of the Context interface.
-// "context" is taken by context package, maybe there is a better name.
+// nativeContext is a native implementation of the Context interface; "context" is taken by context package, maybe there is a better name.
 type nativeContext struct {
-	b     *Bot
+	b     *bot
 	u     Update
 	lock  sync.RWMutex
 	store map[string]interface{}
 }
 
-func (c *nativeContext) Bot() *Bot {
+func (c *nativeContext) Bot() Bot {
 	return c.b
 }
 

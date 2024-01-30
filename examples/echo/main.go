@@ -15,7 +15,7 @@ func main() {
 	}
 
 	tg.Handle("/start", func(ctx telebot.Context) error {
-		return ctx.Send("Hello Sir, I'm Echo Bot, Please send me something to echo.")
+		return ctx.Send("Hello Sir, I'm Echo OldBot, Please send me something to echo.")
 	})
 
 	tg.Handle(telebot.OnText, func(ctx telebot.Context) error {

@@ -150,6 +150,7 @@ type Message struct {
 	//
 	// Ex: `/command <payload>` or `/command@botname <payload>`
 	Payload string `json:"-"`
+	Command string `json:"-"`
 
 	// For text messages, special entities like usernames, URLs, bot commands,
 	// etc. that appear in the text.
@@ -213,7 +214,7 @@ type Message struct {
 	//
 	// Sender leads to User, capable of invite.
 	//
-	// UserJoined might be the Bot itself.
+	// UserJoined might be the OldBot itself.
 	UserJoined *User `json:"new_chat_member"`
 
 	// For a service message, represents a user,
@@ -222,7 +223,7 @@ type Message struct {
 	// If user was kicked, Sender leads to a User,
 	// capable of this kick.
 	//
-	// UserLeft might be the Bot itself.
+	// UserLeft might be the OldBot itself.
 	UserLeft *User `json:"left_chat_member"`
 
 	// For a service message, represents a new title

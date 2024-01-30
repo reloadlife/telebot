@@ -108,7 +108,7 @@ type MessageReactionCountUpdated struct {
 	Reactions []ReactionType `json:"reactions"`
 }
 
-func (b *Bot) SetMessageReaction(where Recipient, messageId int, isBig bool, reaction ...ReactionType) (bool, error) {
+func (b *OldBot) SetMessageReaction(where Recipient, messageId int, isBig bool, reaction ...ReactionType) (bool, error) {
 	params := map[string]any{
 		"chat_id":    where.Recipient(),
 		"message_id": strconv.Itoa(messageId),

@@ -1,106 +1,125 @@
 package telebot
 
-import "errors"
-
-var (
-	ErrBadRecipient    = errors.New("telebot: recipient is nil")
-	ErrUnsupportedWhat = errors.New("telebot: unsupported what argument")
-	ErrCouldNotUpdate  = errors.New("telebot: could not fetch new updates")
-	ErrTrueResult      = errors.New("telebot: result is True")
-	ErrBadContext      = errors.New("telebot: context does not contain message")
+import (
+	httpc "go.mamad.dev/telebot/http"
+	"time"
 )
 
-const DefaultApiURL = "https://api.telegram.org"
+type bot struct {
+	self    *User
+	token   string
+	updates chan Update
+	poller  Poller
+	onError func(error, Context)
 
-const (
-	// Basic message handlers.
-	OnText              = "\atext"
-	OnEdited            = "\aedited"
-	OnPhoto             = "\aphoto"
-	OnAudio             = "\aaudio"
-	OnAnimation         = "\aanimation"
-	OnDocument          = "\adocument"
-	OnSticker           = "\asticker"
-	OnVideo             = "\avideo"
-	OnVoice             = "\avoice"
-	OnVideoNote         = "\avideo_note"
-	OnContact           = "\acontact"
-	OnLocation          = "\alocation"
-	OnVenue             = "\avenue"
-	OnDice              = "\adice"
-	OnInvoice           = "\ainvoice"
-	OnPayment           = "\apayment"
-	OnGame              = "\agame"
-	OnPoll              = "\apoll"
-	OnPollAnswer        = "\apoll_answer"
-	OnPinned            = "\apinned"
-	OnChannelPost       = "\achannel_post"
-	OnEditedChannelPost = "\aedited_channel_post"
+	group    *Group
+	handlers map[string]HandlerFunc
 
-	OnAddedToGroup      = "\aadded_to_group"
-	OnUserJoined        = "\auser_joined"
-	OnUserLeft          = "\auser_left"
-	OnNewGroupTitle     = "\anew_chat_title"
-	OnNewGroupPhoto     = "\anew_chat_photo"
-	OnGroupPhotoDeleted = "\achat_photo_deleted"
-	OnGroupCreated      = "\agroup_created"
-	OnSuperGroupCreated = "\asupergroup_created"
-	OnChannelCreated    = "\achannel_created"
+	synchronous bool
+	stop        chan chan struct{}
+	stopClient  chan struct{}
 
-	// OnMigration happens when group switches to
-	// a supergroup. You might want to update
-	// your internal references to this chat
-	// upon switching as its ID will change.
-	OnMigration = "\amigration"
+	httpClient httpc.Client
+}
 
-	OnMedia           = "\amedia"
-	OnCallback        = "\acallback"
-	OnQuery           = "\aquery"
-	OnInlineResult    = "\ainline_result"
-	OnShipping        = "\ashipping_query"
-	OnCheckout        = "\apre_checkout_query"
-	OnMyChatMember    = "\amy_chat_member"
-	OnChatMember      = "\achat_member"
-	OnChatJoinRequest = "\achat_join_request"
-	OnProximityAlert  = "\aproximity_alert_triggered"
-	OnAutoDeleteTimer = "\amessage_auto_delete_timer_changed"
-	OnWebApp          = "\aweb_app"
+type Bot interface {
+	Debug(...any)
 
-	OnVideoChatStarted      = "\avideo_chat_started"
-	OnVideoChatEnded        = "\avideo_chat_ended"
-	OnVideoChatParticipants = "\avideo_chat_participants_invited"
-	OnVideoChatScheduled    = "\avideo_chat_scheduled"
+	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) ([]Update, error)
 
-	// New stuff needed, todo:
-)
+	Start()
+	Stop()
+}
 
-// ChatAction is a client-side status indicating bot activity.
-type ChatAction string
+type BotSettings struct {
+	// OfflineMode runs the Client in Offline Mode for test-purposes.
+	OfflineMode bool
 
-const (
-	Typing            ChatAction = "typing"
-	UploadingPhoto    ChatAction = "upload_photo"
-	UploadingVideo    ChatAction = "upload_video"
-	UploadingAudio    ChatAction = "upload_audio"
-	UploadingDocument ChatAction = "upload_document"
-	UploadingVNote    ChatAction = "upload_video_note"
-	RecordingVideo    ChatAction = "record_video"
-	RecordingAudio    ChatAction = "record_audio"
-	RecordingVNote    ChatAction = "record_video_note"
-	FindingLocation   ChatAction = "find_location"
-	ChoosingSticker   ChatAction = "choose_sticker"
-)
+	Token string
+	URL   string
 
-// ParseMode determines the way client applications treat the text of the message
-type ParseMode = string
+	Synchronous  bool
+	UpdatesCount int
+}
 
-const (
-	ModeDefault    ParseMode = ""
-	ModeMarkdown   ParseMode = "Markdown"
-	ModeMarkdownV2 ParseMode = "MarkdownV2"
-	ModeHTML       ParseMode = "HTML"
-)
+// New creates a new bot instance.
+func New(s BotSettings) Bot {
+	if s.Token == "" {
+		panic("telebot: token is required")
+	}
 
-// M is a shortcut for map[string]interface{}. Use it for passing
-// arguments to the layout functions.
-type M = map[string]interface{}
+	if s.UpdatesCount == 0 {
+		s.UpdatesCount = 100
+	}
+
+	return &bot{
+		token: s.Token,
+		onError: func(err error, ctx Context) {
+			if s.OfflineMode {
+				panic(err)
+			}
+		},
+		poller: &LongPoller{},
+
+		updates:  make(chan Update, s.UpdatesCount),
+		handlers: make(map[string]HandlerFunc),
+		stop:     make(chan chan struct{}),
+
+		synchronous: s.Synchronous,
+		httpClient:  httpc.NewHTTPClient(s.URL, time.Minute),
+	}
+}
+
+// Start brings bot into motion by consuming incoming updates (see bot.updates channel).
+func (b *bot) Start() {
+	if b.poller == nil {
+		panic("telebot: can't start without a poller, either set one or use NewBot instead")
+	}
+
+	if b.stopClient != nil {
+		return
+	}
+	b.stopClient = make(chan struct{})
+
+	stop := make(chan struct{})
+	stopConfirm := make(chan struct{})
+
+	go func() {
+		b.poller.Poll(b, b.updates, stop)
+		close(stopConfirm)
+	}()
+
+	for {
+		select {
+
+		case upd := <-b.updates:
+			b.ProcessUpdate(upd)
+
+		case confirm := <-b.stop:
+			close(stop)
+			<-stopConfirm
+			close(confirm)
+			b.stopClient = nil
+		}
+	}
+}
+
+// Stop gracefully shuts the poller down.
+func (b *bot) Stop() {
+	if b.stopClient != nil {
+		close(b.stopClient)
+	}
+	confirm := make(chan struct{})
+	b.stop <- confirm
+	<-confirm
+}
+
+// StartInWebhook starts the bot in webhook mode.
+func (b *bot) StartInWebhook() {
+	panic("telebot: webhook mode is not implemented yet")
+}
+
+// StopInWebhook stops the bot from webhook mode.
+func (b *bot) StopInWebhook() {
+	panic("telebot: webhook mode is not implemented yet")
+}

@@ -13,7 +13,7 @@ func applyMiddleware(h HandlerFunc, m ...MiddlewareFunc) HandlerFunc {
 
 // Group is a separated group of handlers, united by the general middleware.
 type Group struct {
-	b          *Bot
+	b          *OldBot
 	middleware []MiddlewareFunc
 }
 

@@ -31,6 +31,7 @@ go get -u go.mamad.dev/telebot
 - [ ] Documentation
 - [ ] Di Injections
 - [ ] Gin Integration
+- [ ] webhook mode (gin support)
 - [ ] Regex Route Support
 - [ ] Code Cleanup and Refactoring
 - [ ] 100% Test Coverage

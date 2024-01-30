@@ -50,7 +50,7 @@ const (
 )
 
 // UploadSticker uploads a PNG file with a sticker for later use.
-func (b *Bot) UploadSticker(to Recipient, png *File, emoji string) (*File, error) {
+func (b *OldBot) UploadSticker(to Recipient, png *File, emoji string) (*File, error) {
 	files := map[string]File{
 		"png_sticker": *png,
 	}
@@ -74,7 +74,7 @@ func (b *Bot) UploadSticker(to Recipient, png *File, emoji string) (*File, error
 }
 
 // StickerSet returns a sticker set on success.
-func (b *Bot) StickerSet(name string) (*StickerSet, error) {
+func (b *OldBot) StickerSet(name string) (*StickerSet, error) {
 	data, err := b.Raw("getStickerSet", map[string]string{"name": name})
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (b *Bot) StickerSet(name string) (*StickerSet, error) {
 // CreateStickerSet creates a new sticker set.
 // todo: https://core.telegram.org/bots/api#createnewstickerset
 // update to the new version
-func (b *Bot) CreateStickerSet(to Recipient, s StickerSet) error {
+func (b *OldBot) CreateStickerSet(to Recipient, s StickerSet) error {
 	params := map[string]string{
 		"user_id":          to.Recipient(),
 		"sticker_type":     s.Type,
@@ -131,7 +131,7 @@ type InputSticker struct {
 
 // AddSticker adds a new sticker to the existing sticker set.
 // todo: test and see if it works
-func (b *Bot) AddSticker(to Recipient, s InputSticker) error {
+func (b *OldBot) AddSticker(to Recipient, s InputSticker) error {
 	files := make(map[string]File)
 	files["sticker.sticker"] = s.Sticker
 
@@ -148,7 +148,7 @@ func (b *Bot) AddSticker(to Recipient, s InputSticker) error {
 }
 
 // SetStickerPosition moves a sticker in set to a specific position.
-func (b *Bot) SetStickerPosition(sticker string, position int) error {
+func (b *OldBot) SetStickerPosition(sticker string, position int) error {
 	params := map[string]string{
 		"sticker":  sticker,
 		"position": strconv.Itoa(position),
@@ -159,7 +159,7 @@ func (b *Bot) SetStickerPosition(sticker string, position int) error {
 }
 
 // DeleteSticker deletes a sticker from a set created by the bot.
-func (b *Bot) DeleteSticker(sticker string) error {
+func (b *OldBot) DeleteSticker(sticker string) error {
 	_, err := b.Raw("deleteStickerFromSet", map[string]string{"sticker": sticker})
 	return err
 
@@ -173,7 +173,7 @@ func (b *Bot) DeleteSticker(sticker string) error {
 // up to 32 kilobytes in size.
 //
 // Animated sticker set thumbnail can't be uploaded via HTTP URL.
-func (b *Bot) SetStickerSetThumb(to Recipient, s StickerSet) error {
+func (b *OldBot) SetStickerSetThumb(to Recipient, s StickerSet) error {
 	files := make(map[string]File)
 	if s.PNG != nil {
 		files["thumbnail"] = *s.PNG
@@ -191,7 +191,7 @@ func (b *Bot) SetStickerSetThumb(to Recipient, s StickerSet) error {
 }
 
 // CustomEmojiStickers returns the information about custom emoji stickers by their ids.
-func (b *Bot) CustomEmojiStickers(ids []string) ([]Sticker, error) {
+func (b *OldBot) CustomEmojiStickers(ids []string) ([]Sticker, error) {
 	data, _ := json.Marshal(ids)
 
 	params := map[string]string{

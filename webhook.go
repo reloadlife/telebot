@@ -56,7 +56,7 @@ type Webhook struct {
 	Endpoint *WebhookEndpoint
 
 	dest chan<- Update
-	bot  *Bot
+	bot  *OldBot
 }
 
 func (h *Webhook) getFiles() map[string]File {
@@ -116,7 +116,7 @@ func (h *Webhook) getParams() map[string]string {
 	return params
 }
 
-func (h *Webhook) Poll(b *Bot, dest chan Update, stop chan struct{}) {
+func (h *Webhook) Poll(b *OldBot, dest chan Update, stop chan struct{}) {
 	if err := b.SetWebhook(h); err != nil {
 		b.OnError(err, nil)
 		close(stop)
@@ -171,7 +171,7 @@ func (h *Webhook) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // Webhook returns the current webhook status.
-func (b *Bot) Webhook() (*Webhook, error) {
+func (b *OldBot) Webhook() (*Webhook, error) {
 	data, err := b.Raw("getWebhookInfo", nil)
 	if err != nil {
 		return nil, err
@@ -188,13 +188,13 @@ func (b *Bot) Webhook() (*Webhook, error) {
 
 // SetWebhook configures a bot to receive incoming
 // updates via an outgoing webhook.
-func (b *Bot) SetWebhook(w *Webhook) error {
+func (b *OldBot) SetWebhook(w *Webhook) error {
 	_, err := b.sendFiles("setWebhook", w.getFiles(), w.getParams())
 	return err
 }
 
 // RemoveWebhook removes webhook integration.
-func (b *Bot) RemoveWebhook(dropPending ...bool) error {
+func (b *OldBot) RemoveWebhook(dropPending ...bool) error {
 	drop := false
 	if len(dropPending) > 0 {
 		drop = dropPending[0]

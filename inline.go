@@ -82,7 +82,7 @@ type Result interface {
 	SetParseMode(ParseMode)
 	SetContent(InputMessageContent)
 	SetReplyMarkup(*ReplyMarkup)
-	Process(*Bot)
+	Process(*OldBot)
 }
 
 // Results is a slice wrapper for convenient marshalling.

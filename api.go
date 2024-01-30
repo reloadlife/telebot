@@ -16,10 +16,10 @@ import (
 	"time"
 )
 
-// Raw lets you call any method of Bot API manually.
+// Raw lets you call any method of OldBot API manually.
 // It also handles API errors, so you only need to unwrap
 // result field from json data.
-func (b *Bot) Raw(method string, payload interface{}) ([]byte, error) {
+func (b *OldBot) Raw(method string, payload interface{}) ([]byte, error) {
 	url := b.URL + "/bot" + b.Token + "/" + method
 
 	var buf bytes.Buffer
@@ -68,7 +68,7 @@ func (b *Bot) Raw(method string, payload interface{}) ([]byte, error) {
 	return data, extractOk(data)
 }
 
-func (b *Bot) sendFiles(method string, files map[string]File, params map[string]string) ([]byte, error) {
+func (b *OldBot) sendFiles(method string, files map[string]File, params map[string]string) ([]byte, error) {
 	rawFiles := make(map[string]interface{})
 	for name, f := range files {
 		switch {
@@ -160,7 +160,7 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 	return err
 }
 
-func (b *Bot) sendText(to Recipient, text string, opt *SendOptions) (*Message, error) {
+func (b *OldBot) sendText(to Recipient, text string, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"text":    text,
@@ -175,7 +175,7 @@ func (b *Bot) sendText(to Recipient, text string, opt *SendOptions) (*Message, e
 	return extractMessage(data)
 }
 
-func (b *Bot) sendMedia(media Media, params map[string]string, files map[string]File) (*Message, error) {
+func (b *OldBot) sendMedia(media Media, params map[string]string, files map[string]File) (*Message, error) {
 	kind := media.MediaType()
 	what := "send" + strings.Title(kind)
 
@@ -196,7 +196,7 @@ func (b *Bot) sendMedia(media Media, params map[string]string, files map[string]
 	return extractMessage(data)
 }
 
-func (b *Bot) getMe() (*User, error) {
+func (b *OldBot) getMe() (*User, error) {
 	data, err := b.Raw("getMe", nil)
 	if err != nil {
 		return nil, err
@@ -204,33 +204,6 @@ func (b *Bot) getMe() (*User, error) {
 
 	var resp struct {
 		Result *User
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
-	}
-	return resp.Result, nil
-}
-
-func (b *Bot) getUpdates(offset, limit int, timeout time.Duration, allowed []string) ([]Update, error) {
-	params := map[string]string{
-		"offset":  strconv.Itoa(offset),
-		"timeout": strconv.Itoa(int(timeout / time.Second)),
-	}
-
-	data, _ := json.Marshal(allowed)
-	params["allowed_updates"] = string(data)
-
-	if limit != 0 {
-		params["limit"] = strconv.Itoa(limit)
-	}
-
-	data, err := b.Raw("getUpdates", params)
-	if err != nil {
-		return nil, err
-	}
-
-	var resp struct {
-		Result []Update
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
 		return nil, wrapError(err)

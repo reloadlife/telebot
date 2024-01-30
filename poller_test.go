@@ -18,7 +18,7 @@ func newTestPoller() *testPoller {
 	}
 }
 
-func (p *testPoller) Poll(b *Bot, updates chan Update, stop chan struct{}) {
+func (p *testPoller) Poll(b *OldBot, updates chan Update, stop chan struct{}) {
 	for {
 		select {
 		case upd := <-p.updates:

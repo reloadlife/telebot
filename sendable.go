@@ -19,11 +19,11 @@ type Recipient interface {
 // custom Sendables for complex kind of media or
 // chat objects spanning across multiple messages.
 type Sendable interface {
-	Send(*Bot, Recipient, *SendOptions) (*Message, error)
+	Send(*OldBot, Recipient, *SendOptions) (*Message, error)
 }
 
 // Send delivers media through bot b to recipient.
-func (p *Photo) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (p *Photo) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"caption": p.Caption,
@@ -43,7 +43,7 @@ func (p *Photo) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers media through bot b to recipient.
-func (a *Audio) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (a *Audio) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":   to.Recipient(),
 		"caption":   a.Caption,
@@ -77,7 +77,7 @@ func (a *Audio) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers media through bot b to recipient.
-func (d *Document) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (d *Document) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":   to.Recipient(),
 		"caption":   d.Caption,
@@ -112,7 +112,7 @@ func (d *Document) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error
 }
 
 // Send delivers media through bot b to recipient.
-func (s *Sticker) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (s *Sticker) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 	}
@@ -130,7 +130,7 @@ func (s *Sticker) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error)
 }
 
 // Send delivers media through bot b to recipient.
-func (v *Video) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (v *Video) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":   to.Recipient(),
 		"caption":   v.Caption,
@@ -173,7 +173,7 @@ func (v *Video) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers animation through bot b to recipient.
-func (a *Animation) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (a *Animation) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":   to.Recipient(),
 		"caption":   a.Caption,
@@ -218,7 +218,7 @@ func (a *Animation) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, erro
 }
 
 // Send delivers media through bot b to recipient.
-func (v *Voice) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (v *Voice) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"caption": v.Caption,
@@ -241,7 +241,7 @@ func (v *Voice) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers media through bot b to recipient.
-func (v *VideoNote) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (v *VideoNote) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 	}
@@ -266,7 +266,7 @@ func (v *VideoNote) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, erro
 }
 
 // Send delivers media through bot b to recipient.
-func (x *Location) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (x *Location) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":     to.Recipient(),
 		"latitude":    fmt.Sprintf("%f", x.Lat),
@@ -293,7 +293,7 @@ func (x *Location) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error
 }
 
 // Send delivers media through bot b to recipient.
-func (v *Venue) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (v *Venue) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":           to.Recipient(),
 		"latitude":          fmt.Sprintf("%f", v.Location.Lat),
@@ -316,7 +316,7 @@ func (v *Venue) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers invoice through bot b to recipient.
-func (i *Invoice) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (i *Invoice) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := i.params()
 	params["chat_id"] = to.Recipient()
 	b.embedSendOptions(params, opt)
@@ -330,7 +330,7 @@ func (i *Invoice) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error)
 }
 
 // Send delivers poll through bot b to recipient.
-func (p *Poll) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (p *Poll) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":                 to.Recipient(),
 		"question":                p.Question,
@@ -368,7 +368,7 @@ func (p *Poll) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers dice through bot b to recipient.
-func (d *Dice) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (d *Dice) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"emoji":   string(d.Type),
@@ -384,7 +384,7 @@ func (d *Dice) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
 }
 
 // Send delivers game through bot b to recipient.
-func (g *Game) Send(b *Bot, to Recipient, opt *SendOptions) (*Message, error) {
+func (g *Game) Send(b *OldBot, to Recipient, opt *SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id":         to.Recipient(),
 		"game_short_name": g.Name,

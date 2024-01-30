@@ -2,7 +2,7 @@ package telebot
 
 import "encoding/json"
 
-func (b *Bot) SetMyDescription(description, languageCode string) error {
+func (b *OldBot) SetMyDescription(description, languageCode string) error {
 	_, err := b.Raw("setMyCommands", map[string]interface{}{
 		"description":   description,
 		"language_code": languageCode,
@@ -14,7 +14,7 @@ type BotDescription struct {
 	Description string `json:"description"`
 }
 
-func (b *Bot) GetMyDescription(languageCode string) (*BotDescription, error) {
+func (b *OldBot) GetMyDescription(languageCode string) (*BotDescription, error) {
 	params := map[string]string{
 		"language_code": languageCode,
 	}
@@ -33,7 +33,7 @@ func (b *Bot) GetMyDescription(languageCode string) (*BotDescription, error) {
 	return &resp.Result, nil
 }
 
-func (b *Bot) SetMyShortDescription(shortDescription, languageCode string) error {
+func (b *OldBot) SetMyShortDescription(shortDescription, languageCode string) error {
 	_, err := b.Raw("setMyShortDescription", map[string]interface{}{
 		"short_description": shortDescription,
 		"language_code":     languageCode,
@@ -45,7 +45,7 @@ type BotShortDescription struct {
 	ShortDescription string `json:"short_description"`
 }
 
-func (b *Bot) GetMyShortDescription(languageCode string) (*BotShortDescription, error) {
+func (b *OldBot) GetMyShortDescription(languageCode string) (*BotShortDescription, error) {
 	data, err := b.Raw("getMyCommands", map[string]string{
 		"language_code": languageCode,
 	})
@@ -62,7 +62,7 @@ func (b *Bot) GetMyShortDescription(languageCode string) (*BotShortDescription, 
 	return &resp.Result, nil
 }
 
-func (b *Bot) SetMyName(name, languageCode string) error {
+func (b *OldBot) SetMyName(name, languageCode string) error {
 	_, err := b.Raw("setMyName", map[string]interface{}{
 		"name":          name,
 		"language_code": languageCode,
@@ -74,7 +74,7 @@ type BotName struct {
 	Name string `json:"name"`
 }
 
-func (b *Bot) GetMyName(languageCode string) (*BotName, error) {
+func (b *OldBot) GetMyName(languageCode string) (*BotName, error) {
 	data, err := b.Raw("getMyCommands", map[string]string{
 		"language_code": languageCode,
 	})

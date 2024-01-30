@@ -35,7 +35,7 @@ type GeneralForumTopicHidden struct {
 type GeneralForumTopicUnhidden struct {
 }
 
-func (b *Bot) CreateTopic(where Recipient, name string, opts ...interface{}) (*ForumTopic, error) {
+func (b *OldBot) CreateTopic(where Recipient, name string, opts ...interface{}) (*ForumTopic, error) {
 	params := map[string]string{
 		"chat_id": where.Recipient(),
 		"name":    name,
@@ -64,7 +64,7 @@ func (b *Bot) CreateTopic(where Recipient, name string, opts ...interface{}) (*F
 	return &resp.Result, nil
 }
 
-func (b *Bot) EditTopic(where Recipient, topicID int64, name string, opts ...interface{}) error {
+func (b *OldBot) EditTopic(where Recipient, topicID int64, name string, opts ...interface{}) error {
 	params := map[string]string{
 		"chat_id":           where.Recipient(),
 		"message_thread_id": fmt.Sprintf("%d", topicID),
@@ -79,7 +79,7 @@ func (b *Bot) EditTopic(where Recipient, topicID int64, name string, opts ...int
 	return err
 }
 
-func (b *Bot) CloseTopic(where Recipient, topicID int64) error {
+func (b *OldBot) CloseTopic(where Recipient, topicID int64) error {
 	params := map[string]string{
 		"chat_id":           where.Recipient(),
 		"message_thread_id": fmt.Sprintf("%d", topicID),
@@ -88,7 +88,7 @@ func (b *Bot) CloseTopic(where Recipient, topicID int64) error {
 	return err
 }
 
-func (b *Bot) ReopenTopic(where Recipient, topicID int64) error {
+func (b *OldBot) ReopenTopic(where Recipient, topicID int64) error {
 	params := map[string]string{
 		"chat_id":           where.Recipient(),
 		"message_thread_id": fmt.Sprintf("%d", topicID),
@@ -97,7 +97,7 @@ func (b *Bot) ReopenTopic(where Recipient, topicID int64) error {
 	return err
 }
 
-func (b *Bot) DeleteTopic(where Recipient, topicID int64) error {
+func (b *OldBot) DeleteTopic(where Recipient, topicID int64) error {
 	params := map[string]string{
 		"chat_id":           where.Recipient(),
 		"message_thread_id": fmt.Sprintf("%d", topicID),
@@ -106,7 +106,7 @@ func (b *Bot) DeleteTopic(where Recipient, topicID int64) error {
 	return err
 }
 
-func (b *Bot) UnpinAllForumTopicMessages(where Recipient, topicID int64) error {
+func (b *OldBot) UnpinAllForumTopicMessages(where Recipient, topicID int64) error {
 	params := map[string]string{
 		"chat_id":           where.Recipient(),
 		"message_thread_id": fmt.Sprintf("%d", topicID),
@@ -115,7 +115,7 @@ func (b *Bot) UnpinAllForumTopicMessages(where Recipient, topicID int64) error {
 	return err
 }
 
-func (b *Bot) GetForumTopicIconStickers() ([]Sticker, error) {
+func (b *OldBot) GetForumTopicIconStickers() ([]Sticker, error) {
 	data, err := b.Raw("getForumTopicIconStickers", nil)
 	if err != nil {
 		return nil, err

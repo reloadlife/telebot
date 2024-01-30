@@ -165,7 +165,7 @@ func extractOptions(how []interface{}) *SendOptions {
 	return opts
 }
 
-func (b *Bot) embedSendOptions(params map[string]string, opt *SendOptions) {
+func (b *OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	if b.parseMode != ModeDefault {
 		params["parse_mode"] = b.parseMode
 	}

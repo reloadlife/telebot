@@ -7,7 +7,6 @@ import "time"
 // All pollers must implement Poll(), which accepts bot
 // pointer and subscription channel and start polling
 // synchronously straight away.
-//
 type Poller interface {
 	// Poll is supposed to take the bot object
 	// subscription channel and start polling
@@ -15,7 +14,7 @@ type Poller interface {
 	//
 	// Poller must listen for stop constantly and close
 	// it as soon as it's done polling.
-	Poll(b *Bot, updates chan Update, stop chan struct{})
+	Poll(b Bot, updates chan Update, stop chan struct{})
 }
 
 // LongPoller is a classic LongPoller with timeout.
@@ -24,27 +23,11 @@ type LongPoller struct {
 	Timeout      time.Duration
 	LastUpdateID int
 
-	// AllowedUpdates contains the update types
-	// you want your bot to receive.
-	//
-	// Possible values:
-	//		message
-	// 		edited_message
-	// 		channel_post
-	// 		edited_channel_post
-	// 		inline_query
-	// 		chosen_inline_result
-	// 		callback_query
-	// 		shipping_query
-	// 		pre_checkout_query
-	// 		poll
-	// 		poll_answer
-	//
-	AllowedUpdates []string `yaml:"allowed_updates"`
+	AllowedUpdates []UpdateType `yaml:"allowed_updates"`
 }
 
 // Poll does long polling.
-func (p *LongPoller) Poll(b *Bot, dest chan Update, stop chan struct{}) {
+func (p *LongPoller) Poll(b Bot, dest chan Update, stop chan struct{}) {
 	for {
 		select {
 		case <-stop:
@@ -52,9 +35,9 @@ func (p *LongPoller) Poll(b *Bot, dest chan Update, stop chan struct{}) {
 		default:
 		}
 
-		updates, err := b.getUpdates(p.LastUpdateID+1, p.Limit, p.Timeout, p.AllowedUpdates)
+		updates, err := b.GetUpdates(p.LastUpdateID+1, p.Limit, p.Timeout, p.AllowedUpdates...)
 		if err != nil {
-			b.debug(err)
+			b.Debug(err)
 			continue
 		}
 
@@ -70,7 +53,6 @@ func (p *LongPoller) Poll(b *Bot, dest chan Update, stop chan struct{}) {
 // handling, banning or whatever.
 //
 // For heavy middleware, use increased capacity.
-//
 type MiddlewarePoller struct {
 	Capacity int // Default: 1
 	Poller   Poller
@@ -86,7 +68,7 @@ func NewMiddlewarePoller(original Poller, filter func(*Update) bool) *Middleware
 }
 
 // Poll sieves updates through middleware filter.
-func (p *MiddlewarePoller) Poll(b *Bot, dest chan Update, stop chan struct{}) {
+func (p *MiddlewarePoller) Poll(b Bot, dest chan Update, stop chan struct{}) {
 	if p.Capacity < 1 {
 		p.Capacity = 1
 	}

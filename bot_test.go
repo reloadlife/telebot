@@ -30,7 +30,7 @@ func defaultSettings() Settings {
 	return Settings{Token: token}
 }
 
-func newTestBot() (*Bot, error) {
+func newTestBot() (*OldBot, error) {
 	return NewBot(defaultSettings())
 }
 
@@ -378,7 +378,7 @@ func TestBot(t *testing.T) {
 		t.Skip("Cached bot instance is bad (probably wrong or empty TELEBOT_SECRET)")
 	}
 	if chatID == 0 {
-		t.Skip("CHAT_ID is required for Bot methods test")
+		t.Skip("CHAT_ID is required for OldBot methods test")
 	}
 
 	_, err := b.Send(to, nil)

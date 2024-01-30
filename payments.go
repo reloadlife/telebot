@@ -172,7 +172,7 @@ func (c Currency) ToTotal(total float64) int {
 }
 
 // CreateInvoiceLink creates a link for a payment invoice.
-func (b *Bot) CreateInvoiceLink(i Invoice) (string, error) {
+func (b *OldBot) CreateInvoiceLink(i Invoice) (string, error) {
 	data, err := b.Raw("createInvoiceLink", i.params())
 	if err != nil {
 		return "", err
