@@ -1,6 +1,8 @@
 name: Test and Checks
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master ]
 
 jobs:
   test:

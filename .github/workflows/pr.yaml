@@ -1,0 +1,85 @@
+name: "PR Checks"
+
+on: [ pull_request ]
+
+jobs:
+  check-commit-messages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check commit messages
+        run: |
+          commit_messages=$(git log --format='%H %s' HEAD^..HEAD)
+          while read -r commit; do
+            commit_hash=$(echo "$commit" | cut -d' ' -f1)
+            commit_message=$(echo "$commit" | cut -d' ' -f2-)
+          
+            if ! [[ "$commit_message" =~ ^(build|chore|ci|docs|feat|fix|perf|refactor|style|test)(\(.+\))?: .+ ]]; then
+              echo "Commit message does not follow Conventional Commits format in commit $commit_hash: $commit_message"
+              exit 1
+            fi
+          
+          done <<< "$commit_messages"
+
+  check-constraints:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check constraints
+        run: |
+          for file in $(git diff --name-only HEAD^ HEAD); do
+            if [[ "$file" == *.go ]]; then
+              if ! [[ "$file" =~ ^[a-z_]+\.go$ ]]; then
+                echo "File name does not follow snake_case.go pattern: $file"
+                exit 1
+              fi
+              test_file="${file%.*}_test.go"
+              if ! [[ -f "$test_file" ]]; then
+                echo "Test file is missing for $file"
+                exit 1
+              fi
+            fi
+          done
+          
+          for type_file in $(git diff --name-only HEAD^ HEAD | grep '^type_.*\.go$'); do
+            type_name=$(basename "${type_file%.go}")
+            if ! [[ "$type_name" =~ ^[A-Z][a-zA-Z]*$ ]]; then
+              echo "Telegram type name does not follow PascalCase: $type_name"
+              exit 1
+            fi
+          
+            test_file="${type_file%.*}_test.go"
+            if ! [[ -f "$test_file" ]]; then
+              echo "Test file is missing for $type_file"
+              exit 1
+            fi
+          done
+
+          for type_file in $(git diff --name-only HEAD^ HEAD | grep '^type_.*\.go$'); do
+            grep -E 'json:"[^"]*"' "$type_file" || (echo "JSON tags are missing in $type_file" && exit 1)
+            grep -E 'func \(t \*[^)]*\) String\(\) string' "$type_file" || (echo "String() method is missing in $type_file" && exit 1)
+          done
+
+  lint-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run tests, with coverage + lint check
+        run: |
+          export TELEBOT_SECRET=${{ secrets.TELEBOT_SECRET }}
+          export CHAT_ID=${{ secrets.CHAT_ID }}
+          export USER_ID=${{ secrets.USER_ID }}
+          export GOPATH=$(go env GOPATH)
+          go clean -modcache
+          go mod tidy
+          make check
+          make cover
+
+      - name: Upload Coverage report to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./resources/cover/cover.out
