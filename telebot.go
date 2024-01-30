@@ -1,29 +1,3 @@
-// Package telebot is a framework for Telegram bots.
-//
-// Example:
-//
-//	package main
-//
-//	import (
-//		"time"
-//		tele "go.mamad.dev/telebot"
-//	)
-//
-//	func main() {
-//		b, err := tele.NewBot(tele.Settings{
-//			Token:  "...",
-//			Poller: &tele.LongPoller{Timeout: 10 * time.Second},
-//		})
-//		if err != nil {
-//			return
-//		}
-//
-//		b.Handle("/start", func(c tele.Context) error {
-//			return c.Send("Hello world!")
-//		})
-//
-//		b.Start()
-//	}
 package telebot
 
 import "errors"
@@ -38,10 +12,6 @@ var (
 
 const DefaultApiURL = "https://api.telegram.org"
 
-// These are one of the possible events Handle() can deal with.
-//
-// For convenience, all Telebot-provided endpoints start with
-// an "alert" character \a.
 const (
 	// Basic message handlers.
 	OnText              = "\atext"
