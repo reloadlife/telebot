@@ -34,3 +34,4 @@ terraform*
 /examples/awslambdaechobot/awslambdaechobot
 
 .vscode
+.env
