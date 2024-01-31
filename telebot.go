@@ -1,6 +1,7 @@
 package telebot
 
 import (
+	"github.com/pkg/errors"
 	httpc "go.mamad.dev/telebot/http"
 	"time"
 )
@@ -26,23 +27,8 @@ type bot struct {
 	stopClient  chan struct{}
 
 	httpClient httpc.Client
-}
 
-type Bot interface {
-	Debug(...any)
-	OnError(error, Context)
-
-	// GetUpdates returns a list of updates (Long Polling).
-	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) ([]Update, error)
-
-	// Handle Register Routes
-	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
-
-	Start()
-	Stop()
-
-	StartInWebhook()
-	StopInWebhook()
+	offlineMode bool
 }
 
 type BotSettings struct {
@@ -72,7 +58,8 @@ func New(s BotSettings) Bot {
 		s.Poller = &LongPoller{}
 	}
 
-	return &bot{
+	b := &bot{
+		self:  &User{},
 		token: s.Token,
 		onError: func(err error, ctx Context) {
 			if s.OfflineMode {
@@ -81,6 +68,8 @@ func New(s BotSettings) Bot {
 		},
 		poller: s.Poller,
 
+		offlineMode: s.OfflineMode,
+
 		updates:  make(chan Update, s.UpdatesCount),
 		handlers: []handler{},
 		stop:     make(chan chan struct{}),
@@ -88,6 +77,16 @@ func New(s BotSettings) Bot {
 		synchronous: s.Synchronous,
 		httpClient:  httpc.NewHTTPClient(s.URL, time.Minute),
 	}
+
+	if !s.OfflineMode {
+		self, err := b.GetMe()
+		if err != nil {
+			panic(errors.Wrap(err, "telebot: can't get bot info"))
+		}
+		b.self = self
+	}
+
+	return b
 }
 
 // Start brings bot into motion by consuming incoming updates (see bot.updates channel).

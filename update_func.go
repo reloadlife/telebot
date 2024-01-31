@@ -29,7 +29,7 @@ func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...Up
 		params.Limit = limit
 	}
 
-	res, err := b.sendMethodRequest(MethodGetUpdates, params)
+	res, err := b.sendMethodRequest(methodGetUpdates, params)
 	if err != nil {
 		return nil, err
 	}

@@ -72,6 +72,8 @@ var (
 	ErrUnauthorized = NewError(401, "Unauthorized")
 	ErrNotFound     = NewError(404, "Not Found")
 	ErrInternal     = NewError(500, "Internal Server Error")
+
+	ErrNotClosed = NewError(400, "Bad Request: failed to close the bot account")
 )
 
 // Bad request errors

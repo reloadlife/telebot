@@ -5,23 +5,7 @@ import (
 	"reflect"
 )
 
-type Method int
-
-const (
-	MethodGetUpdates Method = iota
-)
-
-func (m Method) String() string {
-	switch m {
-	case MethodGetUpdates:
-		return "getUpdates"
-
-	default:
-		panic("telebot: unknown method")
-	}
-}
-
-func (b *bot) sendMethodRequest(method Method, params any) (*http.Response, error) {
+func (b *bot) sendMethodRequest(method method, params any) (*http.Response, error) {
 	return b.httpClient.TelegramCall(method.String(), b.token, structToMap(params))
 }
 
@@ -38,8 +22,6 @@ func structToMap(input any) map[string]any {
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		jsonTag := field.Tag.Get("json")
-
-		// Skip fields without a json tag or with "-" json tag
 		if jsonTag == "" || jsonTag == "-" {
 			continue
 		}
