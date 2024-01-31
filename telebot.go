@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"go.mamad.dev/telebot/.old"
 	httpc "go.mamad.dev/telebot/http"
 	"time"
 )
@@ -13,7 +12,7 @@ type handler struct {
 }
 
 type bot struct {
-	self    *_old.User
+	self    *User
 	token   string
 	updates chan Update
 	poller  Poller
@@ -55,6 +54,8 @@ type BotSettings struct {
 
 	Synchronous  bool
 	UpdatesCount int
+
+	Poller Poller
 }
 
 // New creates a new bot instance.
@@ -67,6 +68,10 @@ func New(s BotSettings) Bot {
 		s.UpdatesCount = 100
 	}
 
+	if s.Poller == nil {
+		s.Poller = &LongPoller{}
+	}
+
 	return &bot{
 		token: s.Token,
 		onError: func(err error, ctx Context) {
@@ -74,7 +79,7 @@ func New(s BotSettings) Bot {
 				panic(err)
 			}
 		},
-		poller: &LongPoller{},
+		poller: s.Poller,
 
 		updates:  make(chan Update, s.UpdatesCount),
 		handlers: []handler{},

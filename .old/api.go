@@ -67,7 +67,7 @@ func (b *OldBot) Raw(method string, payload interface{}) ([]byte, error) {
 	return data, extractOk(data)
 }
 
-func (b *OldBot) sendFiles(method string, files map[string]telebot.File, params map[string]string) ([]byte, error) {
+func (b *OldBot) sendFiles(method string, files map[string]File, params map[string]string) ([]byte, error) {
 	rawFiles := make(map[string]interface{})
 	for name, f := range files {
 		switch {
@@ -174,7 +174,7 @@ func (b *OldBot) sendText(to Recipient, text string, opt *telebot.SendOptions) (
 	return extractMessage(data)
 }
 
-func (b *OldBot) sendMedia(media Media, params map[string]string, files map[string]telebot.File) (*Message, error) {
+func (b *OldBot) sendMedia(media Media, params map[string]string, files map[string]File) (*Message, error) {
 	kind := media.MediaType()
 	what := "send" + strings.Title(kind)
 
@@ -182,7 +182,7 @@ func (b *OldBot) sendMedia(media Media, params map[string]string, files map[stri
 		kind = "video_note"
 	}
 
-	sendFiles := map[string]telebot.File{kind: *media.MediaFile()}
+	sendFiles := map[string]File{kind: *media.MediaFile()}
 	for k, v := range files {
 		sendFiles[k] = v
 	}

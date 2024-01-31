@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"go.mamad.dev/telebot/.old"
 	"testing"
 )
 
@@ -10,24 +9,24 @@ func TestAllUpdateTypes(t *testing.T) {
 		updateType   UpdateType
 		updateSetter func(u *Update)
 	}{
-		{UpdateTypeMessage, func(u *Update) { u.Message = &_old.Message{} }},
-		{UpdateTypeEditedMessage, func(u *Update) { u.EditedMessage = &_old.Message{} }},
-		{UpdateTypeChannelPost, func(u *Update) { u.ChannelPost = &_old.Message{} }},
-		{UpdateTypeEditedChannelPost, func(u *Update) { u.EditedChannelPost = &_old.Message{} }},
-		{UpdateTypeMessageReaction, func(u *Update) { u.MessageReaction = &_old.MessageReaction{} }},
-		{UpdateTypeMessageReactionCount, func(u *Update) { u.MessageReactionCount = &_old.MessageReactionCountUpdated{} }},
-		{UpdateTypeInlineQuery, func(u *Update) { u.Query = &_old.Query{} }},
-		{UpdateTypeChosenInlineResult, func(u *Update) { u.InlineResult = &_old.InlineResult{} }},
+		{UpdateTypeMessage, func(u *Update) { u.Message = &Message{} }},
+		{UpdateTypeEditedMessage, func(u *Update) { u.EditedMessage = &Message{} }},
+		{UpdateTypeChannelPost, func(u *Update) { u.ChannelPost = &Message{} }},
+		{UpdateTypeEditedChannelPost, func(u *Update) { u.EditedChannelPost = &Message{} }},
+		{UpdateTypeMessageReaction, func(u *Update) { u.MessageReaction = &MessageReaction{} }},
+		{UpdateTypeMessageReactionCount, func(u *Update) { u.MessageReactionCount = &MessageReactionCountUpdated{} }},
+		{UpdateTypeInlineQuery, func(u *Update) { u.Query = &Query{} }},
+		{UpdateTypeChosenInlineResult, func(u *Update) { u.InlineResult = &InlineResult{} }},
 		{UpdateTypeCallbackQuery, func(u *Update) { u.Callback = &Callback{} }},
-		{UpdateTypeShippingQuery, func(u *Update) { u.ShippingQuery = &_old.ShippingQuery{} }},
-		{UpdateTypePreCheckoutQuery, func(u *Update) { u.PreCheckoutQuery = &_old.PreCheckoutQuery{} }},
-		{UpdateTypePoll, func(u *Update) { u.Poll = &_old.Poll{} }},
-		{UpdateTypePollAnswer, func(u *Update) { u.PollAnswer = &_old.PollAnswer{} }},
-		{UpdateTypeMyChatMember, func(u *Update) { u.MyChatMember = &_old.ChatMemberUpdate{} }},
-		{UpdateTypeChatMember, func(u *Update) { u.ChatMember = &_old.ChatMemberUpdate{} }},
-		{UpdateTypeChatJoinRequest, func(u *Update) { u.ChatJoinRequest = &_old.ChatJoinRequest{} }},
-		{UpdateTypeChatBoost, func(u *Update) { u.ChatBoost = &_old.ChatBoost{} }},
-		{UpdateTypeChatBoostRemoved, func(u *Update) { u.ChatBoostRemoved = &_old.ChatBoostRemoved{} }},
+		{UpdateTypeShippingQuery, func(u *Update) { u.ShippingQuery = &ShippingQuery{} }},
+		{UpdateTypePreCheckoutQuery, func(u *Update) { u.PreCheckoutQuery = &PreCheckoutQuery{} }},
+		{UpdateTypePoll, func(u *Update) { u.Poll = &Poll{} }},
+		{UpdateTypePollAnswer, func(u *Update) { u.PollAnswer = &PollAnswer{} }},
+		{UpdateTypeMyChatMember, func(u *Update) { u.MyChatMember = &ChatMemberUpdate{} }},
+		{UpdateTypeChatMember, func(u *Update) { u.ChatMember = &ChatMemberUpdate{} }},
+		{UpdateTypeChatJoinRequest, func(u *Update) { u.ChatJoinRequest = &ChatJoinRequest{} }},
+		{UpdateTypeChatBoost, func(u *Update) { u.ChatBoost = &ChatBoost{} }},
+		{UpdateTypeChatBoostRemoved, func(u *Update) { u.ChatBoostRemoved = &ChatBoostRemoved{} }},
 		{UpdateTypeUnknown, func(u *Update) {}},
 	}
 

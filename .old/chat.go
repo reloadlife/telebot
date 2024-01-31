@@ -438,7 +438,7 @@ func (b *OldBot) SetGroupPhoto(chat *Chat, p *Photo) error {
 		"chat_id": chat.Recipient(),
 	}
 
-	_, err := b.sendFiles("setChatPhoto", map[string]telebot.File{"photo": p.File}, params)
+	_, err := b.sendFiles("setChatPhoto", map[string]File{"photo": p.File}, params)
 	return err
 }
 

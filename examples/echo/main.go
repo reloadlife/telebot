@@ -1,4 +1,4 @@
-package echo
+package main
 
 import (
 	tele "go.mamad.dev/telebot"

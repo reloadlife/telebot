@@ -1,7 +1,5 @@
 package telebot
 
-import "go.mamad.dev/telebot/.old"
-
 // CallbackEndpoint is an interface any element capable
 // of responding to a callback `\f<unique>`.
 type CallbackEndpoint interface {
@@ -14,11 +12,11 @@ type Callback struct {
 	ID string `json:"id"`
 
 	// For message sent to channels, Sender may be empty
-	Sender *_old.User `json:"from"`
+	Sender *User `json:"from"`
 
 	// Message will be set if the button that originated the query
 	// was attached to a message sent by a bot.
-	Message *_old.Message `json:"message"`
+	Message *Message `json:"message"`
 
 	// MessageID will be set if the button was attached to a message
 	// sent via the bot in inline mode.
@@ -77,17 +75,17 @@ type CallbackResponse struct {
 }
 
 // CallbackUnique returns ReplyButton.Text.
-func (t *_old.ReplyButton) CallbackUnique() string {
+func (t *ReplyButton) CallbackUnique() string {
 	return t.Text
 }
 
 // CallbackUnique returns InlineButton.Unique.
-func (t *_old.InlineButton) CallbackUnique() string {
+func (t *InlineButton) CallbackUnique() string {
 	return "\f" + t.Unique
 }
 
 // CallbackUnique implements CallbackEndpoint.
-func (t *_old.Btn) CallbackUnique() string {
+func (t *Btn) CallbackUnique() string {
 	if t.Unique != "" {
 		return "\f" + t.Unique
 	}
