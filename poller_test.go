@@ -1,6 +1,7 @@
 package telebot
 
 import (
+	"go.mamad.dev/telebot/.old"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,7 +19,7 @@ func newTestPoller() *testPoller {
 	}
 }
 
-func (p *testPoller) Poll(b *OldBot, updates chan Update, stop chan struct{}) {
+func (p *testPoller) Poll(b *_old.OldBot, updates chan Update, stop chan struct{}) {
 	for {
 		select {
 		case upd := <-p.updates:
@@ -34,10 +35,10 @@ func TestMiddlewarePoller(t *testing.T) {
 	tp := newTestPoller()
 	var ids []int
 
-	pref := defaultSettings()
+	pref := _old.defaultSettings()
 	pref.Offline = true
 
-	b, err := NewBot(pref)
+	b, err := _old.NewBot(pref)
 	if err != nil {
 		t.Fatal(err)
 	}

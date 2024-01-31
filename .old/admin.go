@@ -1,7 +1,8 @@
-package telebot
+package _old
 
 import (
 	"encoding/json"
+	"go.mamad.dev/telebot"
 	"strconv"
 	"time"
 )
@@ -205,7 +206,7 @@ func (b *OldBot) AdminsOf(chat *Chat) ([]ChatMember, error) {
 		Result []ChatMember
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -225,7 +226,7 @@ func (b *OldBot) Len(chat *Chat) (int, error) {
 		Result int
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return 0, wrapError(err)
+		return 0, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -283,7 +284,7 @@ func (b *OldBot) DefaultRights(forChannels bool) (*Rights, error) {
 		Result *Rights
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }

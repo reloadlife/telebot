@@ -1,7 +1,8 @@
-package telebot
+package _old
 
 import (
 	"encoding/json"
+	"go.mamad.dev/telebot"
 	"strconv"
 	"time"
 )
@@ -285,7 +286,7 @@ func (b *OldBot) InviteLink(chat *Chat) (string, error) {
 		Result string
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return "", wrapError(err)
+		return "", telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -317,7 +318,7 @@ func (b *OldBot) CreateInviteLink(chat Recipient, link *ChatInviteLink) (*ChatIn
 		Result ChatInviteLink `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	return &resp.Result, nil
@@ -351,7 +352,7 @@ func (b *OldBot) EditInviteLink(chat Recipient, link *ChatInviteLink) (*ChatInvi
 		Result ChatInviteLink `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	return &resp.Result, nil
@@ -373,7 +374,7 @@ func (b *OldBot) RevokeInviteLink(chat Recipient, link string) (*ChatInviteLink,
 		Result ChatInviteLink `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	return &resp.Result, nil
@@ -437,7 +438,7 @@ func (b *OldBot) SetGroupPhoto(chat *Chat, p *Photo) error {
 		"chat_id": chat.Recipient(),
 	}
 
-	_, err := b.sendFiles("setChatPhoto", map[string]File{"photo": p.File}, params)
+	_, err := b.sendFiles("setChatPhoto", map[string]telebot.File{"photo": p.File}, params)
 	return err
 }
 

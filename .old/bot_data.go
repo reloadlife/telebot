@@ -1,6 +1,9 @@
-package telebot
+package _old
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"go.mamad.dev/telebot"
+)
 
 func (b *OldBot) SetMyDescription(description, languageCode string) error {
 	_, err := b.Raw("setMyCommands", map[string]interface{}{
@@ -28,7 +31,7 @@ func (b *OldBot) GetMyDescription(languageCode string) (*BotDescription, error) 
 		Result BotDescription
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return &resp.Result, nil
 }
@@ -57,7 +60,7 @@ func (b *OldBot) GetMyShortDescription(languageCode string) (*BotShortDescriptio
 		Result BotShortDescription
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return &resp.Result, nil
 }
@@ -86,7 +89,7 @@ func (b *OldBot) GetMyName(languageCode string) (*BotName, error) {
 		Result BotName
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return &resp.Result, nil
 }

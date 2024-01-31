@@ -1,19 +1,18 @@
-package telebot
+package _old
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mamad.dev/telebot"
 	"io"
 	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
-	"time"
 )
 
 // Raw lets you call any method of OldBot API manually.
@@ -44,20 +43,20 @@ func (b *OldBot) Raw(method string, payload interface{}) ([]byte, error) {
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, &buf)
 	if err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := b.client.Do(req)
 	if err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	resp.Close = true
 	defer resp.Body.Close()
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	if b.verbose {
@@ -68,7 +67,7 @@ func (b *OldBot) Raw(method string, payload interface{}) ([]byte, error) {
 	return data, extractOk(data)
 }
 
-func (b *OldBot) sendFiles(method string, files map[string]File, params map[string]string) ([]byte, error) {
+func (b *OldBot) sendFiles(method string, files map[string]telebot.File, params map[string]string) ([]byte, error) {
 	rawFiles := make(map[string]interface{})
 	for name, f := range files {
 		switch {
@@ -117,7 +116,7 @@ func (b *OldBot) sendFiles(method string, files map[string]File, params map[stri
 
 	resp, err := b.client.Post(url, writer.FormDataContentType(), pipeReader)
 	if err != nil {
-		err = wrapError(err)
+		err = telebot.wrapError(err)
 		pipeReader.CloseWithError(err)
 		return nil, err
 	}
@@ -125,12 +124,12 @@ func (b *OldBot) sendFiles(method string, files map[string]File, params map[stri
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusInternalServerError {
-		return nil, ErrInternal
+		return nil, telebot.ErrInternal
 	}
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	return data, extractOk(data)
@@ -160,7 +159,7 @@ func addFileToWriter(writer *multipart.Writer, filename, field string, file inte
 	return err
 }
 
-func (b *OldBot) sendText(to Recipient, text string, opt *SendOptions) (*Message, error) {
+func (b *OldBot) sendText(to Recipient, text string, opt *telebot.SendOptions) (*Message, error) {
 	params := map[string]string{
 		"chat_id": to.Recipient(),
 		"text":    text,
@@ -175,7 +174,7 @@ func (b *OldBot) sendText(to Recipient, text string, opt *SendOptions) (*Message
 	return extractMessage(data)
 }
 
-func (b *OldBot) sendMedia(media Media, params map[string]string, files map[string]File) (*Message, error) {
+func (b *OldBot) sendMedia(media Media, params map[string]string, files map[string]telebot.File) (*Message, error) {
 	kind := media.MediaType()
 	what := "send" + strings.Title(kind)
 
@@ -183,7 +182,7 @@ func (b *OldBot) sendMedia(media Media, params map[string]string, files map[stri
 		kind = "video_note"
 	}
 
-	sendFiles := map[string]File{kind: *media.MediaFile()}
+	sendFiles := map[string]telebot.File{kind: *media.MediaFile()}
 	for k, v := range files {
 		sendFiles[k] = v
 	}
@@ -206,7 +205,7 @@ func (b *OldBot) getMe() (*User, error) {
 		Result *User
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -228,17 +227,17 @@ func extractOk(data []byte) error {
 		return nil
 	}
 
-	err := Err(e.Description)
+	err := telebot.Err(e.Description)
 	switch err {
 	case nil:
-	case ErrGroupMigrated:
+	case telebot.ErrGroupMigrated:
 		migratedTo, ok := e.Parameters["migrate_to_chat_id"]
 		if !ok {
-			return NewError(e.Code, e.Description)
+			return telebot.NewError(e.Code, e.Description)
 		}
 
-		return GroupError{
-			err:        err.(*Error),
+		return telebot.GroupError{
+			err:        err.(*telebot.Error),
 			MigratedTo: int64(migratedTo.(float64)),
 		}
 	default:
@@ -249,11 +248,11 @@ func extractOk(data []byte) error {
 	case http.StatusTooManyRequests:
 		retryAfter, ok := e.Parameters["retry_after"]
 		if !ok {
-			return NewError(e.Code, e.Description)
+			return telebot.NewError(e.Code, e.Description)
 		}
 
-		err = FloodError{
-			err:        NewError(e.Code, e.Description),
+		err = telebot.FloodError{
+			err:        telebot.NewError(e.Code, e.Description),
 			RetryAfter: int(retryAfter.(float64)),
 		}
 	default:
@@ -276,12 +275,12 @@ func extractMessage(data []byte) (*Message, error) {
 			Result bool
 		}
 		if err := json.Unmarshal(data, &resp); err != nil {
-			return nil, wrapError(err)
+			return nil, telebot.wrapError(err)
 		}
 		if resp.Result {
 			return nil, ErrTrueResult
 		}
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }

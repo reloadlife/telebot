@@ -1,4 +1,4 @@
-package telebot
+package _old
 
 import (
 	"testing"

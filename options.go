@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"encoding/json"
+	"go.mamad.dev/telebot/.old"
 	"strconv"
 )
 
@@ -54,7 +55,7 @@ type CustomEmoji string
 // Placeholder is used to set input field placeholder as a send option.
 func Placeholder(text string) *SendOptions {
 	return &SendOptions{
-		ReplyMarkup: &ReplyMarkup{
+		ReplyMarkup: &_old.ReplyMarkup{
 			ForceReply:  true,
 			Placeholder: text,
 		},
@@ -70,11 +71,11 @@ func Placeholder(text string) *SendOptions {
 // and re-using it somewhere or be using Option flags instead.
 type SendOptions struct {
 	// If the message is a reply, original message.
-	ReplyTo         *Message
-	ThreadMessageID *Message
+	ReplyTo         *_old.Message
+	ThreadMessageID *_old.Message
 
 	// See ReplyMarkup struct definition.
-	ReplyMarkup *ReplyMarkup
+	ReplyMarkup *_old.ReplyMarkup
 
 	// For text messages, disables previews for links in this message.
 	DisableWebPagePreview bool
@@ -86,7 +87,7 @@ type SendOptions struct {
 	ParseMode ParseMode
 
 	// Entities is a list of special entities that appear in message text, which can be specified instead of parse_mode.
-	Entities Entities
+	Entities _old.Entities
 
 	// AllowWithoutReply allows sending messages not a as reply if the replied-to message has already been deleted.
 	AllowWithoutReply bool
@@ -115,7 +116,7 @@ func extractOptions(how []interface{}) *SendOptions {
 		switch opt := prop.(type) {
 		case *SendOptions:
 			opts = opt.copy()
-		case *ReplyMarkup:
+		case *_old.ReplyMarkup:
 			if opt != nil {
 				opts.ReplyMarkup = opt.copy()
 			}
@@ -129,17 +130,17 @@ func extractOptions(how []interface{}) *SendOptions {
 				opts.AllowWithoutReply = true
 			case ForceReply:
 				if opts.ReplyMarkup == nil {
-					opts.ReplyMarkup = &ReplyMarkup{}
+					opts.ReplyMarkup = &_old.ReplyMarkup{}
 				}
 				opts.ReplyMarkup.ForceReply = true
 			case OneTimeKeyboard:
 				if opts.ReplyMarkup == nil {
-					opts.ReplyMarkup = &ReplyMarkup{}
+					opts.ReplyMarkup = &_old.ReplyMarkup{}
 				}
 				opts.ReplyMarkup.OneTimeKeyboard = true
 			case RemoveKeyboard:
 				if opts.ReplyMarkup == nil {
-					opts.ReplyMarkup = &ReplyMarkup{}
+					opts.ReplyMarkup = &_old.ReplyMarkup{}
 				}
 				opts.ReplyMarkup.RemoveKeyboard = true
 			case Protected:
@@ -155,7 +156,7 @@ func extractOptions(how []interface{}) *SendOptions {
 			opts.IconCustomEmojiID = opt
 		case ParseMode:
 			opts.ParseMode = opt
-		case Entities:
+		case _old.Entities:
 			opts.Entities = opt
 		default:
 			panic("telebot: unsupported send-option")
@@ -165,7 +166,7 @@ func extractOptions(how []interface{}) *SendOptions {
 	return opts
 }
 
-func (b *OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
+func (b *_old.OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	if b.parseMode != ModeDefault {
 		params["parse_mode"] = b.parseMode
 	}
@@ -175,7 +176,7 @@ func (b *OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	}
 
 	if opt.ReplyTo != nil && opt.ReplyTo.ID != 0 {
-		reply, _ := json.Marshal(ReplyParameters{
+		reply, _ := json.Marshal(_old.ReplyParameters{
 			MessageID:                opt.ReplyTo.ID,
 			AllowSendingWithoutReply: opt.AllowWithoutReply,
 		})
@@ -187,7 +188,7 @@ func (b *OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	}
 
 	if opt.DisableWebPagePreview {
-		linkPrev, _ := json.Marshal(LinkPreviewOptions{
+		linkPrev, _ := json.Marshal(_old.LinkPreviewOptions{
 			IsDisabled: true,
 		})
 		params["LinkPreviewOptions"] = string(linkPrev)
@@ -228,7 +229,7 @@ func (b *OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
 
 }
 
-func processButtons(keys [][]InlineButton) {
+func processButtons(keys [][]_old.InlineButton) {
 	if keys == nil || len(keys) < 1 || len(keys[0]) < 1 {
 		return
 	}

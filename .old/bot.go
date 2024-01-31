@@ -1,9 +1,10 @@
-package telebot
+package _old
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go.mamad.dev/telebot"
 	"io"
 	"log"
 	"net/http"
@@ -30,7 +31,7 @@ func NewBot(pref Settings) (*OldBot, error) {
 		pref.URL = DefaultApiURL
 	}
 	if pref.Poller == nil {
-		pref.Poller = &LongPoller{}
+		pref.Poller = &telebot.LongPoller{}
 	}
 	if pref.OnError == nil {
 		pref.OnError = defaultOnError
@@ -42,8 +43,8 @@ func NewBot(pref Settings) (*OldBot, error) {
 		Poller:  pref.Poller,
 		onError: pref.OnError,
 
-		Updates:  make(chan Update, pref.Updates),
-		handlers: make(map[string]HandlerFunc),
+		Updates:  make(chan telebot.Update, pref.Updates),
+		handlers: make(map[string]telebot.HandlerFunc),
 		stop:     make(chan chan struct{}),
 
 		synchronous: pref.Synchronous,
@@ -71,12 +72,12 @@ type OldBot struct {
 	Me      *User
 	Token   string
 	URL     string
-	Updates chan Update
-	Poller  Poller
-	onError func(error, Context)
+	Updates chan telebot.Update
+	Poller  telebot.Poller
+	onError func(error, telebot.Context)
 
-	group       *Group
-	handlers    map[string]HandlerFunc
+	group       *telebot.Group
+	handlers    map[string]telebot.HandlerFunc
 	synchronous bool
 	verbose     bool
 	parseMode   ParseMode
@@ -95,7 +96,7 @@ type Settings struct {
 	Updates int
 
 	// Poller is the provider of Updates.
-	Poller Poller
+	Poller telebot.Poller
 
 	// Synchronous prevents handlers from running in parallel.
 	// It makes ProcessUpdate return after the handler is finished.
@@ -113,7 +114,7 @@ type Settings struct {
 	// OnError is a callback function that will get called on errors
 	// resulted from the handler. It is used as post-middleware function.
 	// Notice that context can be nil.
-	OnError func(error, Context)
+	OnError func(error, telebot.Context)
 
 	// HTTP Client used to make requests to telegram api
 	Client *http.Client
@@ -122,7 +123,7 @@ type Settings struct {
 	Offline bool
 }
 
-var defaultOnError = func(err error, c Context) {
+var defaultOnError = func(err error, c telebot.Context) {
 	if c != nil {
 		log.Println(c.Update().ID, err)
 	} else {
@@ -130,7 +131,7 @@ var defaultOnError = func(err error, c Context) {
 	}
 }
 
-func (b *OldBot) OnError(err error, c Context) {
+func (b *OldBot) OnError(err error, c telebot.Context) {
 	b.onError(err, c)
 }
 
@@ -141,12 +142,12 @@ func (b *OldBot) debug(err error) {
 }
 
 // Group returns a new group.
-func (b *OldBot) Group() *Group {
-	return &Group{b: b}
+func (b *OldBot) Group() *telebot.Group {
+	return &telebot.Group{b: b}
 }
 
 // Use adds middleware to the global bot chain.
-func (b *OldBot) Use(middleware ...MiddlewareFunc) {
+func (b *OldBot) Use(middleware ...telebot.MiddlewareFunc) {
 	b.group.Use(middleware...)
 }
 
@@ -169,19 +170,19 @@ func (b *OldBot) Use(middleware ...MiddlewareFunc) {
 //	b.Handle("/ban", onBan, middleware.Whitelist(ids...))
 //
 // TODO: Fix Regex Matching
-func (b *OldBot) Handle(endpoint interface{}, h HandlerFunc, m ...MiddlewareFunc) {
+func (b *OldBot) Handle(endpoint interface{}, h telebot.HandlerFunc, m ...telebot.MiddlewareFunc) {
 	if len(b.group.middleware) > 0 {
 		m = append(b.group.middleware, m...)
 	}
 
-	handler := func(c Context) error {
-		return applyMiddleware(h, m...)(c)
+	handler := func(c telebot.Context) error {
+		return telebot.applyMiddleware(h, m...)(c)
 	}
 
 	switch end := endpoint.(type) {
 	case string:
 		b.handlers[end] = handler
-	case CallbackEndpoint:
+	case telebot.CallbackEndpoint:
 		b.handlers[end.CallbackUnique()] = handler
 	case *regexp.Regexp:
 		b.handlers["\r"+end.String()] = handler
@@ -197,8 +198,8 @@ func (b *OldBot) NewMarkup() *ReplyMarkup {
 
 // NewContext returns a new native context object,
 // field by the passed update.
-func (b *OldBot) NewContext(u Update) Context {
-	return &nativeContext{
+func (b *OldBot) NewContext(u telebot.Update) telebot.Context {
+	return &telebot.nativeContext{
 		b: b,
 		u: u,
 	}
@@ -223,7 +224,7 @@ func (b *OldBot) Send(to Recipient, what interface{}, opts ...interface{}) (*Mes
 		return nil, ErrBadRecipient
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 
 	switch object := what.(type) {
 	case string:
@@ -242,9 +243,9 @@ func (b *OldBot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Messag
 		return nil, ErrBadRecipient
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	media := make([]string, len(a))
-	files := make(map[string]File)
+	files := make(map[string]telebot.File)
 
 	for i, x := range a {
 		var (
@@ -293,7 +294,7 @@ func (b *OldBot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Messag
 		Result []Message
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	for attachName := range files {
@@ -321,9 +322,9 @@ func (b *OldBot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Messag
 // Reply behaves just like Send() with an exception of "reply-to" indicator.
 // This function will panic upon nil Message.
 func (b *OldBot) Reply(to *Message, what interface{}, opts ...interface{}) (*Message, error) {
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	if sendOpts == nil {
-		sendOpts = &SendOptions{}
+		sendOpts = &telebot.SendOptions{}
 	}
 
 	sendOpts.ReplyTo = to
@@ -344,7 +345,7 @@ func (b *OldBot) Forward(to Recipient, msg Editable, opts ...interface{}) (*Mess
 		"message_id":   msgID,
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	data, err := b.Raw("forwardMessage", params)
@@ -370,7 +371,7 @@ func (b *OldBot) Copy(to Recipient, msg Editable, options ...interface{}) (*Mess
 		"message_id":   msgID,
 	}
 
-	sendOpts := extractOptions(options)
+	sendOpts := telebot.extractOptions(options)
 	b.embedSendOptions(params, sendOpts)
 
 	data, err := b.Raw("copyMessage", params)
@@ -437,7 +438,7 @@ func (b *OldBot) Edit(msg Editable, what interface{}, opts ...interface{}) (*Mes
 		params["message_id"] = msgID
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	data, err := b.Raw(method, params)
@@ -470,7 +471,7 @@ func (b *OldBot) EditReplyMarkup(msg Editable, markup *ReplyMarkup) (*Message, e
 		markup = &ReplyMarkup{}
 	}
 
-	processButtons(markup.InlineKeyboard)
+	telebot.processButtons(markup.InlineKeyboard)
 	data, _ := json.Marshal(markup)
 	params["reply_markup"] = string(data)
 
@@ -501,7 +502,7 @@ func (b *OldBot) EditCaption(msg Editable, caption string, opts ...interface{}) 
 		params["message_id"] = msgID
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	data, err := b.Raw("editMessageCaption", params)
@@ -526,7 +527,7 @@ func (b *OldBot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) 
 	var (
 		repr  string
 		file  = media.MediaFile()
-		files = make(map[string]File)
+		files = make(map[string]telebot.File)
 
 		thumb     *Photo
 		thumbName = "thumbnail"
@@ -565,7 +566,7 @@ func (b *OldBot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) 
 	msgID, chatID := msg.MessageSig()
 	params := make(map[string]string)
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	im := media.InputMedia()
@@ -714,10 +715,10 @@ func (b *OldBot) Accept(query *PreCheckoutQuery, errorMessage ...string) error {
 //
 //	b.Respond(c)
 //	b.Respond(c, response)
-func (b *OldBot) Respond(c *Callback, resp ...*CallbackResponse) error {
-	var r *CallbackResponse
+func (b *OldBot) Respond(c *telebot.Callback, resp ...*telebot.CallbackResponse) error {
+	var r *telebot.CallbackResponse
 	if resp == nil {
-		r = &CallbackResponse{}
+		r = &telebot.CallbackResponse{}
 	} else {
 		r = resp[0]
 	}
@@ -760,7 +761,7 @@ func (b *OldBot) AnswerWebApp(query *Query, r Result) (*WebAppMessage, error) {
 		Result *WebAppMessage
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	return resp.Result, err
@@ -771,28 +772,28 @@ func (b *OldBot) AnswerWebApp(query *Query, r Result) (*WebAppMessage, error) {
 //
 // Usually, Telegram-provided File objects miss FilePath so you might need to
 // perform an additional request to fetch them.
-func (b *OldBot) FileByID(fileID string) (File, error) {
+func (b *OldBot) FileByID(fileID string) (telebot.File, error) {
 	params := map[string]string{
 		"file_id": fileID,
 	}
 
 	data, err := b.Raw("getFile", params)
 	if err != nil {
-		return File{}, err
+		return telebot.File{}, err
 	}
 
 	var resp struct {
-		Result File
+		Result telebot.File
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return File{}, wrapError(err)
+		return telebot.File{}, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
 
 // Download saves the file from Telegram servers locally.
 // Maximum file size to download is 20 MB.
-func (b *OldBot) Download(file *File, localFilename string) error {
+func (b *OldBot) Download(file *telebot.File, localFilename string) error {
 	reader, err := b.File(file)
 	if err != nil {
 		return err
@@ -801,13 +802,13 @@ func (b *OldBot) Download(file *File, localFilename string) error {
 
 	out, err := os.Create(localFilename)
 	if err != nil {
-		return wrapError(err)
+		return telebot.wrapError(err)
 	}
 	defer out.Close()
 
 	_, err = io.Copy(out, reader)
 	if err != nil {
-		return wrapError(err)
+		return telebot.wrapError(err)
 	}
 
 	file.FileLocal = localFilename
@@ -815,7 +816,7 @@ func (b *OldBot) Download(file *File, localFilename string) error {
 }
 
 // File gets a file from Telegram servers.
-func (b *OldBot) File(file *File) (io.ReadCloser, error) {
+func (b *OldBot) File(file *telebot.File) (io.ReadCloser, error) {
 	f, err := b.FileByID(file.FileID)
 	if err != nil {
 		return nil, err
@@ -826,12 +827,12 @@ func (b *OldBot) File(file *File) (io.ReadCloser, error) {
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	resp, err := b.client.Do(req)
 	if err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -858,7 +859,7 @@ func (b *OldBot) StopLiveLocation(msg Editable, opts ...interface{}) (*Message, 
 		"message_id": msgID,
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	data, err := b.Raw("stopMessageLiveLocation", params)
@@ -882,7 +883,7 @@ func (b *OldBot) StopPoll(msg Editable, opts ...interface{}) (*Poll, error) {
 		"message_id": msgID,
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	data, err := b.Raw("stopPoll", params)
@@ -894,7 +895,7 @@ func (b *OldBot) StopPoll(msg Editable, opts ...interface{}) (*Poll, error) {
 		Result *Poll
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -921,7 +922,7 @@ func (b *OldBot) Pin(msg Editable, opts ...interface{}) error {
 		"message_id": msgID,
 	}
 
-	sendOpts := extractOptions(opts)
+	sendOpts := telebot.extractOptions(opts)
 	b.embedSendOptions(params, sendOpts)
 
 	_, err := b.Raw("pinChatMessage", params)
@@ -989,7 +990,7 @@ func (b *OldBot) ChatByUsername(name string) (*Chat, error) {
 		Result *Chat
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	if resp.Result.Type == ChatChannel && resp.Result.Username == "" {
 		resp.Result.Type = ChatChannelPrivate
@@ -1015,7 +1016,7 @@ func (b *OldBot) ProfilePhotosOf(user *User) ([]Photo, error) {
 		}
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result.Photos, nil
 }
@@ -1036,7 +1037,7 @@ func (b *OldBot) ChatMemberOf(chat, user Recipient) (*ChatMember, error) {
 		Result *ChatMember
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -1057,7 +1058,7 @@ func (b *OldBot) MenuButton(chat *User) (*MenuButton, error) {
 		Result *MenuButton
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
@@ -1096,7 +1097,7 @@ func (b *OldBot) Logout() (bool, error) {
 		Result bool `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return false, wrapError(err)
+		return false, telebot.wrapError(err)
 	}
 
 	return resp.Result, nil
@@ -1113,7 +1114,7 @@ func (b *OldBot) Close() (bool, error) {
 		Result bool `json:"result"`
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return false, wrapError(err)
+		return false, telebot.wrapError(err)
 	}
 
 	return resp.Result, nil

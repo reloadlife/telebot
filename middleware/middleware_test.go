@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"go.mamad.dev/telebot/.old"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,7 +10,7 @@ import (
 	tele "go.mamad.dev/telebot"
 )
 
-var b, _ = tele.NewBot(tele.Settings{Offline: true})
+var b, _ = _old.NewBot(_old.Settings{Offline: true})
 
 func TestRecover(t *testing.T) {
 	onError := func(err error) {

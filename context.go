@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"errors"
+	"go.mamad.dev/telebot/.old"
 	"strings"
 	"sync"
 	"time"
@@ -19,51 +20,51 @@ type Context interface {
 	Update() Update
 
 	// Message returns stored message if such presented.
-	Message() *Message
+	Message() *_old.Message
 
 	// Callback returns stored callback if such presented.
 	Callback() *Callback
 
 	// Query returns stored query if such presented.
-	Query() *Query
+	Query() *_old.Query
 
 	// InlineResult returns stored inline result if such presented.
-	InlineResult() *InlineResult
+	InlineResult() *_old.InlineResult
 
 	// ShippingQuery returns stored shipping query if such presented.
-	ShippingQuery() *ShippingQuery
+	ShippingQuery() *_old.ShippingQuery
 
 	// PreCheckoutQuery returns stored pre checkout query if such presented.
-	PreCheckoutQuery() *PreCheckoutQuery
+	PreCheckoutQuery() *_old.PreCheckoutQuery
 
 	// Poll returns stored poll if such presented.
-	Poll() *Poll
+	Poll() *_old.Poll
 
 	// PollAnswer returns stored poll answer if such presented.
-	PollAnswer() *PollAnswer
+	PollAnswer() *_old.PollAnswer
 
 	// ChatMember returns chat member changes.
-	ChatMember() *ChatMemberUpdate
+	ChatMember() *_old.ChatMemberUpdate
 
 	// ChatJoinRequest returns cha
-	ChatJoinRequest() *ChatJoinRequest
+	ChatJoinRequest() *_old.ChatJoinRequest
 
 	// Migration returns both migration from and to chat IDs.
 	Migration() (int64, int64)
 
 	// Sender returns the current recipient, depending on the context type.
 	// Returns nil if user is not presented.
-	Sender() *User
+	Sender() *_old.User
 
 	// Chat returns the current chat, depending on the context type.
 	// Returns nil if chat is not presented.
-	Chat() *Chat
+	Chat() *_old.Chat
 
 	// Recipient combines both Sender and Chat functions. If there is no user
 	// the chat will be returned. The native context cannot be without sender,
 	// but it is useful in the case when the context created intentionally
 	// by the NewContext constructor and have only Chat field inside.
-	Recipient() Recipient
+	Recipient() _old.Recipient
 
 	// Text returns the message text, depending on the context type.
 	// In the case when no related data presented, returns an empty string.
@@ -71,7 +72,7 @@ type Context interface {
 
 	// Entities returns the message entities, whether it's media caption's or the text's.
 	// In the case when no entities presented, returns a nil.
-	Entities() Entities
+	Entities() _old.Entities
 
 	// Data returns the current data, depending on the context type.
 	// If the context contains command, returns its arguments string.
@@ -89,7 +90,7 @@ type Context interface {
 
 	// SendAlbum sends an album to the current recipient.
 	// See SendAlbum from bot.go.
-	SendAlbum(a Album, opts ...interface{}) error
+	SendAlbum(a _old.Album, opts ...interface{}) error
 
 	// Reply replies to the current message.
 	// See Reply from bot.go.
@@ -97,11 +98,11 @@ type Context interface {
 
 	// Forward forwards the given message to the current recipient.
 	// See Forward from bot.go.
-	Forward(msg Editable, opts ...interface{}) error
+	Forward(msg _old.Editable, opts ...interface{}) error
 
 	// ForwardTo forwards the current message to the given recipient.
 	// See Forward from bot.go
-	ForwardTo(to Recipient, opts ...interface{}) error
+	ForwardTo(to _old.Recipient, opts ...interface{}) error
 
 	// Edit edits the current message.
 	// See Edit from bot.go.
@@ -142,7 +143,7 @@ type Context interface {
 
 	// Answer sends a response to the current inline query.
 	// See Answer from bot.go.
-	Answer(resp *QueryResponse) error
+	Answer(resp *_old.QueryResponse) error
 
 	// Respond sends a response for the current callback query.
 	// See Respond from bot.go.
@@ -171,7 +172,7 @@ func (c *nativeContext) Update() Update {
 	return c.u
 }
 
-func (c *nativeContext) Message() *Message {
+func (c *nativeContext) Message() *_old.Message {
 	switch {
 	case c.u.Message != nil:
 		return c.u.Message
@@ -195,23 +196,23 @@ func (c *nativeContext) Callback() *Callback {
 	return c.u.Callback
 }
 
-func (c *nativeContext) Query() *Query {
+func (c *nativeContext) Query() *_old.Query {
 	return c.u.Query
 }
 
-func (c *nativeContext) InlineResult() *InlineResult {
+func (c *nativeContext) InlineResult() *_old.InlineResult {
 	return c.u.InlineResult
 }
 
-func (c *nativeContext) ShippingQuery() *ShippingQuery {
+func (c *nativeContext) ShippingQuery() *_old.ShippingQuery {
 	return c.u.ShippingQuery
 }
 
-func (c *nativeContext) PreCheckoutQuery() *PreCheckoutQuery {
+func (c *nativeContext) PreCheckoutQuery() *_old.PreCheckoutQuery {
 	return c.u.PreCheckoutQuery
 }
 
-func (c *nativeContext) ChatMember() *ChatMemberUpdate {
+func (c *nativeContext) ChatMember() *_old.ChatMemberUpdate {
 	switch {
 	case c.u.ChatMember != nil:
 		return c.u.ChatMember
@@ -222,15 +223,15 @@ func (c *nativeContext) ChatMember() *ChatMemberUpdate {
 	}
 }
 
-func (c *nativeContext) ChatJoinRequest() *ChatJoinRequest {
+func (c *nativeContext) ChatJoinRequest() *_old.ChatJoinRequest {
 	return c.u.ChatJoinRequest
 }
 
-func (c *nativeContext) Poll() *Poll {
+func (c *nativeContext) Poll() *_old.Poll {
 	return c.u.Poll
 }
 
-func (c *nativeContext) PollAnswer() *PollAnswer {
+func (c *nativeContext) PollAnswer() *_old.PollAnswer {
 	return c.u.PollAnswer
 }
 
@@ -238,7 +239,7 @@ func (c *nativeContext) Migration() (int64, int64) {
 	return c.u.Message.MigrateFrom, c.u.Message.MigrateTo
 }
 
-func (c *nativeContext) Sender() *User {
+func (c *nativeContext) Sender() *_old.User {
 	switch {
 	case c.u.Callback != nil:
 		return c.u.Callback.Sender
@@ -265,7 +266,7 @@ func (c *nativeContext) Sender() *User {
 	}
 }
 
-func (c *nativeContext) Chat() *Chat {
+func (c *nativeContext) Chat() *_old.Chat {
 	switch {
 	case c.Message() != nil:
 		return c.Message().Chat
@@ -280,7 +281,7 @@ func (c *nativeContext) Chat() *Chat {
 	}
 }
 
-func (c *nativeContext) Recipient() Recipient {
+func (c *nativeContext) Recipient() _old.Recipient {
 	chat := c.Chat()
 	if chat != nil {
 		return chat
@@ -299,7 +300,7 @@ func (c *nativeContext) Text() string {
 	return m.Text
 }
 
-func (c *nativeContext) Entities() Entities {
+func (c *nativeContext) Entities() _old.Entities {
 	m := c.Message()
 	if m == nil {
 		return nil
@@ -351,7 +352,7 @@ func (c *nativeContext) Send(what interface{}, opts ...interface{}) error {
 	return err
 }
 
-func (c *nativeContext) SendAlbum(a Album, opts ...interface{}) error {
+func (c *nativeContext) SendAlbum(a _old.Album, opts ...interface{}) error {
 	_, err := c.b.SendAlbum(c.Recipient(), a, opts...)
 	return err
 }
@@ -365,12 +366,12 @@ func (c *nativeContext) Reply(what interface{}, opts ...interface{}) error {
 	return err
 }
 
-func (c *nativeContext) Forward(msg Editable, opts ...interface{}) error {
+func (c *nativeContext) Forward(msg _old.Editable, opts ...interface{}) error {
 	_, err := c.b.Forward(c.Recipient(), msg, opts...)
 	return err
 }
 
-func (c *nativeContext) ForwardTo(to Recipient, opts ...interface{}) error {
+func (c *nativeContext) ForwardTo(to _old.Recipient, opts ...interface{}) error {
 	msg := c.Message()
 	if msg == nil {
 		return ErrBadContext
@@ -460,7 +461,7 @@ func (c *nativeContext) Respond(resp ...*CallbackResponse) error {
 	return c.b.Respond(c.u.Callback, resp...)
 }
 
-func (c *nativeContext) Answer(resp *QueryResponse) error {
+func (c *nativeContext) Answer(resp *_old.QueryResponse) error {
 	if c.u.Query == nil {
 		return errors.New("telebot: context inline query is nil")
 	}

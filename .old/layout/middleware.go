@@ -2,11 +2,12 @@ package layout
 
 import (
 	tele "go.mamad.dev/telebot"
+	"go.mamad.dev/telebot/.old"
 )
 
 // LocaleFunc is the function used to fetch the locale of the recipient.
 // Returned locale will be remembered and linked to the corresponding context.
-type LocaleFunc func(tele.Recipient) string
+type LocaleFunc func(_old.Recipient) string
 
 // Middleware builds a telebot middleware to make localization work.
 //

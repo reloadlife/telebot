@@ -2,6 +2,7 @@ package layout
 
 import (
 	"fmt"
+	"go.mamad.dev/telebot/.old"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -22,7 +23,7 @@ type Settings struct {
 	TokenEnv   string `yaml:"token_env"`
 	ParseMode  string `yaml:"parse_mode"`
 
-	Webhook    *tele.Webhook    `yaml:"webhook"`
+	Webhook    *_old.Webhook    `yaml:"webhook"`
 	LongPoller *tele.LongPoller `yaml:"long_poller"`
 }
 
@@ -49,7 +50,7 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 	lt.commands = aux.Commands
 
 	if pref := aux.Settings; pref != nil {
-		lt.pref = &tele.Settings{
+		lt.pref = &_old.Settings{
 			URL:       pref.URL,
 			Token:     pref.Token,
 			Updates:   pref.Updates,
@@ -74,7 +75,7 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 		// 1. Shortened reply button
 
 		if v, ok := v.(string); ok {
-			btn := tele.Btn{Text: v}
+			btn := _old.Btn{Text: v}
 			lt.buttons[k] = Button{Btn: btn}
 			continue
 		}
@@ -175,9 +176,9 @@ func (lt *Layout) UnmarshalYAML(data []byte) error {
 				return err
 			}
 
-			kb := make([][]tele.ReplyButton, len(markup.Keyboard))
+			kb := make([][]_old.ReplyButton, len(markup.Keyboard))
 			for i, btns := range markup.Keyboard {
-				row := make([]tele.ReplyButton, len(btns))
+				row := make([]_old.ReplyButton, len(btns))
 				for j, btn := range btns {
 					row[j] = *lt.buttons[btn].Reply()
 				}

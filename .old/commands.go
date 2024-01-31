@@ -1,6 +1,9 @@
-package telebot
+package _old
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"go.mamad.dev/telebot"
+)
 
 // Command represents a bot command.
 type Command struct {
@@ -50,7 +53,7 @@ func (b *OldBot) Commands(opts ...interface{}) ([]Command, error) {
 		Result []Command
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, wrapError(err)
+		return nil, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }

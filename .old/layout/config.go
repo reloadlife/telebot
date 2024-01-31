@@ -1,11 +1,11 @@
 package layout
 
 import (
+	tele "go.mamad.dev/telebot/.old"
 	"strconv"
 	"time"
 
 	"github.com/spf13/viper"
-	tele "go.mamad.dev/telebot"
 )
 
 // Config represents typed map interface related to the "config" section in layout.

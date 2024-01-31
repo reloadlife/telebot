@@ -1,24 +1,20 @@
 package echo
 
 import (
-	"go.mamad.dev/telebot"
+	tele "go.mamad.dev/telebot"
 	"os"
 )
 
 func main() {
-	tg, err := telebot.NewBot(telebot.Settings{
+	tg := tele.New(tele.BotSettings{
 		Token: os.Getenv("TELEGRAM_TOKEN"),
 	})
 
-	if err != nil {
-		panic(err)
-	}
-
-	tg.Handle("/start", func(ctx telebot.Context) error {
+	tg.Handle("/start", func(ctx tele.Context) error {
 		return ctx.Send("Hello Sir, I'm Echo OldBot, Please send me something to echo.")
 	})
 
-	tg.Handle(telebot.OnText, func(ctx telebot.Context) error {
+	tg.Handle(tele.OnText, func(ctx tele.Context) error {
 		return ctx.Send(ctx.Text())
 	})
 

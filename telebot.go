@@ -1,19 +1,26 @@
 package telebot
 
 import (
+	"go.mamad.dev/telebot/.old"
 	httpc "go.mamad.dev/telebot/http"
 	"time"
 )
 
+type handler struct {
+	f HandlerFunc
+	e UpdateHandlerOn
+	t any
+}
+
 type bot struct {
-	self    *User
+	self    *_old.User
 	token   string
 	updates chan Update
 	poller  Poller
 	onError func(error, Context)
 
 	group    *Group
-	handlers map[string]HandlerFunc
+	handlers []handler
 
 	synchronous bool
 	stop        chan chan struct{}
@@ -24,11 +31,19 @@ type bot struct {
 
 type Bot interface {
 	Debug(...any)
+	OnError(error, Context)
 
+	// GetUpdates returns a list of updates (Long Polling).
 	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) ([]Update, error)
+
+	// Handle Register Routes
+	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 
 	Start()
 	Stop()
+
+	StartInWebhook()
+	StopInWebhook()
 }
 
 type BotSettings struct {
@@ -62,7 +77,7 @@ func New(s BotSettings) Bot {
 		poller: &LongPoller{},
 
 		updates:  make(chan Update, s.UpdatesCount),
-		handlers: make(map[string]HandlerFunc),
+		handlers: []handler{},
 		stop:     make(chan chan struct{}),
 
 		synchronous: s.Synchronous,
@@ -122,4 +137,9 @@ func (b *bot) StartInWebhook() {
 // StopInWebhook stops the bot from webhook mode.
 func (b *bot) StopInWebhook() {
 	panic("telebot: webhook mode is not implemented yet")
+}
+
+// OnError Debug sends a debug message to the bot.
+func (b *bot) OnError(e error, c Context) {
+	b.onError(e, c)
 }

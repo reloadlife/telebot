@@ -1,8 +1,9 @@
-package telebot
+package _old
 
 import (
 	"encoding/json"
 	"errors"
+	"go.mamad.dev/telebot"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -47,17 +48,17 @@ func testRawServer(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestRaw(t *testing.T) {
-	if token == "" {
+	if telebot.token == "" {
 		t.Skip("TELEBOT_SECRET is required")
 	}
 
-	b, err := newTestBot()
+	b, err := telebot.newTestBot()
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	_, err = b.Raw("BAD METHOD", nil)
-	assert.EqualError(t, err, ErrNotFound.Error())
+	assert.EqualError(t, err, telebot.ErrNotFound.Error())
 
 	_, err = b.Raw("", &testPayload{})
 	assert.Error(t, err)
@@ -84,7 +85,7 @@ func TestExtractOk(t *testing.T) {
 		"error_code": 400,
 		"description": "Bad Request: reply message not found"
 	}`)
-	assert.EqualError(t, extractOk(data), ErrNotFoundToReply.Error())
+	assert.EqualError(t, extractOk(data), telebot.ErrNotFoundToReply.Error())
 
 	data = []byte(`{
 		"ok": false,
@@ -92,8 +93,8 @@ func TestExtractOk(t *testing.T) {
 		"description": "Too Many Requests: retry after 8",
 		"parameters": {"retry_after": 8}
 	}`)
-	assert.Equal(t, FloodError{
-		err:        NewError(429, "Too Many Requests: retry after 8"),
+	assert.Equal(t, telebot.FloodError{
+		err:        telebot.NewError(429, "Too Many Requests: retry after 8"),
 		RetryAfter: 8,
 	}, extractOk(data))
 
@@ -103,8 +104,8 @@ func TestExtractOk(t *testing.T) {
 		"description": "Bad Request: group chat was upgraded to a supergroup chat",
 		"parameters": {"migrate_to_chat_id": -100123456789}
 	}`)
-	assert.Equal(t, GroupError{
-		err:        ErrGroupMigrated,
+	assert.Equal(t, telebot.GroupError{
+		err:        telebot.ErrGroupMigrated,
 		MigratedTo: -100123456789,
 	}, extractOk(data))
 }

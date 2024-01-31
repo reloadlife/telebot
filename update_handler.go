@@ -1,6 +1,7 @@
 package telebot
 
 import (
+	"go.mamad.dev/telebot/.old"
 	"regexp"
 	"strings"
 )
@@ -64,7 +65,7 @@ func (b *bot) ProcessUpdate(u Update) bool {
 	return handled
 }
 
-func (b *bot) handleMessageEvents(m *Message, c Context) bool {
+func (b *bot) handleMessageEvents(m *_old.Message, c Context) bool {
 	if m.PinnedMessage != nil {
 		return b.handle(OnPinnedMessage, c)
 	}
@@ -80,12 +81,12 @@ func (b *bot) handleMessageEvents(m *Message, c Context) bool {
 			m.Command = command
 			m.Payload = match[0][5]
 
-			if b.handle(OnCommand, c) {
+			if b.handle(OnCommand, c, m.Command) {
 				return true
 			}
 		}
 
-		if b.handle(onMatch, c) || b.handle(OnText, c) {
+		if b.handle(onMatch, c, m.Text) || b.handle(OnText, c) {
 			return true
 		}
 	}
@@ -93,7 +94,7 @@ func (b *bot) handleMessageEvents(m *Message, c Context) bool {
 	return b.handleMediaAndOtherEvents(m, c)
 }
 
-func (b *bot) handleMediaAndOtherEvents(m *Message, c Context) bool {
+func (b *bot) handleMediaAndOtherEvents(m *_old.Message, c Context) bool {
 	mediaHandlers := map[interface{}]UpdateHandlerOn{
 		m.Photo:     OnPhoto,
 		m.Voice:     OnVoice,
@@ -139,11 +140,24 @@ func (b *bot) handleCallbackEvent(callback *Callback, c Context) bool {
 		match := callbackRegex.FindAllStringSubmatch(data, -1)
 		if match != nil {
 			unique, payload := match[0][1], match[0][3]
-			if handler, ok := b.handlers["\f"+unique]; ok {
-				callback.Unique = unique
-				callback.Data = payload
-				b.runHandler(handler, c)
-				return true
+			if unique == "" {
+				return b.handle(OnCallback, c)
+			}
+
+			for _, h := range b.handlers {
+				if h.e != OnCallback {
+					continue
+				}
+				if h.f == nil {
+					continue
+				}
+
+				if h.t == unique {
+					callback.Unique = unique
+					callback.Data = payload
+					b.runHandler(h.f, c)
+					return true
+				}
 			}
 		}
 	}
