@@ -218,7 +218,7 @@ func (b *bot) DeclineChatJoinRequest(chatID Recipient, userID int64) error {
 	return err
 }
 
-func (b *bot) SetChatPhoto(chatID Recipient, photo InputFile) error {
+func (b *bot) SetChatPhoto(chatID Recipient, photo File) error {
 	params := setChatPhotoParams{
 		ChatID: chatID,
 		Photo:  photo,

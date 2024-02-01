@@ -84,7 +84,7 @@ type Bot interface {
 	// Photos can't be changed for private chats.
 	// The bot must be an administrator in the chat and have the appropriate administrator rights.
 	// Returns an error on failure.
-	SetChatPhoto(chatID Recipient, photo InputFile) error
+	SetChatPhoto(chatID Recipient, photo File) error
 
 	// DeleteChatPhoto deletes the chat photo.
 	// Photos can't be changed for private chats.
