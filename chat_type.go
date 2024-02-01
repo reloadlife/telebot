@@ -4,6 +4,56 @@ import (
 	"fmt"
 )
 
+// Status represents the possible statuses of a chat member.
+type Status string
+
+// Enum values for the different statuses of a chat member.
+const (
+	StatusCreator       Status = "creator"
+	StatusAdministrator Status = "administrator"
+	StatusMember        Status = "member"
+	StatusRestricted    Status = "restricted"
+	StatusLeft          Status = "left"
+	StatusKicked        Status = "kicked"
+)
+
+// ChatMember represents information about a member of a chat.
+type ChatMember struct {
+	Status Status `json:"status"`
+	User   User   `json:"user"`
+
+	// Additional fields based on the ChatMember type
+	IsAnonymous           bool   `json:"is_anonymous,omitempty"`
+	CustomTitle           string `json:"custom_title,omitempty"`
+	CanBeEdited           bool   `json:"can_be_edited,omitempty"`
+	CanManageChat         bool   `json:"can_manage_chat,omitempty"`
+	CanDeleteMessages     bool   `json:"can_delete_messages,omitempty"`
+	CanManageVideoChats   bool   `json:"can_manage_video_chats,omitempty"`
+	CanRestrictMembers    bool   `json:"can_restrict_members,omitempty"`
+	CanPromoteMembers     bool   `json:"can_promote_members,omitempty"`
+	CanChangeInfo         bool   `json:"can_change_info,omitempty"`
+	CanInviteUsers        bool   `json:"can_invite_users,omitempty"`
+	CanPostMessages       bool   `json:"can_post_messages,omitempty"`
+	CanEditMessages       bool   `json:"can_edit_messages,omitempty"`
+	CanPinMessages        bool   `json:"can_pin_messages,omitempty"`
+	CanPostStories        bool   `json:"can_post_stories,omitempty"`
+	CanEditStories        bool   `json:"can_edit_stories,omitempty"`
+	CanDeleteStories      bool   `json:"can_delete_stories,omitempty"`
+	CanManageTopics       bool   `json:"can_manage_topics,omitempty"`
+	IsMember              bool   `json:"is_member,omitempty"`
+	CanSendMessages       bool   `json:"can_send_messages,omitempty"`
+	CanSendAudios         bool   `json:"can_send_audios,omitempty"`
+	CanSendDocuments      bool   `json:"can_send_documents,omitempty"`
+	CanSendPhotos         bool   `json:"can_send_photos,omitempty"`
+	CanSendVideos         bool   `json:"can_send_videos,omitempty"`
+	CanSendVideoNotes     bool   `json:"can_send_video_notes,omitempty"`
+	CanSendVoiceNotes     bool   `json:"can_send_voice_notes,omitempty"`
+	CanSendPolls          bool   `json:"can_send_polls,omitempty"`
+	CanSendOtherMessages  bool   `json:"can_send_other_messages,omitempty"`
+	CanAddWebPagePreviews bool   `json:"can_add_web_page_previews,omitempty"`
+	UntilDate             int    `json:"until_date,omitempty"`
+}
+
 // ChatPermissions describes actions that a non-administrator user is allowed to take in a chat.
 type ChatPermissions struct {
 	// CanSendMessages indicates whether the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations, and venues.
