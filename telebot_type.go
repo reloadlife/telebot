@@ -40,6 +40,36 @@ type Bot interface {
 	// Unban a user from a group, a supergroup or a channel.
 	Unban(chatID Recipient, userID int64, onlyIfBanned *bool) error
 
+	// Restrict restricts a user in a supergroup.
+	Restrict(chatID Recipient, userID int64, permissions ChatPermissions, useIndependentChatPermissions *bool, untilDate *time.Duration) error
+
+	// Promote promotes or demotes a user in a supergroup or a channel.
+	Promote(chatID Recipient, userID int64, roles ...ChatMemberPermission) error
+
+	// SetChatAdministratorCustomTitle sets a custom title for an administrator in a supergroup promoted by the bot.
+	SetChatAdministratorCustomTitle(chatID Recipient, userID int64, customTitle string) error
+
+	// BanChatSenderChat restricts a user in a supergroup.
+	BanChatSenderChat(chatID Recipient, userID int64) error
+
+	// UnbanChatSenderChat promotes or demotes a user in a supergroup or a channel.
+	UnbanChatSenderChat(chatID Recipient, userID int64) error
+
+	// SetChatPermissions sets default chat permissions for all members.
+	SetChatPermissions(chatID Recipient, permissions ChatPermissions, useIndependentChatPermissions *bool) error
+
+	// ExportChatInviteLink generates a new primary invite link for a chat.
+	ExportChatInviteLink(chatID Recipient) (*string, error)
+
+	// CreateChatInviteLink creates an additional invite link for a chat.
+	CreateChatInviteLink(chatID Recipient, name string, expireDate int64, memberLimit int, createsJoinRequest bool) (*ChatInviteLink, error)
+
+	// EditChatInviteLink edits a non-primary invite link created by the bot.
+	EditChatInviteLink(chatID Recipient, inviteLink, name string, expireDate int64, memberLimit int, createsJoinRequest bool) (*ChatInviteLink, error)
+
+	// RevokeChatInviteLink revokes an invite link created by the bot.
+	RevokeChatInviteLink(chatID Recipient, inviteLink string) (*ChatInviteLink, error)
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 

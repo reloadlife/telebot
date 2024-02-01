@@ -1,35 +1,11 @@
 package telebot
 
-// BanChatMemberRequest represents the parameters for the banChatMember method.
-type banChatMemberRequest struct {
-	// ChatID is the unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername).
-	ChatID interface{} `json:"chat_id"`
-
-	// UserID is the unique identifier of the target user.
-	UserID int64 `json:"user_id"`
-
-	// UntilDate is the date when the user will be unbanned; Unix time.
-	// If the user is banned for more than 366 days or less than 30 seconds from the current time, they are considered to be banned forever.
-	// Applied for supergroups and channels only.
-	UntilDate *int64 `json:"until_date,omitempty"`
-
-	// RevokeMessages indicates whether to delete all messages from the chat for the user that is being removed.
-	// If false, the user will be able to see messages in the group that were sent before the user was removed.
-	// Always true for supergroups and channels.
-	RevokeMessages *bool `json:"revoke_messages,omitempty"`
-}
-
-// UnbanChatMemberRequest represents the parameters for the unbanChatMember method.
-type unbanChatMemberRequest struct {
-	// ChatID is the unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername).
-	ChatID interface{} `json:"chat_id"`
-
-	// UserID is the unique identifier of the target user.
-	UserID int64 `json:"user_id"`
-
-	// OnlyIfBanned indicates whether to do nothing if the user is not banned.
-	OnlyIfBanned bool `json:"only_if_banned,omitempty"`
-}
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+	"time"
+)
 
 func (b *bot) Ban(chatID Recipient, userID int64, untilDate *int64, revokeMessages *bool) error {
 	params := banChatMemberRequest{
@@ -62,4 +38,165 @@ func (b *bot) Unban(chatID Recipient, userID int64, onlyIfBanned *bool) error {
 
 	_, err := b.sendMethodRequest(methodUnbanChatMember, params)
 	return err
+}
+
+func (b *bot) Restrict(chatID Recipient, userID int64, permissions ChatPermissions, useIndependentChatPermissions *bool,
+	untilDate *time.Duration) error {
+	params := restrictChatMemberRequest{
+		ChatID:                        chatID,
+		UserID:                        userID,
+		Permissions:                   permissions,
+		UseIndependentChatPermissions: false,
+		UntilDate:                     0,
+	}
+
+	if useIndependentChatPermissions != nil {
+		params.UseIndependentChatPermissions = *useIndependentChatPermissions
+	}
+
+	if untilDate != nil {
+		params.UntilDate = time.Now().Add(*untilDate).Unix()
+	}
+
+	_, err := b.sendMethodRequest(methodRestrictChatMember, params)
+	return err
+}
+
+func (b *bot) Promote(chatID Recipient, userID int64, roles ...ChatMemberPermission) error {
+	params := promoteChatMemberRequest{
+		ChatID: chatID,
+		UserID: userID,
+	}
+	paramsValue := reflect.ValueOf(&params).Elem()
+	for _, role := range roles {
+		fieldValue := paramsValue.FieldByName(role.String())
+
+		if fieldValue.IsValid() && fieldValue.Kind() == reflect.Bool {
+			fieldValue.SetBool(true)
+		} else {
+			return fmt.Errorf("unsupported role: %s", role.String())
+		}
+	}
+
+	_, err := b.sendMethodRequest(methodPromoteChatMember, params)
+	return err
+}
+
+func (b *bot) SetChatAdministratorCustomTitle(chatID Recipient, userID int64, customTitle string) error {
+	_, err := b.sendMethodRequest(methodSetChatAdministratorCustomTitle, setChatAdministratorCustomTitleRequest{
+		ChatID:      chatID,
+		UserID:      userID,
+		CustomTitle: customTitle,
+	})
+	return err
+}
+
+func (b *bot) BanChatSenderChat(chatID Recipient, userID int64) error {
+	_, err := b.sendMethodRequest(methodBanChatMember, banChatSenderChatRequest{
+		ChatID:       chatID,
+		SenderChatID: userID,
+	})
+	return err
+}
+
+func (b *bot) UnbanChatSenderChat(chatID Recipient, userID int64) error {
+	_, err := b.sendMethodRequest(methodUnbanChatMember, unbanChatSenderChatRequest{
+		ChatID:       chatID,
+		SenderChatID: userID,
+	})
+	return err
+}
+
+func (b *bot) SetChatPermissions(chatID Recipient, permissions ChatPermissions, useIndependentChatPermissions *bool) error {
+	_, err := b.sendMethodRequest(methodSetChatPermissions, setChatPermissionsRequest{
+		ChatID:                        chatID,
+		Permissions:                   permissions,
+		UseIndependentChatPermissions: useIndependentChatPermissions,
+	})
+	return err
+}
+
+func (b *bot) ExportChatInviteLink(chatID Recipient) (*string, error) {
+	params := exportChatInviteLinkRequest{
+		ChatID: chatID,
+	}
+
+	data, err := b.sendMethodRequest(methodExportChatInviteLink, params)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Result string `json:"result"`
+	}
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result.Result, nil
+}
+
+func (b *bot) CreateChatInviteLink(chatID Recipient, name string, expireDate int64, memberLimit int, createsJoinRequest bool) (*ChatInviteLink, error) {
+	params := createChatInviteLinkRequest{
+		ChatID:             chatID,
+		Name:               name,
+		ExpireDate:         expireDate,
+		MemberLimit:        memberLimit,
+		CreatesJoinRequest: createsJoinRequest,
+	}
+	var result struct {
+		Result ChatInviteLink `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodCreateChatInviteLink, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result.Result, err
+}
+
+func (b *bot) EditChatInviteLink(chatID Recipient, inviteLink, name string, expireDate int64, memberLimit int, createsJoinRequest bool) (*ChatInviteLink, error) {
+	params := editChatInviteLinkRequest{
+		ChatID:             chatID,
+		InviteLink:         inviteLink,
+		Name:               name,
+		ExpireDate:         expireDate,
+		MemberLimit:        memberLimit,
+		CreatesJoinRequest: createsJoinRequest,
+	}
+	var result struct {
+		Result ChatInviteLink `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodEditChatInviteLink, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result.Result, err
+}
+
+func (b *bot) RevokeChatInviteLink(chatID Recipient, inviteLink string) (*ChatInviteLink, error) {
+	params := revokeChatInviteLinkRequest{
+		ChatID:     chatID,
+		InviteLink: inviteLink,
+	}
+	var result struct {
+		Result ChatInviteLink `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodRevokeChatInviteLink, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result.Result, err
 }
