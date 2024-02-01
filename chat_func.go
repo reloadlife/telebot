@@ -253,3 +253,99 @@ func (b *bot) SetChatDescription(chatID Recipient, description string) error {
 	_, err := b.sendMethodRequest(methodSetChatDescription, params)
 	return err
 }
+
+func (b *bot) PinChatMessage(chatID Recipient, messageID int, disableNotification bool) error {
+	params := pinChatMessageRequest{
+		ChatID:              chatID,
+		MessageID:           messageID,
+		DisableNotification: disableNotification,
+	}
+	_, err := b.sendMethodRequest(methodPinChatMessage, params)
+	return err
+}
+
+func (b *bot) UnpinChatMessage(chatID Recipient, messageID int) error {
+	params := unpinChatMessageRequest{
+		ChatID:    chatID,
+		MessageID: messageID,
+	}
+	_, err := b.sendMethodRequest(methodUnpinChatMessage, params)
+	return err
+}
+
+func (b *bot) UnpinAllChatMessages(chatID Recipient) error {
+	params := unpinAllChatMessagesRequest{
+		ChatID: chatID,
+	}
+	_, err := b.sendMethodRequest(methodUnpinAllChatMessages, params)
+	return err
+}
+
+func (b *bot) LeaveChat(chatID Recipient) error {
+	params := leaveChatRequest{
+		ChatID: chatID,
+	}
+	_, err := b.sendMethodRequest(methodLeaveChat, params)
+	return err
+}
+
+func (b *bot) GetChat(chatID Recipient) (*Chat, error) {
+	params := getChatRequest{
+		ChatID: chatID,
+	}
+	var result struct {
+		Result Chat `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodGetChat, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	return &result.Result, err
+}
+
+func (b *bot) GetChatAdministrators(chatID Recipient) ([]ChatMember, error) {
+	params := getChatAdministratorsRequest{
+		ChatID: chatID,
+	}
+	var result struct {
+		Result []ChatMember `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodGetChatAdministrators, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	return result.Result, err
+}
+
+func (b *bot) GetChatMemberCount(chatID Recipient) (*int, error) {
+	params := getChatMemberCountRequest{
+		ChatID: chatID,
+	}
+	var result struct {
+		Result int `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodGetChatMemberCount, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	return &result.Result, err
+}
+
+func (b *bot) GetChatMember(chatID Recipient, userID int64) (*ChatMember, error) {
+	params := getChatMemberRequest{
+		ChatID: chatID,
+		UserID: userID,
+	}
+	var result struct {
+		Result ChatMember `json:"result"`
+	}
+	data, err := b.sendMethodRequest(methodGetChatMember, params)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(data, &result)
+	return &result.Result, err
+}

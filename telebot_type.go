@@ -103,6 +103,16 @@ type Bot interface {
 	// Returns an error on failure.
 	SetChatDescription(chatID Recipient, description string) error
 
+	PinChatMessage(chatID Recipient, messageID int, disableNotification bool) error
+	UnpinChatMessage(chatID Recipient, messageID int) error
+	UnpinAllChatMessages(chatID Recipient) error
+	LeaveChat(chatID Recipient) error
+
+	GetChat(chatID Recipient) (*Chat, error)
+	GetChatAdministrators(chatID Recipient) ([]ChatMember, error)
+	GetChatMemberCount(chatID Recipient) (*int, error)
+	GetChatMember(chatID Recipient, userID int64) (*ChatMember, error)
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 

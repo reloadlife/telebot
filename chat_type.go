@@ -289,3 +289,39 @@ type setChatDescriptionParams struct {
 	ChatID      any    `json:"chat_id"`
 	Description string `json:"description"`
 }
+
+type pinChatMessageRequest struct {
+	ChatID              any  `json:"chat_id"`
+	MessageID           int  `json:"message_id"`
+	DisableNotification bool `json:"disable_notification,omitempty"`
+}
+
+type unpinChatMessageRequest struct {
+	ChatID    any `json:"chat_id"`
+	MessageID int `json:"message_id,omitempty"`
+}
+
+type unpinAllChatMessagesRequest struct {
+	ChatID any `json:"chat_id"`
+}
+
+type leaveChatRequest struct {
+	ChatID any `json:"chat_id"`
+}
+
+type getChatRequest struct {
+	ChatID interface{} `json:"chat_id"`
+}
+
+type getChatAdministratorsRequest struct {
+	ChatID interface{} `json:"chat_id"`
+}
+
+type getChatMemberCountRequest struct {
+	ChatID interface{} `json:"chat_id"`
+}
+
+type getChatMemberRequest struct {
+	ChatID interface{} `json:"chat_id"`
+	UserID int64       `json:"user_id"`
+}
