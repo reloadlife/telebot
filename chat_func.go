@@ -40,8 +40,7 @@ func (b *bot) Unban(chatID Recipient, userID int64, onlyIfBanned *bool) error {
 	return err
 }
 
-func (b *bot) Restrict(chatID Recipient, userID int64, permissions ChatPermissions, useIndependentChatPermissions *bool,
-	untilDate *time.Duration) error {
+func (b *bot) Restrict(chatID Recipient, userID int64, permissions ChatPermissions, useIndependentChatPermissions *bool, untilDate *time.Duration) error {
 	params := restrictChatMemberRequest{
 		ChatID:                        chatID,
 		UserID:                        userID,
