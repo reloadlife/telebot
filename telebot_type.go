@@ -31,6 +31,15 @@ type Bot interface {
 	// GetMe returns basic information about the bot as a User object.
 	GetMe() (*User, error)
 
+	// SendMessage sends a text message.
+	SendMessage(recipient Recipient, text string, options ...Option) (*Message, error)
+
+	// Ban a user from a group, a supergroup or a channel.
+	Ban(chatID Recipient, userID int64, untilDate *int64, revokeMessages *bool) error
+
+	// Unban a user from a group, a supergroup or a channel.
+	Unban(chatID Recipient, userID int64, onlyIfBanned *bool) error
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 

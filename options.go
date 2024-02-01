@@ -35,6 +35,7 @@ const (
 	// RemoveKeyboard = ReplyMarkup.RemoveKeyboard
 	RemoveKeyboard
 
+	// HasSpoiler = SendOptions.HasSpoiler
 	HasSpoiler
 )
 
@@ -165,11 +166,7 @@ func extractOptions(how []interface{}) *SendOptions {
 	return opts
 }
 
-func (b *OldBot) embedSendOptions(params map[string]string, opt *SendOptions) {
-	if b.parseMode != ModeDefault {
-		params["parse_mode"] = b.parseMode
-	}
-
+func (b *bot) embedSendOptions(params map[string]string, opt *SendOptions) {
 	if opt == nil {
 		return
 	}

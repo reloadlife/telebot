@@ -38,7 +38,7 @@ func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...Up
 		Result []Update
 	}
 
-	if err = json.NewDecoder(res.Body).Decode(&resp); err != nil {
+	if err = json.Unmarshal(res, &resp); err != nil {
 		return nil, wrapError(err)
 	}
 	return resp.Result, nil

@@ -12,7 +12,7 @@ func (b *bot) GetMe() (*User, error) {
 		Result User
 	}
 
-	if err = json.NewDecoder(raw.Body).Decode(&resp); err != nil {
+	if err = json.Unmarshal(raw, &resp); err != nil {
 		return nil, err
 	}
 

@@ -243,5 +243,14 @@ func Err(s string) error {
 
 // wrapError returns new wrapped telebot-related error.
 func wrapError(err error) error {
+	if err == nil {
+		return nil
+	}
 	return fmt.Errorf("telebot: %w", err)
+}
+
+func panicIf(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
