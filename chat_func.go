@@ -200,3 +200,56 @@ func (b *bot) RevokeChatInviteLink(chatID Recipient, inviteLink string) (*ChatIn
 	}
 	return &result.Result, err
 }
+
+func (b *bot) ApproveChatJoinRequest(chatID Recipient, userID int64) error {
+	params := approveChatJoinRequestParams{
+		ChatID: chatID,
+		UserID: userID,
+	}
+	_, err := b.sendMethodRequest(methodApproveChatJoinRequest, params)
+	return err
+}
+
+func (b *bot) DeclineChatJoinRequest(chatID Recipient, userID int64) error {
+	params := declineChatJoinRequestParams{
+		ChatID: chatID,
+		UserID: userID,
+	}
+	_, err := b.sendMethodRequest(methodDeclineChatJoinRequest, params)
+	return err
+}
+
+func (b *bot) SetChatPhoto(chatID Recipient, photo InputFile) error {
+	params := setChatPhotoParams{
+		ChatID: chatID,
+		Photo:  photo,
+	}
+	_, err := b.sendMethodRequest(methodSetChatPhoto, params)
+	return err
+}
+
+func (b *bot) DeleteChatPhoto(chatID Recipient) error {
+	params := deleteChatPhotoParams{
+		ChatID: chatID,
+	}
+	_, err := b.sendMethodRequest(methodDeleteChatPhoto, params)
+	return err
+}
+
+func (b *bot) SetChatTitle(chatID Recipient, title string) error {
+	params := setChatTitleParams{
+		ChatID: chatID,
+		Title:  title,
+	}
+	_, err := b.sendMethodRequest(methodSetChatTitle, params)
+	return err
+}
+
+func (b *bot) SetChatDescription(chatID Recipient, description string) error {
+	params := setChatDescriptionParams{
+		ChatID:      chatID,
+		Description: description,
+	}
+	_, err := b.sendMethodRequest(methodSetChatDescription, params)
+	return err
+}

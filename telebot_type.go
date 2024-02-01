@@ -70,6 +70,39 @@ type Bot interface {
 	// RevokeChatInviteLink revokes an invite link created by the bot.
 	RevokeChatInviteLink(chatID Recipient, inviteLink string) (*ChatInviteLink, error)
 
+	// ApproveChatJoinRequest approves a chat join request for the specified user in the chat.
+	// The bot must be an administrator in the chat and have the can_invite_users administrator right.
+	// Returns an error on failure.
+	ApproveChatJoinRequest(chatID Recipient, userID int64) error
+
+	// DeclineChatJoinRequest declines a chat join request for the specified user in the chat.
+	// The bot must be an administrator in the chat and have the can_invite_users administrator right.
+	// Returns an error on failure.
+	DeclineChatJoinRequest(chatID Recipient, userID int64) error
+
+	// SetChatPhoto sets a new profile photo for the chat.
+	// Photos can't be changed for private chats.
+	// The bot must be an administrator in the chat and have the appropriate administrator rights.
+	// Returns an error on failure.
+	SetChatPhoto(chatID Recipient, photo InputFile) error
+
+	// DeleteChatPhoto deletes the chat photo.
+	// Photos can't be changed for private chats.
+	// The bot must be an administrator in the chat and have the appropriate administrator rights.
+	// Returns an error on failure.
+	DeleteChatPhoto(chatID Recipient) error
+
+	// SetChatTitle changes the title of the chat.
+	// Titles can't be changed for private chats.
+	// The bot must be an administrator in the chat and have the appropriate administrator rights.
+	// Returns an error on failure.
+	SetChatTitle(chatID Recipient, title string) error
+
+	// SetChatDescription changes the description of a group, supergroup, or channel.
+	// The bot must be an administrator in the chat and have the appropriate administrator rights.
+	// Returns an error on failure.
+	SetChatDescription(chatID Recipient, description string) error
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 
