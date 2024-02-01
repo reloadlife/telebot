@@ -3,6 +3,7 @@ package telebot
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 // User represents a Telegram user or bot.
@@ -63,4 +64,9 @@ func (u *User) String() string {
 		isBot = "(Bot)"
 	}
 	return fmt.Sprintf("User{%sID: %d, User: @%v}\n%s\n", isBot, u.ID, u.Username, indented)
+}
+
+// Recipient Mention returns a string which mentions the user.
+func (u *User) Recipient() string {
+	return strconv.FormatInt(u.ID, 10)
 }

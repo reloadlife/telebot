@@ -3,7 +3,35 @@ package telebot
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
+
+type ChatType string
+
+const (
+	ChatPrivate        ChatType = "private"
+	ChatGroup          ChatType = "group"
+	ChatSuperGroup     ChatType = "supergroup"
+	ChatChannel        ChatType = "channel"
+	ChatChannelPrivate ChatType = "privatechannel"
+)
+
+// ChatLocation represents a location to which a chat is connected.
+type ChatLocation struct {
+	Location Location `json:"location,omitempty"`
+	Address  string   `json:"address,omitempty"`
+}
+
+// ChatPhoto object represents a chat photo.
+type ChatPhoto struct {
+	// File identifiers of small (160x160) chat photo
+	SmallFileID   string `json:"small_file_id"`
+	SmallUniqueID string `json:"small_file_unique_id"`
+
+	// File identifiers of big (640x640) chat photo
+	BigFileID   string `json:"big_file_id"`
+	BigUniqueID string `json:"big_file_unique_id"`
+}
 
 // Chat represents a chat.
 type Chat struct {
@@ -14,7 +42,7 @@ type Chat struct {
 	ID int64 `json:"id"`
 
 	// Type is the type of chat, which can be either "private", "group", "supergroup" or "channel".
-	Type string `json:"type"`
+	Type ChatType `json:"type"`
 
 	// Title is the title for supergroups, channels, and group chats.
 	Title *string `json:"title,omitempty"`
@@ -40,7 +68,7 @@ type Chat struct {
 
 	// AvailableReactions is the list of available reactions allowed in the chat.
 	// If omitted, then all emoji reactions are allowed. Returned only in getChat.
-	AvailableReactions *[]ReactionType `json:"available_reactions,omitempty"`
+	AvailableReactions []ReactionType `json:"available_reactions,omitempty"`
 
 	// AccentColorID is the identifier of the accent color for the chat name and backgrounds of the chat photo,
 	// reply header, and link preview. Returned only in getChat. Always returned in getChat.
@@ -143,17 +171,22 @@ type Chat struct {
 }
 
 // MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (u *Chat) MarshalJSON() ([]byte, error) {
-	return json.Marshal(u)
+func (c *Chat) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c)
 }
 
 // UnmarshalJSON to be JSON unserializable
-func (u *Chat) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, u)
+func (c *Chat) UnmarshalJSON(b []byte) error {
+	return json.Unmarshal(b, c)
 }
 
 // String returns a string representation of this user.
-func (u *Chat) String() string {
-	indented, _ := json.MarshalIndent(u, "", "  ")
-	return fmt.Sprintf("Chat{ID: (%s) %d, Title: @%v}\n%s\n", u.Type, u.ID, u.Title, indented)
+func (c *Chat) String() string {
+	indented, _ := json.MarshalIndent(c, "", "  ")
+	return fmt.Sprintf("Chat{ID: (%s) %d, Title: @%v}\n%s\n", c.Type, c.ID, c.Title, indented)
+}
+
+// Recipient returns the chat's recipient.
+func (c *Chat) Recipient() string {
+	return strconv.FormatInt(c.ID, 10)
 }
