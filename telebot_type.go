@@ -132,6 +132,25 @@ type Bot interface {
 
 	AnswerCallbackQuery(callback *Callback, opts ...any) error
 
+	SetMyCommands(commands []BotCommand, opts ...any) error
+	GetMyCommands(opts ...any) ([]BotCommand, error)
+	DeleteMyCommands(opts ...any) error
+
+	SetMyName(name string, opts ...any) error
+	GetMyName(opts ...any) (*string, error)
+
+	SetMyDescription(description string, opts ...any) error
+	GetMyDescription(opts ...any) (*string, error)
+
+	SetMyShortDescription(shortDescription string, opts ...any) error
+	GetMyShortDescription(opts ...any) (*string, error)
+
+	SetChatMenuButton(opts ...any) error
+	GetChatMenuButton(opts ...any) (*string, error)
+
+	SetMyDefaultAdministratorRights(opts ...any) error
+	GetMyDefaultAdministratorRights(opts ...any) (*Rights, error)
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 
