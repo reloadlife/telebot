@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var telegramSecretToken string
+
 type handler struct {
 	f HandlerFunc
 	e UpdateHandlerOn
@@ -78,6 +80,7 @@ func New(s BotSettings) Bot {
 		httpClient:  httpc.NewHTTPClient(s.URL, time.Minute),
 	}
 
+	telegramSecretToken = s.Token
 	if !s.OfflineMode {
 		self, err := b.GetMe()
 		if err != nil {

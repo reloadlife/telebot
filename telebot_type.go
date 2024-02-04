@@ -34,6 +34,10 @@ type Bot interface {
 	// SendMessage sends a text message.
 	SendMessage(recipient Recipient, text string, options ...Option) (*Message, error)
 
+	GetFile(fileID string) (*File, error)
+
+	GetUserProfilePhotos(userID int64, offset, limit int) (*UserProfilePhotos, error)
+
 	// Ban a user from a group, a supergroup or a channel.
 	Ban(chatID Recipient, userID int64, untilDate *int64, revokeMessages *bool) error
 
