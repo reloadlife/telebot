@@ -130,6 +130,8 @@ type Bot interface {
 	UnhideGeneralForumTopic(chatID Recipient) error
 	UnpinAllGeneralForumTopicMessages(chatID Recipient) error
 
+	AnswerCallbackQuery(callback *Callback, opts ...any) error
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 

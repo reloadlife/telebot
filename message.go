@@ -5,6 +5,17 @@ import (
 	"fmt"
 )
 
+type MaybeInaccessibleMessage struct {
+	*Message
+	*InaccessibleMessage
+}
+
+type InaccessibleMessage struct {
+	MessageID int64 `json:"message_id"`
+	Date      int64 `json:"date"`
+	Chat      *Chat `json:"chat"`
+}
+
 // Message
 // This struct represents a Telegram message and includes various fields to capture different aspects of the message.
 //
