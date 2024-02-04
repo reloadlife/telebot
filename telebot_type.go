@@ -146,7 +146,7 @@ type Bot interface {
 	GetMyShortDescription(opts ...any) (*string, error)
 
 	SetChatMenuButton(opts ...any) error
-	GetChatMenuButton(opts ...any) (*string, error)
+	GetChatMenuButton(opts ...any) (*MenuButton, error)
 
 	SetMyDefaultAdministratorRights(opts ...any) error
 	GetMyDefaultAdministratorRights(opts ...any) (*Rights, error)
