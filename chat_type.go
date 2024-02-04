@@ -322,8 +322,8 @@ type declineChatJoinRequestParams struct {
 }
 
 type setChatPhotoParams struct {
-	ChatID any       `json:"chat_id"`
-	Photo  InputFile `json:"photo"`
+	ChatID any  `json:"chat_id"`
+	Photo  File `json:"photo"`
 }
 
 type deleteChatPhotoParams struct {
@@ -374,4 +374,13 @@ type getChatMemberCountRequest struct {
 type getChatMemberRequest struct {
 	ChatID interface{} `json:"chat_id"`
 	UserID int64       `json:"user_id"`
+}
+
+type setChatStickerSetRequest struct {
+	ChatID         any    `json:"chat_id"`
+	StickerSetName string `json:"sticker_set_name"`
+}
+
+type deleteChatStickerSetRequest struct {
+	ChatID any `json:"chat_id"`
 }

@@ -113,6 +113,23 @@ type Bot interface {
 	GetChatMemberCount(chatID Recipient) (*int, error)
 	GetChatMember(chatID Recipient, userID int64) (*ChatMember, error)
 
+	SetChatStickerSet(chatID Recipient, stickerSetName string) error
+	DeleteChatStickerSet(chatID Recipient) error
+
+	GetForumTopicIconStickers() ([]Sticker, error)
+	CreateForumTopic(chatID Recipient, name string, options ...any) (*ForumTopic, error)
+	EditForumTopic(chatID Recipient, topicID int64, options ...any) error
+	CloseForumTopic(chatID Recipient, topicID int64) error
+	ReopenForumTopic(chatID Recipient, topicID int64) error
+	DeleteForumTopic(chatID Recipient, topicID int64) error
+	UnpinAllForumTopicMessages(chatID Recipient, topicID int64) error
+	EditGeneralForumTopic(chatID Recipient, name string) error
+	CloseGeneralForumTopic(chatID Recipient) error
+	ReopenGeneralForumTopic(chatID Recipient) error
+	HideGeneralForumTopic(chatID Recipient) error
+	UnhideGeneralForumTopic(chatID Recipient) error
+	UnpinAllGeneralForumTopicMessages(chatID Recipient) error
+
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 

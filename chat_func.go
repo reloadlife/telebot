@@ -348,3 +348,20 @@ func (b *bot) GetChatMember(chatID Recipient, userID int64) (*ChatMember, error)
 	err = json.Unmarshal(data, &result)
 	return &result.Result, err
 }
+
+func (b *bot) SetChatStickerSet(chatID Recipient, stickerSetName string) error {
+	params := setChatStickerSetRequest{
+		ChatID:         chatID,
+		StickerSetName: stickerSetName,
+	}
+	_, err := b.sendMethodRequest(methodSetChatStickerSet, params)
+	return err
+}
+
+func (b *bot) DeleteChatStickerSet(chatID Recipient) error {
+	params := deleteChatStickerSetRequest{
+		ChatID: chatID,
+	}
+	_, err := b.sendMethodRequest(methodDeleteChatStickerSet, params)
+	return err
+}

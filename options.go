@@ -39,19 +39,6 @@ const (
 	HasSpoiler
 )
 
-type IconColor int
-
-const (
-	IconColorBlue      IconColor = 7322096
-	IconColorOrange    IconColor = 16766590
-	IconColorPurple    IconColor = 13338331
-	IconColorGreen     IconColor = 9367192
-	IconColorRed       IconColor = 16749490
-	IconColorOrangeRed IconColor = 16478047
-)
-
-type CustomEmoji string
-
 // Placeholder is used to set input field placeholder as a send option.
 func Placeholder(text string) *SendOptions {
 	return &SendOptions{
