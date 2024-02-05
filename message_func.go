@@ -16,7 +16,7 @@ type sendMessageParams struct {
 	Text string `json:"text" validate:"required,max=4096"`
 
 	// ParseMode is the mode for parsing entities in the message text. See formatting options for more details.
-	ParseMode *string `json:"parse_mode,omitempty"`
+	ParseMode *ParseMode `json:"parse_mode,omitempty"`
 
 	// Entities is a JSON-serialized list of special entities that appear in message text,
 	// which can be specified instead of ParseMode.

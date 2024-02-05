@@ -34,6 +34,10 @@ type Bot interface {
 	// SendMessage sends a text message.
 	SendMessage(recipient Recipient, text string, options ...Option) (*Message, error)
 
+	SendChatAction(recipient Recipient, action ChatAction) error
+
+	SetMessageReaction(recipient Recipient, messageID int, options ...any) error
+
 	GetFile(fileID string) (*File, error)
 
 	GetUserProfilePhotos(userID int64, offset, limit int) (*UserProfilePhotos, error)

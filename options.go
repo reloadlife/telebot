@@ -37,6 +37,8 @@ const (
 
 	// HasSpoiler = SendOptions.HasSpoiler
 	HasSpoiler
+
+	RemoveCaption
 )
 
 // Placeholder is used to set input field placeholder as a send option.

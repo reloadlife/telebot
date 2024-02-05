@@ -18,8 +18,11 @@ const (
 	methodStopMessageLiveLocation
 	methodEditMessageReplyMarkup
 	methodStopPoll
+	methodDeleteMessage
 	methodDeleteMessages
+	methodForwardMessage
 	methodForwardMessages
+	methodCopyMessage
 	methodCopyMessages
 	methodSendPhoto
 	methodSendAudio
