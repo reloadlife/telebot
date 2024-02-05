@@ -19,25 +19,7 @@ func (b *bot) GetMe() (*User, error) {
 	return &resp.Result, nil
 }
 
-func (b *bot) SetMyCommands(commands []BotCommand, opts ...any) error {
-	params := setMyCommands{
-		Commands: commands,
-	}
-
-	for _, opt := range opts {
-		switch o := opt.(type) {
-		case *BotCommandScope:
-			params.Scope = o
-		case string:
-			params.Language = o
-		}
-	}
-
-	_, err := b.sendMethodRequest(methodSetMyCommands, params)
-	return err
-}
-
-func (b *bot) GetMyCommands(opts ...any) ([]BotCommand, error) {
+func (b *bot) Commands(opts ...any) ([]BotCommand, error) {
 	params := getMyCommands{}
 
 	for _, opt := range opts {
@@ -65,7 +47,25 @@ func (b *bot) GetMyCommands(opts ...any) ([]BotCommand, error) {
 	return resp.Result, nil
 }
 
-func (b *bot) DeleteMyCommands(opts ...any) error {
+func (b *bot) SetCommands(commands []BotCommand, opts ...any) error {
+	params := setMyCommands{
+		Commands: commands,
+	}
+
+	for _, opt := range opts {
+		switch o := opt.(type) {
+		case *BotCommandScope:
+			params.Scope = o
+		case string:
+			params.Language = o
+		}
+	}
+
+	_, err := b.sendMethodRequest(methodSetMyCommands, params)
+	return err
+}
+
+func (b *bot) DeleteCommands(opts ...any) error {
 	params := deleteMyCommands{}
 
 	for _, opt := range opts {
@@ -81,7 +81,7 @@ func (b *bot) DeleteMyCommands(opts ...any) error {
 	return err
 }
 
-func (b *bot) SetMyName(name string, opts ...any) error {
+func (b *bot) SetName(name string, opts ...any) error {
 	params := setMyNameRequest{
 		Name: name,
 	}
@@ -97,7 +97,7 @@ func (b *bot) SetMyName(name string, opts ...any) error {
 	return err
 }
 
-func (b *bot) GetMyName(opts ...any) (*string, error) {
+func (b *bot) GetName(opts ...any) (*string, error) {
 	params := setMyNameRequest{}
 
 	for _, opt := range opts {
@@ -123,7 +123,7 @@ func (b *bot) GetMyName(opts ...any) (*string, error) {
 	return &resp.Result, nil
 }
 
-func (b *bot) SetMyDescription(description string, opts ...any) error {
+func (b *bot) SetDescription(description string, opts ...any) error {
 	params := setMyDescriptionRequest{
 		Description: description,
 	}
@@ -139,7 +139,7 @@ func (b *bot) SetMyDescription(description string, opts ...any) error {
 	return err
 }
 
-func (b *bot) GetMyDescription(opts ...any) (*string, error) {
+func (b *bot) GetDescription(opts ...any) (*string, error) {
 	params := setMyDescriptionRequest{}
 
 	for _, opt := range opts {
@@ -165,7 +165,7 @@ func (b *bot) GetMyDescription(opts ...any) (*string, error) {
 	return &resp.Result, nil
 }
 
-func (b *bot) SetMyShortDescription(description string, opts ...any) error {
+func (b *bot) SetShortDescription(description string, opts ...any) error {
 	params := setMyDescriptionRequest{
 		ShortDescription: description,
 	}
@@ -181,7 +181,7 @@ func (b *bot) SetMyShortDescription(description string, opts ...any) error {
 	return err
 }
 
-func (b *bot) GetMyShortDescription(opts ...any) (*string, error) {
+func (b *bot) GetShortDescription(opts ...any) (*string, error) {
 	params := setMyDescriptionRequest{}
 
 	for _, opt := range opts {
@@ -251,7 +251,7 @@ func (b *bot) GetChatMenuButton(opts ...any) (*MenuButton, error) {
 	return &resp.Result, nil
 }
 
-func (b *bot) SetMyDefaultAdministratorRights(opts ...any) error {
+func (b *bot) SetDefaultAdministratorRights(opts ...any) error {
 	params := setMyDefaultAdministratorRights{}
 
 	for _, opt := range opts {
@@ -267,7 +267,7 @@ func (b *bot) SetMyDefaultAdministratorRights(opts ...any) error {
 	return err
 }
 
-func (b *bot) GetMyDefaultAdministratorRights(opts ...any) (*Rights, error) {
+func (b *bot) GetDefaultAdministratorRights(opts ...any) (*Rights, error) {
 	params := setMyDefaultAdministratorRights{}
 
 	for _, opt := range opts {

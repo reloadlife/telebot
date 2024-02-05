@@ -32,7 +32,7 @@ type Bot interface {
 	GetMe() (*User, error)
 
 	// SendMessage sends a text message.
-	SendMessage(recipient Recipient, text string, options ...Option) (*Message, error)
+	SendMessage(recipient Recipient, text string, options ...any) (*Message, error)
 
 	SendChatAction(recipient Recipient, action ChatAction) error
 
@@ -140,24 +140,24 @@ type Bot interface {
 
 	AnswerCallbackQuery(callback *Callback, opts ...any) error
 
-	SetMyCommands(commands []BotCommand, opts ...any) error
-	GetMyCommands(opts ...any) ([]BotCommand, error)
-	DeleteMyCommands(opts ...any) error
+	Commands(opts ...any) ([]BotCommand, error)
+	SetCommands(commands []BotCommand, opts ...any) error
+	DeleteCommands(opts ...any) error
 
-	SetMyName(name string, opts ...any) error
-	GetMyName(opts ...any) (*string, error)
+	SetName(name string, opts ...any) error
+	GetName(opts ...any) (*string, error)
 
-	SetMyDescription(description string, opts ...any) error
-	GetMyDescription(opts ...any) (*string, error)
+	SetDescription(description string, opts ...any) error
+	GetDescription(opts ...any) (*string, error)
 
-	SetMyShortDescription(shortDescription string, opts ...any) error
-	GetMyShortDescription(opts ...any) (*string, error)
+	SetShortDescription(shortDescription string, opts ...any) error
+	GetShortDescription(opts ...any) (*string, error)
 
 	SetChatMenuButton(opts ...any) error
 	GetChatMenuButton(opts ...any) (*MenuButton, error)
 
-	SetMyDefaultAdministratorRights(opts ...any) error
-	GetMyDefaultAdministratorRights(opts ...any) (*Rights, error)
+	SetDefaultAdministratorRights(opts ...any) error
+	GetDefaultAdministratorRights(opts ...any) (*Rights, error)
 
 	// Handle Register Routes
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
