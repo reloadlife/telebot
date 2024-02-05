@@ -10,6 +10,10 @@ type MaybeInaccessibleMessage struct {
 	*InaccessibleMessage
 }
 
+func (m *MaybeInaccessibleMessage) IsAccessible() bool {
+	return m.InaccessibleMessage.Date != 0 && m.Message.Date != 0
+}
+
 type InaccessibleMessage struct {
 	MessageID int64 `json:"message_id"`
 	Date      int64 `json:"date"`
