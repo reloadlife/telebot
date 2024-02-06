@@ -9,6 +9,8 @@ import (
 type ChatType string
 
 const (
+	ChatTypeSender ChatType = "sender" // Only for InlineQuery.
+
 	ChatPrivate        ChatType = "private"
 	ChatGroup          ChatType = "group"
 	ChatSuperGroup     ChatType = "supergroup"

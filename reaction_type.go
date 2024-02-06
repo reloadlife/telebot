@@ -1,6 +1,7 @@
 package telebot
 
-type Emoji string
+type StickerEmoji string
+type Emoji StickerEmoji
 
 const (
 	EmojiLike       Emoji = "👍"
