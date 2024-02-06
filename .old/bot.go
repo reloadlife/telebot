@@ -245,7 +245,7 @@ func (b *OldBot) SendAlbum(to Recipient, a Album, opts ...interface{}) ([]Messag
 
 	sendOpts := telebot.extractOptions(opts)
 	media := make([]string, len(a))
-	files := make(map[string]telebot.File)
+	files := make(map[string]File)
 
 	for i, x := range a {
 		var (
@@ -527,7 +527,7 @@ func (b *OldBot) EditMedia(msg Editable, media Inputtable, opts ...interface{}) 
 	var (
 		repr  string
 		file  = media.MediaFile()
-		files = make(map[string]telebot.File)
+		files = make(map[string]File)
 
 		thumb     *Photo
 		thumbName = "thumbnail"
@@ -772,28 +772,28 @@ func (b *OldBot) AnswerWebApp(query *Query, r Result) (*WebAppMessage, error) {
 //
 // Usually, Telegram-provided File objects miss FilePath so you might need to
 // perform an additional request to fetch them.
-func (b *OldBot) FileByID(fileID string) (telebot.File, error) {
+func (b *OldBot) FileByID(fileID string) (File, error) {
 	params := map[string]string{
 		"file_id": fileID,
 	}
 
 	data, err := b.Raw("getFile", params)
 	if err != nil {
-		return telebot.File{}, err
+		return File{}, err
 	}
 
 	var resp struct {
-		Result telebot.File
+		Result File
 	}
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return telebot.File{}, telebot.wrapError(err)
+		return File{}, telebot.wrapError(err)
 	}
 	return resp.Result, nil
 }
 
 // Download saves the file from Telegram servers locally.
 // Maximum file size to download is 20 MB.
-func (b *OldBot) Download(file *telebot.File, localFilename string) error {
+func (b *OldBot) Download(file *File, localFilename string) error {
 	reader, err := b.File(file)
 	if err != nil {
 		return err
@@ -816,7 +816,7 @@ func (b *OldBot) Download(file *telebot.File, localFilename string) error {
 }
 
 // File gets a file from Telegram servers.
-func (b *OldBot) File(file *telebot.File) (io.ReadCloser, error) {
+func (b *OldBot) File(file *File) (io.ReadCloser, error) {
 	f, err := b.FileByID(file.FileID)
 	if err != nil {
 		return nil, err

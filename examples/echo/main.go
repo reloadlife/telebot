@@ -1,4 +1,4 @@
-package echo
+package main
 
 import (
 	tele "go.mamad.dev/telebot"
@@ -10,12 +10,12 @@ func main() {
 		Token: os.Getenv("TELEGRAM_TOKEN"),
 	})
 
-	tg.Handle("/start", func(ctx tele.Context) error {
-		return ctx.Send("Hello Sir, I'm Echo OldBot, Please send me something to echo.")
+	tg.Handle("/start", func(c tele.Context) error {
+		return c.Send("Hello Sir, I'm Echo OldBot, Please send me something to echo.")
 	})
 
-	tg.Handle(tele.OnText, func(ctx tele.Context) error {
-		return ctx.Send(ctx.Text())
+	tg.Handle(tele.OnText, func(c tele.Context) error {
+		return c.Send(c.Text())
 	})
 
 	tg.Start()

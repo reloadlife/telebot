@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"go.mamad.dev/telebot/.old"
 	"regexp"
 	"strings"
 )
@@ -65,7 +64,7 @@ func (b *bot) ProcessUpdate(u Update) bool {
 	return handled
 }
 
-func (b *bot) handleMessageEvents(m *_old.Message, c Context) bool {
+func (b *bot) handleMessageEvents(m *Message, c Context) bool {
 	if m.PinnedMessage != nil {
 		return b.handle(OnPinnedMessage, c)
 	}
@@ -94,7 +93,7 @@ func (b *bot) handleMessageEvents(m *_old.Message, c Context) bool {
 	return b.handleMediaAndOtherEvents(m, c)
 }
 
-func (b *bot) handleMediaAndOtherEvents(m *_old.Message, c Context) bool {
+func (b *bot) handleMediaAndOtherEvents(m *Message, c Context) bool {
 	mediaHandlers := map[interface{}]UpdateHandlerOn{
 		m.Photo:     OnPhoto,
 		m.Voice:     OnVoice,

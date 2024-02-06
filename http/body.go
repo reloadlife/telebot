@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"mime/multipart"
+	"os"
 )
 
 type Body interface {
@@ -13,6 +14,19 @@ type Body interface {
 	Get(key string) any
 	Delete(key string)
 	Encode() (io.Reader, string)
+}
+
+type Uploadable interface {
+	InCloud() bool
+	OnDisk() bool
+
+	GetFileID() string
+	GetFileSize() int64
+	GetFilePath() string
+	GetFileLocal() string
+	GetFileURL() string
+	GetFileName() string
+	GetFileReader() io.Reader
 }
 
 type body struct {
@@ -45,18 +59,46 @@ func (b *body) MarshalJSON() ([]byte, error) {
 	return json.Marshal(b.b)
 }
 
-func (b *body) AddFile(name string, data []byte) {
-	b.hasFiles = true
-	b.files = append(b.files, file{
-		name: name,
-		data: data,
-	})
-}
-
 func (b *body) Add(key string, value any) {
 	switch value.(type) {
 	case []byte:
-		b.AddFile(key, value.([]byte))
+		b.hasFiles = true
+		b.files = append(b.files, file{
+			name: key,
+			data: value.([]byte),
+		})
+	case Uploadable:
+		v := value.(Uploadable)
+		switch {
+		case v.InCloud():
+			b.b[key] = v.GetFileID()
+		case v.OnDisk():
+			fileData, err := os.ReadFile(v.GetFileLocal())
+			if err != nil {
+				panic("httpc: failed to read file")
+			}
+			b.files = append(b.files, file{
+				name: key,
+				data: fileData,
+			})
+		case v.GetFileReader() != nil:
+			fileData, err := io.ReadAll(v.GetFileReader())
+			if err != nil {
+				panic("httpc: failed to read file")
+			}
+
+			b.files = append(b.files, file{
+				name: key,
+				data: fileData,
+			})
+
+		case v.GetFileURL() != "":
+			b.b[key] = v.GetFileURL()
+
+		default:
+			panic("httpc: file for field " + key + " doesn't exist")
+		}
+
 	default:
 		b.b[key] = value
 	}

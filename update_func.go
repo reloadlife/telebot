@@ -29,7 +29,7 @@ func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...Up
 		params.Limit = limit
 	}
 
-	res, err := b.sendMethodRequest(MethodGetUpdates, params)
+	res, err := b.sendMethodRequest(methodGetUpdates, params)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...Up
 		Result []Update
 	}
 
-	if err = json.NewDecoder(res.Body).Decode(&resp); err != nil {
+	if err = json.Unmarshal(res, &resp); err != nil {
 		return nil, wrapError(err)
 	}
 	return resp.Result, nil

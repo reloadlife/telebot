@@ -1,10 +1,12 @@
 package telebot
 
 import (
-	"go.mamad.dev/telebot/.old"
+	"github.com/pkg/errors"
 	httpc "go.mamad.dev/telebot/http"
 	"time"
 )
+
+var telegramSecretToken string
 
 type handler struct {
 	f HandlerFunc
@@ -13,7 +15,7 @@ type handler struct {
 }
 
 type bot struct {
-	self    *_old.User
+	self    *User
 	token   string
 	updates chan Update
 	poller  Poller
@@ -27,23 +29,8 @@ type bot struct {
 	stopClient  chan struct{}
 
 	httpClient httpc.Client
-}
 
-type Bot interface {
-	Debug(...any)
-	OnError(error, Context)
-
-	// GetUpdates returns a list of updates (Long Polling).
-	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) ([]Update, error)
-
-	// Handle Register Routes
-	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
-
-	Start()
-	Stop()
-
-	StartInWebhook()
-	StopInWebhook()
+	offlineMode bool
 }
 
 type BotSettings struct {
@@ -55,6 +42,8 @@ type BotSettings struct {
 
 	Synchronous  bool
 	UpdatesCount int
+
+	Poller Poller
 }
 
 // New creates a new bot instance.
@@ -67,14 +56,21 @@ func New(s BotSettings) Bot {
 		s.UpdatesCount = 100
 	}
 
-	return &bot{
+	if s.Poller == nil {
+		s.Poller = &LongPoller{}
+	}
+
+	b := &bot{
+		self:  &User{},
 		token: s.Token,
 		onError: func(err error, ctx Context) {
 			if s.OfflineMode {
 				panic(err)
 			}
 		},
-		poller: &LongPoller{},
+		poller: s.Poller,
+
+		offlineMode: s.OfflineMode,
 
 		updates:  make(chan Update, s.UpdatesCount),
 		handlers: []handler{},
@@ -83,6 +79,17 @@ func New(s BotSettings) Bot {
 		synchronous: s.Synchronous,
 		httpClient:  httpc.NewHTTPClient(s.URL, time.Minute),
 	}
+
+	telegramSecretToken = s.Token
+	if !s.OfflineMode {
+		self, err := b.GetMe()
+		if err != nil {
+			panic(errors.Wrap(err, "telebot: can't get bot info"))
+		}
+		b.self = self
+	}
+
+	return b
 }
 
 // Start brings bot into motion by consuming incoming updates (see bot.updates channel).

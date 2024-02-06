@@ -393,7 +393,7 @@ func TestBot(t *testing.T) {
 	assert.Equal(t, ErrBadRecipient, err)
 
 	photo := &Photo{
-		File:    telebot.FromURL("https://telegra.ph/file/65c5237b040ebf80ec278.jpg"),
+		File:    FromURL("https://telegra.ph/file/65c5237b040ebf80ec278.jpg"),
 		Caption: t.Name(),
 	}
 	var msg *Message
@@ -462,7 +462,7 @@ func TestBot(t *testing.T) {
 		require.NoError(t, err)
 
 		animation := &Animation{
-			File:     telebot.FromDisk(file.Name()),
+			File:     FromDisk(file.Name()),
 			Caption:  t.Name(),
 			FileName: "animation.gif",
 		}

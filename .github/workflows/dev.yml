@@ -1,0 +1,34 @@
+name: Test and Checks
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  test:
+    name: Test & coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run unit tests with coverage.
+        run: |
+          export TELEBOT_SECRET=${{ secrets.TELEBOT_SECRET }}
+          export CHAT_ID=${{ secrets.CHAT_ID }}
+          export USER_ID=${{ secrets.USER_ID }}
+          export GOPATH=$(go env GOPATH)
+          go clean -modcache
+          go mod tidy
+          make cover
+          make check
+
+      - name: Upload Coverage report to CodeCov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./resources/cover/cover.out
