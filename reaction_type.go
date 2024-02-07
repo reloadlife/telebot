@@ -98,3 +98,12 @@ type setMessageReactionRequest struct {
 	Reaction  []ReactionType `json:"reaction,omitempty"`
 	IsBig     bool           `json:"is_big,omitempty"`
 }
+
+// ReactionCount represents the count of a specific reaction on a message.
+type ReactionCount struct {
+	// Type is the type of reaction.
+	Type ReactionType `json:"type"`
+
+	// Count is the count of reactions of the specified type.
+	Count int `json:"count"`
+}
