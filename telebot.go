@@ -1,7 +1,7 @@
 package telebot
 
 import (
-	"github.com/pkg/errors"
+	"errors"
 	httpc "go.mamad.dev/telebot/http"
 	"time"
 )
@@ -84,7 +84,7 @@ func New(s BotSettings) Bot {
 	if !s.OfflineMode {
 		self, err := b.GetMe()
 		if err != nil {
-			panic(errors.Wrap(err, "telebot: can't get bot info"))
+			panic(errors.Join(err, errors.New("telebot: can't get bot info")))
 		}
 		b.self = self
 	}
