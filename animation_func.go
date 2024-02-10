@@ -56,7 +56,7 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Mess
 		Result *Message
 	}
 
-	req, err := b.sendMethodRequest(methodSendPhoto, params)
+	req, err := b.sendMethodRequest(methodSendAnimation, params)
 	if err != nil {
 		return nil, err
 	}

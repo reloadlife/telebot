@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*Message, error) {
-	params := sendAudioRequest{
+func (b *bot) SendVideo(to Recipient, video File, options ...any) (*Message, error) {
+	params := sendVideoParams{
 		ChatID: to.Recipient(),
-		Audio:  audio,
+		Video:  video,
 	}
 
 	for _, option := range options {
@@ -29,10 +29,11 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*Message, err
 		case time.Duration:
 			params.Duration = toPtr(int(v.Seconds()))
 
-		case Performer:
-			params.Performer = toPtr(string(v))
-		case Title:
-			params.Title = toPtr(string(v))
+		case Width:
+			params.Width = toPtr(int(v))
+
+		case Height:
+			params.Height = toPtr(int(v))
 
 		case *File:
 			params.Thumbnail = v
@@ -45,6 +46,8 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*Message, err
 				params.Protected = toPtr(true)
 			case HasSpoiler:
 				params.HasSpoiler = toPtr(true)
+			case Streamable:
+				params.Streamable = toPtr(true)
 			}
 
 		default:
@@ -56,7 +59,7 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*Message, err
 		Result *Message
 	}
 
-	req, err := b.sendMethodRequest(methodSendAudio, params)
+	req, err := b.sendMethodRequest(methodSendVideo, params)
 	if err != nil {
 		return nil, err
 	}
