@@ -23,3 +23,7 @@ type Game struct {
 	// Upload via BotFather.
 	Animation *Animation `json:"animation,omitempty"`
 }
+
+// CallbackGame represents a placeholder for game-related information.
+// Use BotFather to set up your game.
+type CallbackGame struct{}
