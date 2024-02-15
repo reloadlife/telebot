@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+type Updates []Update
+
 // Update represents an incoming update.
 type Update struct {
 	// ID is the update's a unique identifier.

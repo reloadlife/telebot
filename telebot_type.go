@@ -4,44 +4,50 @@ import "time"
 
 // Bot
 // Interface for a Bot instance.
-// Bot is a high-level interface for interacting with the Telegram API.
+// Bot is a high-level interface for interacting with the Telegram API;
+// Bot provides Start Method to Start the Bot using LongPolling.
+// Bot also provides a StartInWebhook to start the Bot in Webhook mode with a Simple Mux HTTP Server.
+// Example for a Simple Echo Bot:
+// ```golang
+// package main
+//
+// import (
+//
+//	tele "go.mamad.dev/telebot"
+//	"os"
+//
+// )
+//
+//	func main() {
+//		tg := tele.New(tele.BotSettings{
+//			Token: os.Getenv("TELEGRAM_TOKEN"),
+//		})
+//
+//		tg.Handle("/start", func(c tele.Context) error {
+//			return c.Send("Hello Sir, I'm Echo OldBot, Please send me something to echo.")
+//		})
+//
+//		tg.Handle(tele.OnText, func(c tele.Context) error {
+//			return c.Send(c.Text())
+//		})
+//
+//		tg.Start()
+//	}
+//
+// ```
 type Bot interface {
-
-	// Handle registers a handler function for the given endpoint.
-	//
-	// endpoint is the endpoint path to handle.
-	//
-	// h is the handler function to register.
-	//
-	// m specifies optional middleware functions.
-	//
-	// This allows routing HTTP requests to handler functions.
-	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
-
-	// Start starts the router listening for requests.
-	//
-	// This starts the HTTP server on the configured address
-	// and port and begins handling requests.
+	// Start starts the Bot and waits for requests.
+	// Start starts a long polling loop to receive updates from the Telegram API.
 	Start()
 
-	// Stop stops the router and shuts down the HTTP server.
-	//
-	// This closes the listener and stops handling requests.
-	Stop()
-
 	// StartInWebhook starts the router in webhook mode.
-	//
-	// This configures the router for webhook usage rather
-	// than a HTTP server. The router will not listen on
-	// the configured port, but will call handler functions
-	// when SetWebhook is called externally.
+	// StartInWebhook starts a simple HTTP server to receive updates from the Telegram API.
 	StartInWebhook()
 
-	// StopInWebhook stops the router in webhook mode.
-	//
-	// This disables webhook and stops calling any webhook
-	// handler functions.
-	StopInWebhook()
+	// Stop Gracefully stops the Bot.
+	Stop()
+
+	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 
 	// Debug sends a debug message to the bot.
 	//
@@ -55,31 +61,33 @@ type Bot interface {
 	// ctx provides context about where the error occurred.
 	OnError(err error, ctx Context)
 
-	// Close closes the bot instance before moving it from one local server to another.
-	//
-	// Deletes the webhook before closing to ensure the bot isn't launched again
-	// after the server restarts. Returns error 429 if called within 10 mins of launch.
-	//
+	// Close
+	// Telegram API Method.
+	// Use this method to close the bot instance before moving it from one local server to another.
+	// You need to delete the webhook before calling this method to ensure that
+	// the bot isn't launched again after the server restarts.
+	// The method will return error 429 in the first 10 minutes after the bot is launched.
+	// <a href="https://core.telegram.org/bots/api#close">/bots/api#close</a>
 	// Returns an error on failure.
 	Close() error
 
-	// Logout logs out the bot from the cloud Bot API server before running locally.
-	//
-	// Logs out to ensure the bot receives updates when running locally.
-	// Can't log back in to cloud for 10 mins after logging out.
-	//
+	// Logout
+	// Telegram API Method.
+	// Use this method to log out from the cloud Bot API server before launching the bot locally.
+	// You must log out the bot before running it locally,
+	// otherwise there is no guarantee that the bot will receive updates.
+	// After a successful call, you can immediately log in on a local server,
+	// but will not be able to log in back to the cloud Bot API server for 10 minutes.
+	// <a href="https://core.telegram.org/bots/api#logout">/bots/api#logout</a>
 	// Returns an error on failure.
 	Logout() error
 
-	// GetUpdates retrieves updates for the bot via long polling.
-	//
-	// offset is the update offset to start from.
-	// limit limits number of updates returned.
-	// timeout is the time to wait for updates in seconds.
-	// allowed optionally filters updates by type.
-	//
-	// Returns list of updates and error on failure.
-	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) ([]Update, error)
+	// GetUpdates
+	// Telegram API Method.
+	// Use this method to receive incoming updates using long polling.
+	// <a href="https://core.telegram.org/bots/api#getupdates">/bots/api#getupdates</a>
+	// Returns a list of Update objects and error on failure.
+	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) (Updates, error)
 
 	// GetMe returns basic info about the bot as a User object.
 	//

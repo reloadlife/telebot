@@ -1,10 +1,10 @@
 package tests
 
 import (
-	"errors"
 	"github.com/stretchr/testify/require"
 	tele "go.mamad.dev/telebot"
 	"testing"
+	"time"
 )
 
 func TestMethods(t *testing.T) {
@@ -13,14 +13,27 @@ func TestMethods(t *testing.T) {
 		Token:       "12345678:ABCDEFG",
 	})
 
-	err := errors.New("this would be a real error")
+	_ = t.Run("OfflineMode/TelegramAPI/Close", func(t *testing.T) {
+		err := tg.Close()
+		require.NoError(t, err)
+	})
 
-	err = tg.Close()
-	require.NoError(t, err)
+	_ = t.Run("OfflineMode/TelegramAPI/Logout", func(t *testing.T) {
+		err := tg.Logout()
+		require.NoError(t, err)
+	})
 
-	err = tg.Logout()
-	require.NoError(t, err)
+	_ = t.Run("OfflineMode/TelegramAPI/GetUpdates", func(t *testing.T) {
+		updates, err := tg.GetUpdates(0, 0, time.Second)
+		require.NoError(t, err)
+		require.Len(t, updates, 0) // no updates in offline mode
+	})
 
-	_, err = tg.GetMe()
-	require.NoError(t, err)
+	_ = t.Run("OfflineMode/TelegramAPI/GetMe", func(t *testing.T) {
+		user, err := tg.GetMe()
+		require.NoError(t, err)
+		require.Equal(t, "TestBot", *user.Username)
+		require.True(t, user.IsBot)
+	})
+
 }
