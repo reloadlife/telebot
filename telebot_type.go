@@ -89,10 +89,13 @@ type Bot interface {
 	// Returns a list of Update objects and error on failure.
 	GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) (Updates, error)
 
-	// GetMe returns basic info about the bot as a User object.
-	//
+	// GetMe
+	// Telegram API Method.
+	// Use this method to get current bot info.
+	// <a href="https://core.telegram.org/bots/api#getme">/bots/api#getme</a>
 	// Returns User info and error on failure.
 	GetMe() (*User, error)
+
 	//
 	//// SendMessage sends a text message to the provided recipient.
 	////
