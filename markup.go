@@ -1,12 +1,26 @@
 package telebot
 
+import "encoding/json"
+
 type ReplyMarkup interface {
+	ReplyMarkup()
+
+	MarshalJSON() ([]byte, error)
+	UnmarshalJSON(data []byte) error
 }
 
 // InlineKeyboardMarkup represents an inline keyboard that appears right next to the message it belongs to.
 type InlineKeyboardMarkup struct {
 	// InlineKeyboard is an array of button rows, each represented by an array of InlineKeyboardButton objects.
 	InlineKeyboard [][]InlineKeyboardButton `json:"inline_keyboard"`
+}
+
+func (m *InlineKeyboardMarkup) ReplyMarkup() {}
+func (m *InlineKeyboardMarkup) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m)
+}
+func (m *InlineKeyboardMarkup) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, m)
 }
 
 // ReplyKeyboardMarkup represents a custom keyboard with reply options.

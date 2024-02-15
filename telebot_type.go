@@ -823,13 +823,9 @@ type Bot interface {
 	DeleteMessage(recipient Recipient, messageIds ...int) error
 
 	// SendSticker sends a sticker to a chat.
-	//
 	// recipient is the chat to send the sticker to.
-	//
 	// sticker is the sticker file to send.
-	//
 	// options can specify additional send options.
-	//
 	// Returns the sent Message and any error.
 	SendSticker(recipient Recipient, sticker File, options ...any) (*Message, error)
 
@@ -978,7 +974,7 @@ type Bot interface {
 	// options can specify additional parameters.
 	//
 	// Returns any error that occurred.
-	AnswerInlineQuery(queryID string, results []QueryResult, options ...any) error
+	AnswerInlineQuery(queryID string, results QueryResults, options ...any) error
 
 	// AnswerWebAppQuery sends result for a Web App query.
 	//

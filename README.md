@@ -24,7 +24,6 @@ go get -u go.mamad.dev/telebot
 
 > hey, if you like the project, just give me a star, it's free :)
 
-
 - TRC-20/TRC-10: `TKD7LxW6ue39491KKGpVVxBhwZa8GLYE4G`
 - ERC20/BEP-20: `0xc382e422fE20F0c3C774B6C6136227D7e8331970`
 
