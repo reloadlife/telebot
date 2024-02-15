@@ -75,3 +75,7 @@ type EncryptedCredentials struct {
 	// Secret is Base64-encoded secret, encrypted with the bot's public RSA key, required for data decryption.
 	Secret string `json:"secret"`
 }
+
+type PassportElementError struct {
+	// todo:
+}

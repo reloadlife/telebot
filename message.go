@@ -128,6 +128,13 @@ type InaccessibleMessage struct {
 // — ReplyMarkup (*InlineKeyboardMarkup): Optional. Inline keyboard attached to the message.
 // login_url buttons are represented as ordinary URL buttons.
 type Message struct {
+	// Custom Types
+
+	Command string `json:"-"`
+	Payload string `json:"-"`
+
+	// Telegram Types.
+
 	ID                           int64                         `json:"message_id"`
 	ThreadID                     *int64                        `json:"message_thread_id,omitempty"`
 	From                         *User                         `json:"from,omitempty"`

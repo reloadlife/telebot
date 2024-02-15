@@ -38,3 +38,7 @@ type LoginUrl struct {
 	// RequestWriteAccess, if true, passes True to request the permission for your bot to send messages to the user.
 	RequestWriteAccess bool `json:"request_write_access,omitempty"`
 }
+
+type SentWebAppMessage struct {
+	InlineMessageID *string `json:"inline_message_id,omitempty"`
+}

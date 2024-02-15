@@ -85,10 +85,10 @@ func (u *Update) Type() UpdateType {
 	case u.EditedChannelPost != nil:
 		return UpdateTypeEditedChannelPost
 
-	case u.MessageReaction != nil:
+	case u.Reaction != nil:
 		return UpdateTypeMessageReaction
 
-	case u.MessageReactionCount != nil:
+	case u.ReactionCount != nil:
 		return UpdateTypeMessageReactionCount
 
 	case u.Query != nil:
@@ -97,7 +97,7 @@ func (u *Update) Type() UpdateType {
 	case u.InlineResult != nil:
 		return UpdateTypeChosenInlineResult
 
-	case u.Callback != nil:
+	case u.CallbackQuery != nil:
 		return UpdateTypeCallbackQuery
 
 	case u.ShippingQuery != nil:
@@ -124,7 +124,7 @@ func (u *Update) Type() UpdateType {
 	case u.ChatBoost != nil:
 		return UpdateTypeChatBoost
 
-	case u.ChatBoostRemoved != nil:
+	case u.RemovedChatBoost != nil:
 		return UpdateTypeChatBoostRemoved
 
 	default:

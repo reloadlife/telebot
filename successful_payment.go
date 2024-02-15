@@ -25,3 +25,8 @@ type SuccessfulPayment struct {
 	// ProviderPaymentChargeID is the provider payment identifier.
 	ProviderPaymentChargeID string `json:"provider_payment_charge_id"`
 }
+
+type LabeledPrice struct {
+	Label  string `json:"label"`
+	Amount int    `json:"amount"`
+}

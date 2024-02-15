@@ -36,3 +36,7 @@ func (c *Callback) String() string {
 	indented, _ := json.MarshalIndent(c, "", "  ")
 	return fmt.Sprintf("Callback{ID: %v, Data: %v (%s)}\n%s\n", c.ID, c.Data, c.Unique, indented)
 }
+
+type CallbackEndpoint interface {
+	CallbackUnique() string
+}

@@ -27,3 +27,9 @@ type Game struct {
 // CallbackGame represents a placeholder for game-related information.
 // Use BotFather to set up your game.
 type CallbackGame struct{}
+
+type GameHighScore struct {
+	Position int  `json:"position"`
+	User     User `json:"user"`
+	Score    int  `json:"score"`
+}

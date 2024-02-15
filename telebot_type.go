@@ -1016,7 +1016,7 @@ type Bot interface {
 	// shippingOptions lists available shipping options.
 	//
 	// Returns any error that occurred.
-	AnswerShippingQuery(queryID string, ok bool, errorMessage *string, shippingOptions ...ShippingOption) error
+	AnswerShippingQuery(queryID string, ok bool, errorMessage *string, shippingOptions ...any) error
 
 	// AnswerPreCheckoutQuery responds to pre-checkout query.
 	//
