@@ -1,9 +1,9 @@
 package telebot
 
-import "fmt"
+import "go.mamad.dev/telebot/log"
 
-func (b *bot) Debug(log ...any) {
-	for _, l := range log {
-		fmt.Println("[telebot] Debug: ", l)
+func (b *bot) Debug(logAttrs ...any) {
+	for _, l := range logAttrs {
+		log.Debugf("%v", l)
 	}
 }

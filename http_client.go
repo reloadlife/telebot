@@ -10,12 +10,14 @@ import (
 )
 
 func (b *bot) sendMethodRequest(method method, params any) ([]byte, error) {
-	req, err := b.httpClient.TelegramCall(method.String(), b.token, structToMap(params))
+	if b.offlineMode {
+		return nil, nil
+	}
 
+	req, err := b.httpClient.TelegramCall(method.String(), b.token, structToMap(params))
 	if err != nil {
 		return nil, err
 	}
-
 	defer panicIf(wrapError(req.Body.Close()))
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
