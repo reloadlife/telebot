@@ -78,5 +78,5 @@ type GiveawayCompleted struct {
 	UnclaimedPrizeCount int `json:"unclaimed_prize_count,omitempty"`
 
 	// GiveawayMessage is the message with the giveaway that was completed if it wasn't deleted.
-	GiveawayMessage Message `json:"giveaway_message,omitempty"`
+	GiveawayMessage AccessibleMessage `json:"giveaway_message,omitempty"`
 }

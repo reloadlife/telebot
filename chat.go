@@ -125,7 +125,7 @@ type Chat struct {
 
 	// PinnedMessage is the most recent pinned message (by sending date).
 	// Returned only in getChat.
-	PinnedMessage *Message `json:"pinned_message,omitempty"`
+	PinnedMessage *AccessibleMessage `json:"pinned_message,omitempty"`
 
 	// Permissions is the default chat member permissions for groups and supergroups.
 	// Returned only in getChat.

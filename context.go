@@ -15,8 +15,8 @@ type Context interface {
 	// Update returns the original update.
 	Update() Update
 
-	// Message returns stored message if such presented.
-	Message() *Message
+	// AccessibleMessage returns stored message if such presented.
+	Message() *AccessibleMessage
 
 	// Callback returns stored callback if such presented.
 	Callback() *Callback
@@ -47,17 +47,17 @@ func (c *nativeContext) Update() Update {
 	return c.u
 }
 
-func (c *nativeContext) Message() *Message {
+func (c *nativeContext) Message() *AccessibleMessage {
 	switch {
 	case c.u.Message != nil:
 		return c.u.Message
 	case c.u.CallbackQuery != nil:
-		return c.u.CallbackQuery.Message.Message
+		return c.u.CallbackQuery.Message.AccessibleMessage
 	case c.u.EditedMessage != nil:
 		return c.u.EditedMessage
 	case c.u.ChannelPost != nil:
 		if c.u.ChannelPost.PinnedMessage != nil {
-			return c.u.ChannelPost.PinnedMessage.Message
+			return c.u.ChannelPost.PinnedMessage.AccessibleMessage
 		}
 		return c.u.ChannelPost
 	case c.u.EditedChannelPost != nil:

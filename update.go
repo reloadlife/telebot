@@ -16,16 +16,16 @@ type Update struct {
 	ID int `json:"update_id"`
 
 	// Message is the new incoming message of any kind – text, photo, sticker, etc. (optional).
-	Message *Message `json:"message,omitempty"`
+	Message *AccessibleMessage `json:"message,omitempty"`
 
 	// EditedMessage is the new version of a message that is known to the bot and was edited (optional).
-	EditedMessage *Message `json:"edited_message,omitempty"`
+	EditedMessage *AccessibleMessage `json:"edited_message,omitempty"`
 
 	// ChannelPost is the new incoming channel post of any kind – text, photo, sticker, etc. (optional).
-	ChannelPost *Message `json:"channel_post,omitempty"`
+	ChannelPost *AccessibleMessage `json:"channel_post,omitempty"`
 
 	// EditedChannelPost is the new version of a channel post that is known to the bot and was edited (optional).
-	EditedChannelPost *Message `json:"edited_channel_post,omitempty"`
+	EditedChannelPost *AccessibleMessage `json:"edited_channel_post,omitempty"`
 
 	// Reaction is the reaction to a message changed by a user (optional).
 	Reaction *MessageReaction `json:"message_reaction,omitempty"`

@@ -42,7 +42,7 @@ type ReplyKeyboardMarkup struct {
 
 	// Selective is used if you want to show the keyboard to specific users only.
 	// Targets:
-	// 1) Users that are @mentioned in the text of the Message object.
+	// 1) Users that are @mentioned in the text of the AccessibleMessage object.
 	// 2) If the bot's message is a reply to a message in the same chat and forum topic, the sender of the original message.
 	Selective bool `json:"selective,omitempty"`
 }

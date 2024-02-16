@@ -54,7 +54,7 @@ func (err GroupError) Error() string {
 }
 
 // NewError returns new Error instance with given description.
-// First element of msgs is Description. The second is optional Message.
+// First element of msgs is Description. The second is optional AccessibleMessage.
 func NewError(code int, msgs ...string) *Error {
 	err := &Error{Code: code}
 	if len(msgs) >= 1 {

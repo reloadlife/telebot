@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*Message, error) {
+func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleMessage, error) {
 	params := sendDocumentParams{
 		ChatID:   to.Recipient(),
 		Document: doc,
@@ -43,7 +43,7 @@ func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*Message, er
 	}
 
 	var resp struct {
-		Result *Message
+		Result *AccessibleMessage
 	}
 
 	req, err := b.sendMethodRequest(methodSendDocument, params)

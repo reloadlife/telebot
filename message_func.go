@@ -2,7 +2,7 @@ package telebot
 
 import "encoding/json"
 
-func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Message, error) {
+func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*AccessibleMessage, error) {
 	params := sendMessageParams{
 		ChatID: recipient.Recipient(),
 		Text:   text,
@@ -43,7 +43,7 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Mes
 	}
 
 	var resp struct {
-		Result *Message
+		Result *AccessibleMessage
 	}
 
 	if b.offlineMode {

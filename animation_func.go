@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Message, error) {
+func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*AccessibleMessage, error) {
 	params := sendAnimationRequest{
 		ChatID:    to.Recipient(),
 		Animation: animation,
@@ -53,7 +53,7 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Mess
 	}
 
 	var resp struct {
-		Result *Message
+		Result *AccessibleMessage
 	}
 
 	req, err := b.sendMethodRequest(methodSendAnimation, params)

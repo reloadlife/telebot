@@ -99,12 +99,12 @@ type Bot interface {
 	GetMe() (*User, error)
 
 	// SendMessage sends a text message to the provided recipient.
-	// Returns the sent Message and error on failure.
-	SendMessage(recipient Recipient, text string, options ...any) (*Message, error)
+	// Returns the sent AccessibleMessage and error on failure.
+	SendMessage(recipient Recipient, text string, options ...any) (*AccessibleMessage, error)
 
 	// SendPhoto sends a photo to the provided recipient.
-	// Returns the sent Message and error on failure.
-	SendPhoto(recipient Recipient, photo File, options ...any) (*Message, error)
+	// Returns the sent AccessibleMessage and error on failure.
+	SendPhoto(recipient Recipient, photo File, options ...any) (*AccessibleMessage, error)
 
 	//// SendAudio sends an audio track to the provided recipient.
 	////
@@ -112,8 +112,8 @@ type Bot interface {
 	//// audio is the audio File to send.
 	//// options contains additional send options like caption.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendAudio(recipient Recipient, audio File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendAudio(recipient Recipient, audio File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendDocument sends a document to the provided recipient.
 	////
@@ -121,8 +121,8 @@ type Bot interface {
 	//// document is the document File to send.
 	//// options contains additional send options like caption.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendDocument(recipient Recipient, document File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendDocument(recipient Recipient, document File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendVideo sends a video to the provided recipient.
 	////
@@ -130,8 +130,8 @@ type Bot interface {
 	//// video is the video File to send.
 	//// options contains additional send options like supports streaming.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendVideo(recipient Recipient, video File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendVideo(recipient Recipient, video File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendAnimation sends an animation to the provided recipient.
 	////
@@ -139,8 +139,8 @@ type Bot interface {
 	//// animation is the animation File to send.
 	//// options contains additional send options like caption.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendAnimation(recipient Recipient, animation File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendAnimation(recipient Recipient, animation File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendVoice sends a voice recording to the provided recipient.
 	////
@@ -148,8 +148,8 @@ type Bot interface {
 	//// voice is the voice recording File to send.
 	//// options contains additional send options like caption.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendVoice(recipient Recipient, voice File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendVoice(recipient Recipient, voice File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendVideoNote sends a video note to the provided recipient.
 	////
@@ -157,8 +157,8 @@ type Bot interface {
 	//// videoNote is the video note File to send.
 	//// options contains additional send options like duration.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendVideoNote(recipient Recipient, videoNote File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendVideoNote(recipient Recipient, videoNote File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendMediaGroup sends a group of photos or videos as an album to the recipient.
 	////
@@ -167,7 +167,7 @@ type Bot interface {
 	//// options contains additional send options like disable_notification.
 	////
 	//// Returns the sent Messages and error on failure.
-	//SendMediaGroup(recipient Recipient, media []File, options ...any) ([]Message, error)
+	//SendMediaGroup(recipient Recipient, media []File, options ...any) ([]AccessibleMessage, error)
 	//
 	//// SendLocation sends a location to the provided recipient.
 	////
@@ -175,8 +175,8 @@ type Bot interface {
 	//// location is the latitude and longitude location to send.
 	//// options contains additional send options like live_period.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendLocation(recipient Recipient, location Location, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendLocation(recipient Recipient, location Location, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendVenue sends a venue to the provided recipient.
 	////
@@ -184,8 +184,8 @@ type Bot interface {
 	//// venue is the venue information to send.
 	//// options contains additional send options like foursquare_id.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendVenue(recipient Recipient, venue Venue, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendVenue(recipient Recipient, venue Venue, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendContact sends a contact's info to the provided recipient.
 	////
@@ -193,8 +193,8 @@ type Bot interface {
 	//// contact is the contact info to send.
 	//// options contains additional send options like last_name.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendContact(recipient Recipient, contact Contact, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendContact(recipient Recipient, contact Contact, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendPoll sends a poll to the provided recipient.
 	////
@@ -202,16 +202,16 @@ type Bot interface {
 	//// question is the poll question.
 	//// options contains additional send options like is_anonymous.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendPoll(recipient Recipient, question string, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendPoll(recipient Recipient, question string, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendDice sends a dice with random value to the provided recipient.
 	////
 	//// recipient is the chat to send the dice to.
 	//// options contains additional send options like emoji.
 	////
-	//// Returns the sent Message and error on failure.
-	//SendDice(recipient Recipient, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and error on failure.
+	//SendDice(recipient Recipient, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendChatAction sends a chat action to the provided recipient.
 	////
@@ -718,8 +718,8 @@ type Bot interface {
 	////
 	//// options can specify additional editing options.
 	////
-	//// Returns the edited Message and any error.
-	//EditMessageText(recipient Recipient, messageID int, text string, options ...any) (*Message, error)
+	//// Returns the edited AccessibleMessage and any error.
+	//EditMessageText(recipient Recipient, messageID int, text string, options ...any) (*AccessibleMessage, error)
 	//
 	//// EditMessageTextInline edits text of an inline message.
 	////
@@ -742,8 +742,8 @@ type Bot interface {
 	////
 	//// options can specify additional editing options.
 	////
-	//// Returns the edited Message and any error.
-	//EditMessageCaption(recipient Recipient, messageID int, caption string, options ...any) (*Message, error)
+	//// Returns the edited AccessibleMessage and any error.
+	//EditMessageCaption(recipient Recipient, messageID int, caption string, options ...any) (*AccessibleMessage, error)
 	//
 	//// EditMessageCaptionInline edits caption of an inline message.
 	////
@@ -766,8 +766,8 @@ type Bot interface {
 	////
 	//// options can specify additional editing options.
 	////
-	//// Returns the edited Message and any error.
-	//EditMessageMedia(recipient Recipient, messageID int, media InputMedia, options ...any) (*Message, error)
+	//// Returns the edited AccessibleMessage and any error.
+	//EditMessageMedia(recipient Recipient, messageID int, media InputMedia, options ...any) (*AccessibleMessage, error)
 	//
 	//// EditMessageMediaInline edits media content of an inline message.
 	////
@@ -790,8 +790,8 @@ type Bot interface {
 	////
 	//// options can specify additional editing options.
 	////
-	//// Returns the edited Message and any error.
-	//EditMessageLiveLocation(recipient Recipient, messageID int, latitude float64, longitude float64, options ...any) (*Message, error)
+	//// Returns the edited AccessibleMessage and any error.
+	//EditMessageLiveLocation(recipient Recipient, messageID int, latitude float64, longitude float64, options ...any) (*AccessibleMessage, error)
 	//
 	//// EditMessageLiveLocationInline edits live location in an inline message.
 	////
@@ -812,8 +812,8 @@ type Bot interface {
 	////
 	//// options can specify additional editing options.
 	////
-	//// Returns the edited Message and any error.
-	//StopMessageLiveLocation(recipient Recipient, messageID int, options ...any) (*Message, error)
+	//// Returns the edited AccessibleMessage and any error.
+	//StopMessageLiveLocation(recipient Recipient, messageID int, options ...any) (*AccessibleMessage, error)
 	//
 	//// StopMessageLiveLocationInline stops live location in an inline message.
 	////
@@ -832,8 +832,8 @@ type Bot interface {
 	////
 	//// markup is the new inline keyboard markup.
 	////
-	//// Returns the edited Message and any error.
-	//EditMessageReplyMarkup(recipient Recipient, messageID int, markup *InlineKeyboardMarkup) (*Message, error)
+	//// Returns the edited AccessibleMessage and any error.
+	//EditMessageReplyMarkup(recipient Recipient, messageID int, markup *InlineKeyboardMarkup) (*AccessibleMessage, error)
 	//
 	//// EditMessageReplyMarkupInline edits reply markup of an inline message.
 	////
@@ -868,8 +868,8 @@ type Bot interface {
 	//// recipient is the chat to send the sticker to.
 	//// sticker is the sticker file to send.
 	//// options can specify additional send options.
-	//// Returns the sent Message and any error.
-	//SendSticker(recipient Recipient, sticker File, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and any error.
+	//SendSticker(recipient Recipient, sticker File, options ...any) (*AccessibleMessage, error)
 	//
 	//// GetStickerSet gets info about a sticker set by name.
 	////
@@ -1035,8 +1035,8 @@ type Bot interface {
 	////
 	//// options can specify additional parameters.
 	////
-	//// Returns the sent Message and any error.
-	//SendInvoice(recipient Recipient, invoice Invoice, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and any error.
+	//SendInvoice(recipient Recipient, invoice Invoice, options ...any) (*AccessibleMessage, error)
 	//
 	//// CreateInvoiceLink generates a link for an invoice.
 	////
@@ -1088,8 +1088,8 @@ type Bot interface {
 	////
 	//// options can specify additional parameters.
 	////
-	//// Returns the sent Message and any error.
-	//SendGame(recipient Recipient, gameShortName string, options ...any) (*Message, error)
+	//// Returns the sent AccessibleMessage and any error.
+	//SendGame(recipient Recipient, gameShortName string, options ...any) (*AccessibleMessage, error)
 	//
 	//// SetGameScore sets a new high score for a game.
 	////
@@ -1101,8 +1101,8 @@ type Bot interface {
 	////
 	//// options can specify additional parameters.
 	////
-	//// Returns the updated Message and any error.
-	//SetGameScore(recipient Recipient, userID int64, score int, options ...any) (*Message, error)
+	//// Returns the updated AccessibleMessage and any error.
+	//SetGameScore(recipient Recipient, userID int64, score int, options ...any) (*AccessibleMessage, error)
 	//
 	//// SetGameScoreInline sets high score for an inline game message.
 	////

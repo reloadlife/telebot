@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (b *bot) SendVideo(to Recipient, video File, options ...any) (*Message, error) {
+func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMessage, error) {
 	params := sendVideoParams{
 		ChatID: to.Recipient(),
 		Video:  video,
@@ -56,7 +56,7 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*Message, err
 	}
 
 	var resp struct {
-		Result *Message
+		Result *AccessibleMessage
 	}
 
 	req, err := b.sendMethodRequest(methodSendVideo, params)

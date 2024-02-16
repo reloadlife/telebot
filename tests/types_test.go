@@ -8,8 +8,14 @@ import (
 )
 
 var (
+	messageTypes = []any{
+		&tele.AccessibleMessage{},
+		&tele.MaybeInaccessibleMessage{},
+		&tele.InaccessibleMessage{},
+	}
+
 	updateTypes = []any{
-		&tele.Message{},
+
 		&tele.MessageReaction{},
 		&tele.MessageReactionCountUpdated{},
 		&tele.InlineQuery{},
@@ -50,7 +56,7 @@ var (
 
 		&tele.Rights{},
 
-		// Message types
+		// AccessibleMessage types
 		&tele.MessageOrigin{},
 		&tele.ExternalReplyInfo{},
 		&tele.TextQuote{},
@@ -78,8 +84,6 @@ var (
 		&tele.Location{},
 
 		&tele.AutoDeleteTimerChanged{},
-		&tele.MaybeInaccessibleMessage{},
-		&tele.InaccessibleMessage{},
 
 		&tele.Invoice{},
 		&tele.SuccessfulPayment{},
@@ -124,8 +128,21 @@ var (
 func init() {
 	types = append(types, updateTypes...)
 	types = append(types, replyMarkupTypes...)
-
 	types = append(types, recipients...)
+	types = append(types, messageTypes...)
+}
+func Test_All_Types_Coverd(t *testing.T) {
+	packageName := "go.mamad.dev/telebot"
+	allTypes, err := getAllTypes(packageName)
+	require.NoError(t, err)
+
+	require.Equal(t, len(allTypes), len(types), "not all types are covered")
+
+	for _, typ := range allTypes {
+		_ = t.Run(fmt.Sprintf("TestTypes/%s", typ), func(t *testing.T) {
+			require.Contains(t, types, typ, "type %s is not covered", typ)
+		})
+	}
 }
 func Test_TT_Type_Compatibility(t *testing.T) {
 	for _, typ := range types {

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*Message, error) {
+func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMessage, error) {
 	params := sendAudioRequest{
 		ChatID: to.Recipient(),
 		Audio:  audio,
@@ -53,7 +53,7 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*Message, err
 	}
 
 	var resp struct {
-		Result *Message
+		Result *AccessibleMessage
 	}
 
 	req, err := b.sendMethodRequest(methodSendAudio, params)
