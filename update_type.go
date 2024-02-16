@@ -70,9 +70,9 @@ func (ut UpdateType) String() string {
 	}
 }
 
-// Type returns the type of the Update.
-func (u *Update) Type() UpdateType {
-	switch true {
+// UpdateType returns the type of the Update.
+func (u *Update) UpdateType() UpdateType {
+	switch {
 	case u.Message != nil:
 		return UpdateTypeMessage
 
@@ -129,6 +129,5 @@ func (u *Update) Type() UpdateType {
 
 	default:
 		return UpdateTypeUnknown
-
 	}
 }

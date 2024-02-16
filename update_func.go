@@ -14,7 +14,6 @@ type getUpdatesRequest struct {
 
 func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) (Updates, error) {
 	if b.offlineMode {
-		// todo: fake updates
 		return nil, nil
 	}
 	params := getUpdatesRequest{

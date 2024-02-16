@@ -47,6 +47,8 @@ type Bot interface {
 	// Stop Gracefully stops the Bot.
 	Stop()
 
+	// Handle
+	// adds new Handler
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)
 
 	// Debug sends a debug message to the bot.
@@ -96,25 +98,14 @@ type Bot interface {
 	// Returns User info and error on failure.
 	GetMe() (*User, error)
 
-	//
-	//// SendMessage sends a text message to the provided recipient.
-	////
-	//// recipient is the chat to send the message to.
-	//// text is the text content of the message.
-	//// options contains additional send options like ReplyMarkup.
-	////
-	//// Returns the sent Message and error on failure.
-	//SendMessage(recipient Recipient, text string, options ...any) (*Message, error)
-	//
-	//// SendPhoto sends a photo to the provided recipient.
-	////
-	//// recipient is the chat to send the photo to.
-	//// photo is the photo File to send.
-	//// options contains additional send options like caption.
-	////
-	//// Returns the sent Message and error on failure.
-	//SendPhoto(recipient Recipient, photo File, options ...any) (*Message, error)
-	//
+	// SendMessage sends a text message to the provided recipient.
+	// Returns the sent Message and error on failure.
+	SendMessage(recipient Recipient, text string, options ...any) (*Message, error)
+
+	// SendPhoto sends a photo to the provided recipient.
+	// Returns the sent Message and error on failure.
+	SendPhoto(recipient Recipient, photo File, options ...any) (*Message, error)
+
 	//// SendAudio sends an audio track to the provided recipient.
 	////
 	//// recipient is the chat to send the audio to.

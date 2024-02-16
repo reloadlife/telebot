@@ -46,6 +46,11 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Mes
 		Result *Message
 	}
 
+	if b.offlineMode {
+
+		return resp.Result, nil
+	}
+
 	req, err := b.sendMethodRequest(methodSendMessage, params)
 
 	if err != nil {

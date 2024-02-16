@@ -26,7 +26,7 @@ func TestMethods(t *testing.T) {
 	_ = t.Run("OfflineMode/TelegramAPI/GetUpdates", func(t *testing.T) {
 		updates, err := tg.GetUpdates(0, 0, time.Second)
 		require.NoError(t, err)
-		require.Len(t, updates, 0) // no updates in offline mode
+		require.Empty(t, updates) // no updates in offline mode
 	})
 
 	_ = t.Run("OfflineMode/TelegramAPI/GetMe", func(t *testing.T) {
@@ -36,4 +36,10 @@ func TestMethods(t *testing.T) {
 		require.True(t, user.IsBot)
 	})
 
+	_ = t.Run("OfflineMode/TelegramAPI/SendMessage", func(t *testing.T) {
+		_, err := tg.SendMessage(&tele.Chat{
+			ID: 123,
+		}, "Hello, world!")
+		require.NoError(t, err)
+	})
 }

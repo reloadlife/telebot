@@ -1,10 +1,10 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
+// Updates represents a list of updates.
 type Updates []Update
 
 // Update represents an incoming update.
@@ -70,23 +70,18 @@ type Update struct {
 	RemovedChatBoost *ChatBoostRemoved `json:"removed_chat_boost,omitempty"`
 }
 
-func (u *Update) MarshalJSON() ([]byte, error) {
-	return json.Marshal(u)
-}
-
-func (u *Update) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, u)
-}
-
-func (u *Update) String() string {
-	indented, _ := json.MarshalIndent(u, "", "  ")
-	return fmt.Sprintf("Update{ID: %d, Type: %s}\n%s\n", u.ID, u.Type().String(), indented)
-}
-
 func (u *Update) Verify() error {
 	if u.ID == 0 {
 		return fmt.Errorf("telebot: Update ID is empty")
 	}
 
 	return nil
+}
+
+func (u *Update) Type() string {
+	return u.UpdateType().String()
+}
+
+func (u *Update) ReflectType() string {
+	return fmt.Sprintf("%T", u)
 }

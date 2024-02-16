@@ -16,6 +16,7 @@ func (b *bot) GetMe() (*User, error) {
 			Username:  toPtr("TestBot"),
 		}, nil
 	}
+
 	raw, err := b.sendMethodRequest(methodGetMe, nil)
 	if err != nil {
 		return nil, err
