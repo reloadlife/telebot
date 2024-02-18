@@ -25,7 +25,7 @@ func getAllTypes(packageName string) ([]types2.Type, error) {
 			typeFullName := name
 			// isPrivate ? ignore it
 			if !pkg.Types.Scope().Lookup(name).Exported() {
-				_, _ = fmt.Println("Ignoring private type: ", typeFullName)
+				//_, _ = fmt.Println("Ignoring private type: ", typeFullName)
 				continue
 			}
 
@@ -52,4 +52,16 @@ func getTypeByName(typeName string, pkgs []*packages.Package) (types2.Type, erro
 	}
 
 	return nil, fmt.Errorf("type not found: %s", typeName)
+}
+
+func removeDuplicates[T any](slice []T) []T {
+	keys := make(map[any]bool)
+	list := []T{}
+	for _, entry := range slice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }

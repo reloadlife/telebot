@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/require"
 	tele "go.mamad.dev/telebot"
+	"strings"
 	"testing"
 )
 
@@ -40,7 +41,7 @@ var (
 		&tele.Chat{},
 	}
 
-	types = []any{
+	listOfTypes = []any{
 		&tele.Update{},
 
 		&tele.ChatPhoto{},
@@ -122,30 +123,47 @@ var (
 		&tele.VideoChatStarted{},
 
 		&tele.WebAppData{},
+
+		&tele.WebAppInfo{},
 	}
 )
 
 func init() {
-	types = append(types, updateTypes...)
-	types = append(types, replyMarkupTypes...)
-	types = append(types, recipients...)
-	types = append(types, messageTypes...)
+	listOfTypes = append(listOfTypes, updateTypes...)
+	listOfTypes = append(listOfTypes, replyMarkupTypes...)
+	listOfTypes = append(listOfTypes, recipients...)
+	listOfTypes = append(listOfTypes, messageTypes...)
 }
-func Test_All_Types_Coverd(t *testing.T) {
+func Test_All_Types_Covered(t *testing.T) {
 	packageName := "go.mamad.dev/telebot"
 	allTypes, err := getAllTypes(packageName)
+
+	// cleanup types
+
+	allTypes = removeDuplicates(allTypes)
+
+	for i, ty := range allTypes {
+		// remove those without telebot.
+		if !strings.HasPrefix(ty.String(), packageName) {
+			allTypes = append(allTypes[:i], allTypes[i+1:]...)
+		}
+	}
+
 	require.NoError(t, err)
 
-	require.Equal(t, len(allTypes), len(types), "not all types are covered")
-
+	//require.Equal(t, len(allTypes), len(types), "not all types are covered")
+	listOfStringTypes := make([]string, len(listOfTypes))
+	for i, typ := range listOfTypes {
+		listOfStringTypes[i] = "go.mamad.dev/" + strings.ReplaceAll(fmt.Sprintf("%T", typ), "*", "")
+	}
 	for _, typ := range allTypes {
 		_ = t.Run(fmt.Sprintf("TestTypes/%s", typ), func(t *testing.T) {
-			require.Contains(t, types, typ, "type %s is not covered", typ)
+			require.Contains(t, listOfStringTypes, fmt.Sprintf("%s", typ), "type %s is not covered", typ)
 		})
 	}
 }
 func Test_TT_Type_Compatibility(t *testing.T) {
-	for _, typ := range types {
+	for _, typ := range listOfTypes {
 		_ = t.Run(fmt.Sprintf("TestTypes/%T", typ), func(t *testing.T) {
 			require.Implements(t, (*tele.TType)(nil), typ, "type %T does not implement tele.TType", typ)
 			TT, ok := typ.(tele.TType)
