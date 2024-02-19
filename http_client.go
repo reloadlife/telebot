@@ -18,7 +18,7 @@ func (b *bot) sendMethodRequest(method method, params any) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer panicIf(wrapError(req.Body.Close()))
+	defer req.Body.Close()
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		return nil, err
