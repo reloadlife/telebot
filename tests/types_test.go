@@ -16,7 +16,6 @@ var (
 	}
 
 	updateTypes = []any{
-
 		&tele.MessageReaction{},
 		&tele.MessageReactionCountUpdated{},
 		&tele.InlineQuery{},
@@ -34,6 +33,10 @@ var (
 
 	replyMarkupTypes = []any{
 		&tele.InlineKeyboardMarkup{},
+		&tele.ReplyKeyboardMarkup{},
+		&tele.ReplyKeyboardRemove{},
+		&tele.LoginUrl{},
+		&tele.CallbackGame{},
 	}
 
 	recipients = []any{
@@ -125,6 +128,106 @@ var (
 		&tele.WebAppData{},
 
 		&tele.WebAppInfo{},
+
+		&tele.BotCommand{},
+		&tele.BotCommandScope{},
+
+		&tele.UserProfilePhotos{},
+		&tele.UserChatBoosts{},
+
+		&tele.SwitchInlineQueryChosenChat{},
+		&tele.StickerSet{},
+
+		&tele.SentWebAppMessage{},
+		&tele.ReplyParameters{},
+		&tele.QueryResult{},
+		&tele.PassportElementError{},
+		&tele.MenuButton{},
+		&tele.MaskPosition{},
+
+		&tele.KeyboardButton{},
+		&tele.KeyboardButtonPollType{},
+		&tele.KeyboardButtonRequestUsers{},
+		&tele.KeyboardButtonRequestChat{},
+		&tele.GameHighScore{},
+
+		&tele.ForumTopic{},
+
+		&tele.File{},
+
+		&tele.ChatBoost{},
+		&tele.ChatBoostSource{},
+
+		&tele.ReactionCount{},
+		&tele.InlineKeyboardButton{},
+
+		&tele.InputContactMessageContent{},
+		&tele.InputLocationMessageContent{},
+		&tele.InputTextMessageContent{},
+		&tele.InputVenueMessageContent{},
+		&tele.InputInvoiceMessageContent{},
+		&tele.InputSticker{},
+		&tele.InputMedia{},
+	}
+
+	notStructTypes = []string{
+		"BoostSource",
+		"Bot",
+		"BotCommandScopeType",
+
+		"BotSettings",
+		"CallbackEndpoint",
+		"ChatMemberPermission",
+		"ChatAction",
+		"ChatType",
+		"Context",
+		"CustomEmoji",
+		"Option",
+		"Emoji",
+		"EntityType",
+		"Width",
+		"Height",
+		"Verifiable",
+
+		"Updates",
+		"UpdateType",
+		"Title",
+		"TType",
+		"StickerEmoji",
+		"Status",
+
+		"ReplyMarkup",
+		"Recipient",
+		"ReactionTypeType",
+
+		"QueryResults",
+		"Poller",
+		"Performer",
+
+		"ParseMode",
+		"UpdateHandlerOn",
+
+		"MiddlewarePoller",
+		"MiddlewareFunc",
+		"MessageThreadID",
+		"MessageOriginType",
+
+		"Message",
+
+		"LongPoller",
+		"InlineQueryResultType",
+		"IconColor",
+
+		"Group",
+		"GroupError",
+
+		"HandlerFunc",
+
+		"Error",
+		"FloodError",
+
+		"InputMessageContent",
+		"InputMediaType",
 	}
 )
 
@@ -137,13 +240,9 @@ func init() {
 func Test_All_Types_Covered(t *testing.T) {
 	packageName := "go.mamad.dev/telebot"
 	allTypes, err := getAllTypes(packageName)
-
-	// cleanup types
-
 	allTypes = removeDuplicates(allTypes)
 
 	for i, ty := range allTypes {
-		// remove those without telebot.
 		if !strings.HasPrefix(ty.String(), packageName) {
 			allTypes = append(allTypes[:i], allTypes[i+1:]...)
 		}
@@ -151,13 +250,22 @@ func Test_All_Types_Covered(t *testing.T) {
 
 	require.NoError(t, err)
 
-	//require.Equal(t, len(allTypes), len(types), "not all types are covered")
 	listOfStringTypes := make([]string, len(listOfTypes))
 	for i, typ := range listOfTypes {
 		listOfStringTypes[i] = "go.mamad.dev/" + strings.ReplaceAll(fmt.Sprintf("%T", typ), "*", "")
 	}
+
+	for _, not := range notStructTypes {
+		listOfStringTypes = append(listOfStringTypes, "go.mamad.dev/telebot."+not)
+	}
+
 	for _, typ := range allTypes {
-		_ = t.Run(fmt.Sprintf("TestTypes/%s", typ), func(t *testing.T) {
+		typName := fmt.Sprintf("TestTypes/%s", typ)
+		if strings.Contains(typName, "func") ||
+			typName == "TestTypes/*go.mamad.dev/telebot.Error" { // a duplicate type, "Error" is already covered.
+			continue
+		}
+		_ = t.Run(typName, func(t *testing.T) {
 			require.Contains(t, listOfStringTypes, fmt.Sprintf("%s", typ), "type %s is not covered", typ)
 		})
 	}

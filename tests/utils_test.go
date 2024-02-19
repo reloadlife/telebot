@@ -4,6 +4,7 @@ import (
 	"fmt"
 	types2 "go/types"
 	"golang.org/x/tools/go/packages"
+	"reflect"
 )
 
 func getAllTypes(packageName string) ([]types2.Type, error) {
@@ -64,4 +65,11 @@ func removeDuplicates[T any](slice []T) []T {
 		}
 	}
 	return list
+}
+
+func isStruct(v interface{}) bool {
+	t := reflect.TypeOf(v)
+
+	// Check if the type is a struct and not an interface
+	return t.Kind() == reflect.Struct
 }
