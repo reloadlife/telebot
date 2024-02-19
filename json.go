@@ -25,6 +25,10 @@ func (u *User) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*u)
 }
 
+func (c *Chat) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*c)
+}
+
 // /// //// ////// ////// ////// ////// ////// ////// ////// ////// ////// //////
 
 func (u *Update) UnmarshalJSON(b []byte) error {
@@ -79,6 +83,19 @@ func (u *User) UnmarshalJSON(b []byte) error {
 		*Alias
 	}{
 		Alias: (*Alias)(u),
+	}
+	if err := json.Unmarshal(b, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Chat) UnmarshalJSON(b []byte) error {
+	type Alias Chat
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
 	}
 	if err := json.Unmarshal(b, &aux); err != nil {
 		return err

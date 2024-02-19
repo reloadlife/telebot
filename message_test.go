@@ -28,7 +28,7 @@ func Test_Online_SendMessage(t *testing.T) {
 	require.NotNil(t, b)
 
 	require.Equal(t, b.Chat.ID, chat)
-	require.Equal(t, b.Text, "Hello, World!")
+	require.Equal(t, *b.Text, "Hello, World!") // nullable stuff are pointer. So, we need to dereference it.
 }
 
 func TestMessage(t *testing.T) {

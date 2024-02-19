@@ -172,16 +172,6 @@ type Chat struct {
 	Location *ChatLocation `json:"location,omitempty"`
 }
 
-// MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (c *Chat) MarshalJSON() ([]byte, error) {
-	return json.Marshal(c)
-}
-
-// UnmarshalJSON to be JSON unserializable
-func (c *Chat) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, c)
-}
-
 // String returns a string representation of this user.
 func (c *Chat) String() string {
 	indented, _ := json.MarshalIndent(c, "", "  ")

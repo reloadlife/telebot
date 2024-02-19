@@ -63,7 +63,7 @@ func New(s BotSettings) Bot {
 	b := &bot{
 		self:  &User{},
 		token: s.Token,
-		onError: func(err error, ctx Context) {
+		onError: func(err error, _ Context) {
 			if s.OfflineMode {
 				panic(err)
 			}
