@@ -13,4 +13,6 @@ func TestBot_GetMe(t *testing.T) {
 
 	require.True(t, b.IsBot)
 	require.NotEmpty(t, b.Username)
+
+	require.Equal(t, b.Username, "TeleBotUnitTestBot")
 }

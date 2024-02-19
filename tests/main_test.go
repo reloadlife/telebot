@@ -42,4 +42,5 @@ func TestMethods(t *testing.T) {
 		}, "Hello, world!")
 		require.NoError(t, err)
 	})
+
 }
