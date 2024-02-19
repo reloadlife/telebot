@@ -35,7 +35,12 @@ func structToMap(input any) map[string]any {
 	result := make(map[string]any)
 
 	val := reflect.ValueOf(input)
-	typ := reflect.TypeOf(input)
+	if val.Kind() != reflect.Struct {
+		// Handle the case when input is not a struct
+		return result
+	}
+
+	typ := val.Type()
 
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
@@ -53,10 +58,10 @@ func structToMap(input any) map[string]any {
 func extractOk(data []byte) error {
 
 	var e struct {
-		Ok          bool                   `json:"ok"`
-		Code        int                    `json:"error_code"`
-		Description string                 `json:"description"`
-		Parameters  map[string]interface{} `json:"parameters"`
+		Ok          bool           `json:"ok"`
+		Code        int            `json:"error_code"`
+		Description string         `json:"description"`
+		Parameters  map[string]any `json:"parameters"`
 	}
 	if json.NewDecoder(bytes.NewReader(data)).Decode(&e) != nil {
 		return nil
