@@ -66,7 +66,7 @@ type Chat struct {
 
 	// ActiveUsernames is the list of all active chat usernames for private chats, supergroups, and channels.
 	// Returned only in getChat.
-	ActiveUsernames *[]string `json:"active_usernames,omitempty"`
+	ActiveUsernames []string `json:"active_usernames,omitempty"`
 
 	// AvailableReactions is the list of available reactions allowed in the chat.
 	// If omitted, then all emoji reactions are allowed. Returned only in getChat.
@@ -125,7 +125,7 @@ type Chat struct {
 
 	// PinnedMessage is the most recent pinned message (by sending date).
 	// Returned only in getChat.
-	PinnedMessage *Message `json:"pinned_message,omitempty"`
+	PinnedMessage *AccessibleMessage `json:"pinned_message,omitempty"`
 
 	// Permissions is the default chat member permissions for groups and supergroups.
 	// Returned only in getChat.

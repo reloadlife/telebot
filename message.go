@@ -5,22 +5,105 @@ import (
 	"fmt"
 )
 
+const (
+	AccessibleMessageType        = "AccessibleMessage"
+	MaybeInaccessibleMessageType = "MaybeInaccessibleMessage"
+	InaccessibleMessageType      = "InaccessibleMessage"
+)
+
+type Message interface {
+	MessageType() string
+}
+
+func (u *AccessibleMessage) MessageType() string {
+	return AccessibleMessageType
+}
+
+func (u *MaybeInaccessibleMessage) MessageType() string {
+	return MaybeInaccessibleMessageType
+}
+
+func (u *InaccessibleMessage) MessageType() string {
+	return InaccessibleMessageType
+}
+
+// MaybeInaccessibleMessage
+// This object represents a message. It can be either a regular message or a message that is inaccessible to the bot.
+//
+// Fields:
+// — AccessibleMessage (*AccessibleMessage): Optional. The message itself, if it is accessible to the bot.
+// — InaccessibleMessage (*InaccessibleMessage): Optional. Information about the message that is inaccessible to the bot.
 type MaybeInaccessibleMessage struct {
-	*Message
+	*AccessibleMessage
 	*InaccessibleMessage
 }
 
-func (m *MaybeInaccessibleMessage) IsAccessible() bool {
-	return m.InaccessibleMessage.Date != 0 && m.Message.Date != 0
+func (u *MaybeInaccessibleMessage) String() string {
+	if u.IsAccessible() {
+		return u.AccessibleMessage.String()
+	}
+	return u.InaccessibleMessage.String()
 }
 
+func (u *MaybeInaccessibleMessage) Verify() error {
+	if (u.AccessibleMessage != nil && u.InaccessibleMessage != nil) || (u.AccessibleMessage == nil && u.InaccessibleMessage == nil) {
+		return fmt.Errorf("telebot: MaybeInaccessibleMessage cant have both AccessibleMessage and InaccessibleMessage or none")
+	}
+	if u.AccessibleMessage != nil { // Only in this method we dont use u.IsAccessible() because it will cause a loop.
+		return u.AccessibleMessage.Verify()
+	}
+	return u.InaccessibleMessage.Verify()
+}
+
+func (u *MaybeInaccessibleMessage) Type() string {
+	return AccessibleMessageType // for now
+}
+
+func (u *MaybeInaccessibleMessage) ReflectType() string {
+	return fmt.Sprintf("%T", u)
+}
+
+func (u *MaybeInaccessibleMessage) IsAccessible() bool {
+	err := u.Verify()
+	if err != nil {
+		panic("telebot: MaybeInaccessibleMessage is not a valid MaybeInaccessibleMessage: " + err.Error())
+	}
+	return u.AccessibleMessage != nil
+}
+
+// InaccessibleMessage
+// This object represents a message that is inaccessible to the bot.
+//
+// Fields:
+// — ID (int64): Unique message identifier inside this chat.
+// — Date (int64): Date the message was sent in Unix time. (<b>Always 0 for inaccessible messages.</b>)
+// — Chat (*Chat): Chat the message belongs to.
 type InaccessibleMessage struct {
-	MessageID int64 `json:"message_id"`
-	Date      int64 `json:"date"`
-	Chat      *Chat `json:"chat"`
+	ID   int64 `json:"message_id"`
+	Date int64 `json:"date"`
+	Chat *Chat `json:"chat"`
 }
 
-// Message
+func (u *InaccessibleMessage) String() string {
+	return fmt.Sprintf("InaccessibleMessage{ID: %d}", u.ID)
+}
+
+func (u *InaccessibleMessage) Verify() error {
+	if u.ID == 0 {
+		return fmt.Errorf("telebot: InaccessibleMessage ID is empty")
+	}
+	return nil
+}
+
+func (u *InaccessibleMessage) Type() string {
+	return AccessibleMessageType // for now
+}
+
+func (u *InaccessibleMessage) ReflectType() string {
+	return fmt.Sprintf("%T", u)
+}
+
+// AccessibleMessage
 // This struct represents a Telegram message and includes various fields to capture different aspects of the message.
 //
 // Fields:
@@ -37,8 +120,8 @@ type InaccessibleMessage struct {
 // — IsTopic (*bool): Optional. True, if the message is sent to a forum topic.
 // — IsAutomaticForward (*bool): Optional. True,
 // if the message is a channel post that was automatically forwarded to the connected discussion group.
-// — ReplyTo (*Message): Optional. For replies in the same chat and message thread,
-// the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is
+// — ReplyTo (*AccessibleMessage): Optional. For replies in the same chat and message thread,
+// the original message. Note that the AccessibleMessage object in this field will not contain further reply_to_message fields even if it itself is
 // a reply.
 // — ExternalReply (*ExternalReplyInfo): Optional. Information about the message that is being replied to,
 // which may come from another chat or forum topic.
@@ -54,26 +137,26 @@ type InaccessibleMessage struct {
 // etc. that appear in the text.
 // — LinkPreviewOptions (*LinkPreviewOptions): Optional. Options used for link preview generation for the message,
 // if it is a text message and link preview options were changed.
-// — Animation (*Animation): Optional. Message is an animation, information about the animation.
-// — Audio (*Audio): Optional. Message is an audio file, information about the file.
-// — Document (*Document): Optional. Message is a general file, information about the file.
-// — Photo ([]PhotoSize): Optional. Message is a photo, available sizes of the photo.
-// — Sticker (*Sticker): Optional. Message is a sticker, information about the sticker.
-// — Story (*Story): Optional. Message is a forwarded story.
-// — Video (*Video): Optional. Message is a video, information about the video.
-// — VideoNote (*VideoNote): Optional. Message is a video note, information about the video message.
-// — Voice (*Voice): Optional. Message is a voice message, information about the file.
+// — Animation (*Animation): Optional. AccessibleMessage is an animation, information about the animation.
+// — Audio (*Audio): Optional. AccessibleMessage is an audio file, information about the file.
+// — Document (*Document): Optional. AccessibleMessage is a general file, information about the file.
+// — Photo ([]PhotoSize): Optional. AccessibleMessage is a photo, available sizes of the photo.
+// — Sticker (*Sticker): Optional. AccessibleMessage is a sticker, information about the sticker.
+// — Story (*Story): Optional. AccessibleMessage is a forwarded story.
+// — Video (*Video): Optional. AccessibleMessage is a video, information about the video.
+// — VideoNote (*VideoNote): Optional. AccessibleMessage is a video note, information about the video message.
+// — Voice (*Voice): Optional. AccessibleMessage is a voice message, information about the file.
 // — Caption (*string): Optional. Caption for the animation, audio, document, photo, video, or voice.
 // — CaptionEntities ([]Entity): Optional. For messages with a caption, special entities like usernames, URLs, bot commands,
 // etc. that appear in the caption.
 // — HasMediaSpoiler (*bool): Optional. True, if the message media is covered by a spoiler animation.
-// — Contact (*Contact): Optional. Message is a shared contact, information about the contact.
-// — Dice (*Dice): Optional. Message is a 'dice' with a random value.
-// — Game (*Game): Optional. Message is a game, information about the game. More about games »
-// — Poll (*Poll): Optional. Message is a native poll, information about the poll.
-// — Venue (*Venue): Optional. Message is a venue, information about the venue. For backward compatibility, when this field is set,
+// — Contact (*Contact): Optional. AccessibleMessage is a shared contact, information about the contact.
+// — Dice (*Dice): Optional. AccessibleMessage is a 'dice' with a random value.
+// — Game (*Game): Optional. AccessibleMessage is a game, information about the game. More about games »
+// — Poll (*Poll): Optional. AccessibleMessage is a native poll, information about the poll.
+// — Venue (*Venue): Optional. AccessibleMessage is a venue, information about the venue. For backward compatibility, when this field is set,
 // the location field will also be set.
-// — Location (*Location): Optional. Message is a shared location, information about the location.
+// — Location (*Location): Optional. AccessibleMessage is a shared location, information about the location.
 // — NewChatMembers ([]User): Optional. New members that were added to the group or supergroup and information about them
 // (the bot itself may be one of these members).
 // — LeftChatMember (*User): Optional. A member was removed from the group, information about them (this member may be the bot itself).
@@ -97,9 +180,9 @@ type InaccessibleMessage struct {
 // and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits,
 // so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
 // — PinnedMessage (*MaybeInaccessibleMessage): Optional. A specified message was pinned.
-// Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
-// — Invoice (*Invoice): Optional. Message is an invoice for a payment, information about the invoice.
-// — SuccessfulPayment (*SuccessfulPayment): Optional. Message is a service message about a successful payment,
+// Note that the AccessibleMessage object in this field will not contain further reply_to_message fields even if it itself is a reply.
+// — Invoice (*Invoice): Optional. AccessibleMessage is an invoice for a payment, information about the invoice.
+// — SuccessfulPayment (*SuccessfulPayment): Optional. AccessibleMessage is a service message about a successful payment,
 // information about the payment.
 // — UsersShared (*UsersShared): Optional. Service message: users were shared with the bot.
 // — ChatShared (*ChatShared): Optional. Service message: a chat was shared with the bot.
@@ -127,7 +210,14 @@ type InaccessibleMessage struct {
 // — WebAppData (*WebAppData): Optional. Service message: data sent by a Web App.
 // — ReplyMarkup (*InlineKeyboardMarkup): Optional. Inline keyboard attached to the message.
 // login_url buttons are represented as ordinary URL buttons.
-type Message struct {
+type AccessibleMessage struct {
+	// Custom Types
+
+	Command string `json:"-"`
+	Payload string `json:"-"`
+
+	// Telegram Types.
+
 	ID                           int64                         `json:"message_id"`
 	ThreadID                     *int64                        `json:"message_thread_id,omitempty"`
 	From                         *User                         `json:"from,omitempty"`
@@ -137,7 +227,7 @@ type Message struct {
 	ForwardOrigin                *MessageOrigin                `json:"forward_origin,omitempty"`
 	IsTopic                      *bool                         `json:"is_topic_message,omitempty"`
 	IsAutomaticForward           *bool                         `json:"is_automatic_forward,omitempty"`
-	ReplyTo                      *Message                      `json:"reply_to_message,omitempty"`
+	ReplyTo                      *AccessibleMessage            `json:"reply_to_message,omitempty"`
 	ExternalReply                *ExternalReplyInfo            `json:"external_reply,omitempty"`
 	Quote                        *TextQuote                    `json:"quote,omitempty"`
 	ViaBot                       *User                         `json:"via_bot,omitempty"`
@@ -204,18 +294,23 @@ type Message struct {
 	ReplyMarkup                  *InlineKeyboardMarkup         `json:"reply_markup,omitempty"`
 }
 
-// MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (u *Message) MarshalJSON() ([]byte, error) {
-	return json.Marshal(u)
-}
-
-// UnmarshalJSON to be JSON unserializable
-func (u *Message) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, u)
-}
-
-// String returns a string representation of this user.
-func (u *Message) String() string {
+func (u *AccessibleMessage) String() string {
 	indented, _ := json.MarshalIndent(u, "", "  ")
-	return fmt.Sprintf("Message{ID: %d, Chat: @%v}\n%s\n", u.ID, u.Chat.ID, indented)
+	return fmt.Sprintf("AccessibleMessage{ID: %d, Chat: @%v}\n%s\n", u.ID, u.Chat.ID, indented)
+}
+
+func (u *AccessibleMessage) Verify() error {
+	if u.ID == 0 {
+		return fmt.Errorf("telebot: AccessibleMessage ID is empty")
+	}
+
+	return nil
+}
+
+func (u *AccessibleMessage) Type() string {
+	return AccessibleMessageType // for now
+}
+
+func (u *AccessibleMessage) ReflectType() string {
+	return fmt.Sprintf("%T", u)
 }

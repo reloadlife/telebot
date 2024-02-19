@@ -8,4 +8,7 @@ const (
 	HasSpoiler
 
 	RemoveCaption
+
+	DisableContentTypeDetection
+	Streamable
 )

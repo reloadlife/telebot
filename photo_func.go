@@ -2,7 +2,7 @@ package telebot
 
 import "encoding/json"
 
-func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*Message, error) {
+func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*AccessibleMessage, error) {
 	params := sendPhotoRequest{
 		ChatID: to.Recipient(),
 		Photo:  photo,
@@ -39,7 +39,7 @@ func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*Message, err
 	}
 
 	var resp struct {
-		Result *Message
+		Result *AccessibleMessage
 	}
 
 	req, err := b.sendMethodRequest(methodSendPhoto, params)

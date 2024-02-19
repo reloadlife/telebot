@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func (b *bot) Forward(to Recipient, From Recipient, messageID int, opts ...any) (*Message, error) {
+func (b *bot) Forward(to Recipient, From Recipient, messageID int, opts ...any) (*AccessibleMessage, error) {
 	params := forwardMessageRequest{
 		ChatID:    to.Recipient(),
 		FromChat:  From.Recipient(),
@@ -31,7 +31,7 @@ func (b *bot) Forward(to Recipient, From Recipient, messageID int, opts ...any) 
 	}
 
 	var resp struct {
-		Result Message
+		Result AccessibleMessage
 	}
 	if err = json.Unmarshal(req, &resp); err != nil {
 		return nil, err

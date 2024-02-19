@@ -24,16 +24,16 @@ func (b *bot) ProcessUpdate(u Update) bool {
 		handled = handled || b.handle(OnChannelPost, c)
 	case u.EditedChannelPost != nil:
 		handled = b.handle(OnEditedChannelPost, c)
-	case u.MessageReaction != nil:
+	case u.Reaction != nil:
 		handled = b.handle(OnMessageReaction, c)
-	case u.MessageReactionCount != nil:
+	case u.ReactionCount != nil:
 		handled = b.handle(OnMessageReactionCount, c)
 	case u.Query != nil:
 		handled = b.handle(OnInlineQuery, c)
 	case u.InlineResult != nil:
 		handled = b.handle(OnChosenInlineResult, c)
-	case u.Callback != nil:
-		handled = b.handleCallbackEvent(u.Callback, c)
+	case u.CallbackQuery != nil:
+		handled = b.handleCallbackEvent(u.CallbackQuery, c)
 	case u.ShippingQuery != nil:
 		handled = b.handle(OnShippingQuery, c)
 	case u.PreCheckoutQuery != nil:
@@ -50,7 +50,7 @@ func (b *bot) ProcessUpdate(u Update) bool {
 		handled = b.handle(OnChatJoinRequest, c)
 	case u.ChatBoost != nil:
 		handled = b.handle(OnChatBoost, c)
-	case u.ChatBoostRemoved != nil:
+	case u.RemovedChatBoost != nil:
 		handled = b.handle(OnChatBoostRemoved, c)
 
 	default:
@@ -64,16 +64,16 @@ func (b *bot) ProcessUpdate(u Update) bool {
 	return handled
 }
 
-func (b *bot) handleMessageEvents(m *Message, c Context) bool {
+func (b *bot) handleMessageEvents(m *AccessibleMessage, c Context) bool {
 	if m.PinnedMessage != nil {
 		return b.handle(OnPinnedMessage, c)
 	}
 
-	if m.Text != "" {
-		match := commandRegex.FindAllStringSubmatch(m.Text, -1)
+	if m.Text != nil && *m.Text != "" { // change to HasText()
+		match := commandRegex.FindAllStringSubmatch(*m.Text, -1) // Change to GetText
 		if match != nil {
 			command, botName := match[0][1], match[0][3]
-			if botName != "" && !strings.EqualFold(b.self.Username, botName) {
+			if botName != "" && !strings.EqualFold(*b.self.Username, botName) {
 				return false
 			}
 
@@ -93,7 +93,7 @@ func (b *bot) handleMessageEvents(m *Message, c Context) bool {
 	return b.handleMediaAndOtherEvents(m, c)
 }
 
-func (b *bot) handleMediaAndOtherEvents(m *Message, c Context) bool {
+func (b *bot) handleMediaAndOtherEvents(m *AccessibleMessage, c Context) bool {
 	mediaHandlers := map[interface{}]UpdateHandlerOn{
 		m.Photo:     OnPhoto,
 		m.Voice:     OnVoice,
@@ -126,7 +126,7 @@ func (b *bot) handleMediaAndOtherEvents(m *Message, c Context) bool {
 		return b.handle(OnDice, c)
 	case m.Invoice != nil:
 		return b.handle(OnInvoice, c)
-	case m.Payment != nil:
+	case m.SuccessfulPayment != nil:
 		return b.handle(OnPayment, c)
 	default:
 		return b.handle(OnAny, c)

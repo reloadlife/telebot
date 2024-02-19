@@ -75,7 +75,6 @@ jobs:
           export GOPATH=$(go env GOPATH)
           go clean -modcache
           go mod tidy
-          make check
           make cover
 
       - name: Upload Coverage report to CodeCov

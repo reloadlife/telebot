@@ -12,7 +12,10 @@ type getUpdatesRequest struct {
 	AllowedUpdates []string `json:"allowed_updates,omitempty"`
 }
 
-func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) ([]Update, error) {
+func (b *bot) GetUpdates(offset, limit int, timeout time.Duration, allowed ...UpdateType) (Updates, error) {
+	if b.offlineMode {
+		return nil, nil
+	}
 	params := getUpdatesRequest{
 		Offset:  offset,
 		Timeout: int(timeout / time.Second),

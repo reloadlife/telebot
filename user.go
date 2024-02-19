@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 )
@@ -46,24 +45,23 @@ type User struct {
 	SupportsInlineQueries *bool `json:"supports_inline_queries,omitempty"`
 }
 
-// MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (u *User) MarshalJSON() ([]byte, error) {
-	return json.Marshal(u)
-}
-
-// UnmarshalJSON to be JSON unserializable
-func (u *User) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, u)
-}
-
-// String returns a string representation of this user.
-func (u *User) String() string {
-	indented, _ := json.MarshalIndent(u, "", "  ")
-	isBot := ""
-	if u.IsBot {
-		isBot = "(Bot)"
+func (u *User) Verify() error {
+	if u.ID == 0 {
+		return fmt.Errorf("telebot: Update ID is empty")
 	}
-	return fmt.Sprintf("User{%sID: %d, User: @%v}\n%s\n", isBot, u.ID, u.Username, indented)
+
+	return nil
+}
+
+func (u *User) Type() string {
+	if u.IsBot {
+		return "Bot"
+	}
+	return "User"
+}
+
+func (u *User) ReflectType() string {
+	return "telebot.User{}"
 }
 
 // Recipient Mention returns a string which mentions the user.
