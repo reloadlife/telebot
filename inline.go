@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // InlineQuery represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
 type InlineQuery struct {
 	// ID is the unique identifier for this query.
@@ -23,9 +25,17 @@ type InlineQuery struct {
 	Location *Location `json:"location,omitempty"`
 }
 
+func (c *InlineQuery) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *InlineQuery) Type() string {
+	return "InlineQuery"
+}
+
 type ChosenInlineResult struct {
 	// ResultID is the unique identifier for the result that was chosen.
-	ResultID string `json:"result_id"`
+	ID string `json:"result_id"`
 
 	// From is the user that chose the result.
 	From User `json:"from"`
@@ -39,4 +49,12 @@ type ChosenInlineResult struct {
 
 	// Query is the query that was used to obtain the result.
 	Query string `json:"query"`
+}
+
+func (c *ChosenInlineResult) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *ChosenInlineResult) Type() string {
+	return "ChosenInlineResult"
 }

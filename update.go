@@ -13,7 +13,7 @@ type Update struct {
 	// Update identifiers start from a certain positive number and increase sequentially.
 	// This identifier becomes handy if you're using webhooks, allowing you to ignore repeated updates or restore the correct update sequence if they get out of order.
 	// If there are no new updates for at least a week, then the identifier of the next update will be chosen randomly instead of sequentially.
-	ID int `json:"update_id"`
+	ID int `json:"update_id" verify:"nonzero"`
 
 	// Message is the new incoming message of any kind – text, photo, sticker, etc. (optional).
 	Message *AccessibleMessage `json:"message,omitempty"`
@@ -68,14 +68,6 @@ type Update struct {
 
 	// RemovedChatBoost is a boost removed from a chat (optional, the bot must be an administrator in the chat to receive these updates).
 	RemovedChatBoost *ChatBoostRemoved `json:"removed_chat_boost,omitempty"`
-}
-
-func (u *Update) Verify() error {
-	if u.ID == 0 {
-		return fmt.Errorf("telebot: Update ID is empty")
-	}
-
-	return nil
 }
 
 func (u *Update) Type() string {

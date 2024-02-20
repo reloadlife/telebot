@@ -14,6 +14,7 @@ var (
 		&tele.MaybeInaccessibleMessage{},
 		&tele.InaccessibleMessage{},
 	}
+	// TTType ✅
 
 	updateTypes = []any{
 		&tele.MessageReaction{},
@@ -30,6 +31,7 @@ var (
 		&tele.ChatBoostUpdated{},
 		&tele.ChatBoostRemoved{},
 	}
+	// TTType ✅
 
 	replyMarkupTypes = []any{
 		&tele.InlineKeyboardMarkup{},
@@ -43,6 +45,7 @@ var (
 		&tele.User{},
 		&tele.Chat{},
 	}
+	// TTType ✅
 
 	listOfTypes = []any{
 		&tele.Update{},

@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 )
@@ -44,7 +43,7 @@ type Chat struct {
 	ID int64 `json:"id"`
 
 	// Type is the type of chat, which can be either "private", "group", "supergroup" or "channel".
-	Type ChatType `json:"type"`
+	ChatType ChatType `json:"type"`
 
 	// Title is the title for supergroups, channels, and group chats.
 	Title *string `json:"title,omitempty"`
@@ -172,10 +171,12 @@ type Chat struct {
 	Location *ChatLocation `json:"location,omitempty"`
 }
 
-// String returns a string representation of this user.
-func (c *Chat) String() string {
-	indented, _ := json.MarshalIndent(c, "", "  ")
-	return fmt.Sprintf("Chat{ID: (%s) %d, Title: @%v}\n%s\n", c.Type, c.ID, c.Title, indented)
+func (c *Chat) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *Chat) Type() string {
+	return string(c.ChatType)
 }
 
 // Recipient returns the chat's recipient.

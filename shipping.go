@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // ShippingQuery contains information about an incoming shipping query.
 type ShippingQuery struct {
 	// ID is the unique query identifier.
@@ -13,6 +15,14 @@ type ShippingQuery struct {
 
 	// ShippingAddress is the user-specified shipping address.
 	ShippingAddress ShippingAddress `json:"shipping_address"`
+}
+
+func (c *ShippingQuery) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *ShippingQuery) Type() string {
+	return "ShippingQuery"
 }
 
 // PreCheckoutQuery contains information about an incoming pre-checkout query.
@@ -39,4 +49,12 @@ type PreCheckoutQuery struct {
 
 	// OrderInfo is the order information provided by the user (optional).
 	OrderInfo OrderInfo `json:"order_info,omitempty"`
+}
+
+func (c *PreCheckoutQuery) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *PreCheckoutQuery) Type() string {
+	return "PreCheckoutQuery"
 }

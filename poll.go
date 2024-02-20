@@ -1,5 +1,14 @@
 package telebot
 
+import "fmt"
+
+type PollType string
+
+const (
+	PollTypeRegular PollType = "regular"
+	PollTypeQuiz    PollType = "quiz"
+)
+
 // Poll contains information about a poll.
 type Poll struct {
 	// ID is the unique poll identifier.
@@ -21,7 +30,7 @@ type Poll struct {
 	IsAnonymous bool `json:"is_anonymous"`
 
 	// Type is the poll type, currently can be “regular” or “quiz”.
-	Type string `json:"type"`
+	PollType PollType `json:"type"`
 
 	// AllowsMultipleAnswers is true if the poll allows multiple answers.
 	AllowsMultipleAnswers bool `json:"allows_multiple_answers"`
@@ -43,10 +52,18 @@ type Poll struct {
 	CloseDate int `json:"close_date,omitempty"`
 }
 
+func (c *Poll) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *Poll) Type() string {
+	return string(c.PollType)
+}
+
 // PollAnswer represents an answer of a user in a non-anonymous poll.
 type PollAnswer struct {
 	// PollID is the unique poll identifier.
-	PollID string `json:"poll_id"`
+	ID string `json:"poll_id"`
 
 	// VoterChat is the chat that changed the answer to the poll, if the voter is anonymous (optional).
 	VoterChat *Chat `json:"voter_chat,omitempty"`
@@ -57,4 +74,12 @@ type PollAnswer struct {
 	// OptionIDs is the 0-based identifiers of chosen answer options.
 	// May be empty if the vote was retracted.
 	OptionIDs []int `json:"option_ids"`
+}
+
+func (c *PollAnswer) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *PollAnswer) Type() string {
+	return "PollAnswer"
 }

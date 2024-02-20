@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // ChatMemberUpdated represents changes in the status of a chat member.
 type ChatMemberUpdated struct {
 	// Chat is the chat the user belongs to.
@@ -22,4 +24,12 @@ type ChatMemberUpdated struct {
 
 	// ViaChatFolderInviteLink is true if the user joined the chat via a chat folder invite link (optional).
 	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
+}
+
+func (c *ChatMemberUpdated) ReflectType() string {
+	return fmt.Sprintf("%T", c)
+}
+
+func (c *ChatMemberUpdated) Type() string {
+	return "ChatMemberUpdated"
 }

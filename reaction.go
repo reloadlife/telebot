@@ -1,17 +1,16 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
 // MessageReaction represents a change of a reaction on a message performed by a user.
 type MessageReaction struct {
 	// ID is the unique identifier of the message inside the chat.
-	ID int `json:"message_id"`
+	ID int `json:"message_id" verify:"required"`
 
 	// Chat is the chat containing the message the user reacted to.
-	Chat Chat `json:"chat"`
+	Chat Chat `json:"chat" verify:"required"`
 
 	// User is the user that changed the reaction. It is optional if the user isn't anonymous.
 	User *User `json:"user,omitempty"`
@@ -20,28 +19,21 @@ type MessageReaction struct {
 	ActorChat *Chat `json:"actor_chat,omitempty"`
 
 	// Date is the date of the change in Unix time.
-	Date int64 `json:"date"`
+	Date int64 `json:"date" verify:"required"`
 
 	// OldReaction is the previous list of reaction types that were set by the user.
-	OldReaction []ReactionType `json:"old_reaction"`
+	OldReaction []ReactionType `json:"old_reaction" verify:"required"`
 
 	// NewReaction is the new list of reaction types that have been set by the user.
-	NewReaction []ReactionType `json:"new_reaction"`
+	NewReaction []ReactionType `json:"new_reaction" verify:"required"`
 }
 
-// MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (r *MessageReaction) MarshalJSON() ([]byte, error) {
-	return json.Marshal(r)
+func (r *MessageReaction) ReflectType() string {
+	return fmt.Sprintf("%T", r)
 }
 
-// UnmarshalJSON to be JSON unserializable
-func (r *MessageReaction) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, r)
-}
-
-func (r *MessageReaction) String() string {
-	indented, _ := json.MarshalIndent(r, "", "  ")
-	return fmt.Sprintf("MessageReaction{ID: %d}\n%s\n", r.ID, indented)
+func (r *MessageReaction) Type() string {
+	return "MessageReaction"
 }
 
 type MessageReactionCountUpdated struct {
@@ -58,17 +50,10 @@ type MessageReactionCountUpdated struct {
 	Reactions []ReactionCount `json:"reactions"`
 }
 
-// MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (r *MessageReactionCountUpdated) MarshalJSON() ([]byte, error) {
-	return json.Marshal(r)
+func (r *MessageReactionCountUpdated) ReflectType() string {
+	return fmt.Sprintf("%T", r)
 }
 
-// UnmarshalJSON to be JSON unserializable
-func (r *MessageReactionCountUpdated) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, r)
-}
-
-func (r *MessageReactionCountUpdated) String() string {
-	indented, _ := json.MarshalIndent(r, "", "  ")
-	return fmt.Sprintf("MessageReactionCountUpdated{ID: %d}\n%s\n", r.ID, indented)
+func (r *MessageReactionCountUpdated) Type() string {
+	return "MessageReactionCountUpdated"
 }

@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
@@ -11,21 +10,23 @@ const (
 	InaccessibleMessageType      = "InaccessibleMessage"
 )
 
+// Message
+// This interface represents a message.
+//
+// Types:
+// — AccessibleMessage (*AccessibleMessage): The message itself, if it is accessible to the bot.
+// — InaccessibleMessage (*InaccessibleMessage): Information about the message that is inaccessible to the bot.
+// — MaybeInaccessibleMessage (*MaybeInaccessibleMessage): The message itself, if it is accessible to the bot, or information about the message that is inaccessible to the bot.
+//
+// Methods:
+// — MessageType() string: Returns the type of the message.
 type Message interface {
 	MessageType() string
 }
 
-func (u *AccessibleMessage) MessageType() string {
-	return AccessibleMessageType
-}
-
-func (u *MaybeInaccessibleMessage) MessageType() string {
-	return MaybeInaccessibleMessageType
-}
-
-func (u *InaccessibleMessage) MessageType() string {
-	return InaccessibleMessageType
-}
+func (u *AccessibleMessage) MessageType() string        { return AccessibleMessageType }
+func (u *MaybeInaccessibleMessage) MessageType() string { return MaybeInaccessibleMessageType }
+func (u *InaccessibleMessage) MessageType() string      { return InaccessibleMessageType }
 
 // MaybeInaccessibleMessage
 // This object represents a message. It can be either a regular message or a message that is inaccessible to the bot.
@@ -34,25 +35,8 @@ func (u *InaccessibleMessage) MessageType() string {
 // — AccessibleMessage (*AccessibleMessage): Optional. The message itself, if it is accessible to the bot.
 // — InaccessibleMessage (*InaccessibleMessage): Optional. Information about the message that is inaccessible to the bot.
 type MaybeInaccessibleMessage struct {
-	*AccessibleMessage
-	*InaccessibleMessage
-}
-
-func (u *MaybeInaccessibleMessage) String() string {
-	if u.IsAccessible() {
-		return u.AccessibleMessage.String()
-	}
-	return u.InaccessibleMessage.String()
-}
-
-func (u *MaybeInaccessibleMessage) Verify() error {
-	if (u.AccessibleMessage != nil && u.InaccessibleMessage != nil) || (u.AccessibleMessage == nil && u.InaccessibleMessage == nil) {
-		return fmt.Errorf("telebot: MaybeInaccessibleMessage cant have both AccessibleMessage and InaccessibleMessage or none")
-	}
-	if u.AccessibleMessage != nil { // Only in this method we dont use u.IsAccessible() because it will cause a loop.
-		return u.AccessibleMessage.Verify()
-	}
-	return u.InaccessibleMessage.Verify()
+	*AccessibleMessage   `verify:"either_exists:InaccessibleMessage"`
+	*InaccessibleMessage `verify:"either_exists:AccessibleMessage"`
 }
 
 func (u *MaybeInaccessibleMessage) Type() string {
@@ -64,11 +48,10 @@ func (u *MaybeInaccessibleMessage) ReflectType() string {
 }
 
 func (u *MaybeInaccessibleMessage) IsAccessible() bool {
-	err := u.Verify()
-	if err != nil {
-		panic("telebot: MaybeInaccessibleMessage is not a valid MaybeInaccessibleMessage: " + err.Error())
+	if u.AccessibleMessage != nil {
+		return u.AccessibleMessage.Date != 0
 	}
-	return u.AccessibleMessage != nil
+	return false
 }
 
 // InaccessibleMessage
@@ -79,20 +62,9 @@ func (u *MaybeInaccessibleMessage) IsAccessible() bool {
 // — Date (int64): Date the message was sent in Unix time. (<b>Always 0 for inaccessible messages.</b>)
 // — Chat (*Chat): Chat the message belongs to.
 type InaccessibleMessage struct {
-	ID   int64 `json:"message_id"`
-	Date int64 `json:"date"`
-	Chat *Chat `json:"chat"`
-}
-
-func (u *InaccessibleMessage) String() string {
-	return fmt.Sprintf("InaccessibleMessage{ID: %d}", u.ID)
-}
-
-func (u *InaccessibleMessage) Verify() error {
-	if u.ID == 0 {
-		return fmt.Errorf("telebot: InaccessibleMessage ID is empty")
-	}
-	return nil
+	ID   int64 `json:"message_id" verify:"nonzero"`
+	Date int64 `json:"date" verify:"literalZero"`
+	Chat *Chat `json:"chat" verify:"required"`
 }
 
 func (u *InaccessibleMessage) Type() string {
@@ -292,19 +264,6 @@ type AccessibleMessage struct {
 	VideoChatParticipantsInvited *VideoChatParticipantsInvited `json:"video_chat_participants_invited,omitempty"`
 	WebAppData                   *WebAppData                   `json:"web_app_data,omitempty"`
 	ReplyMarkup                  *InlineKeyboardMarkup         `json:"reply_markup,omitempty"`
-}
-
-func (u *AccessibleMessage) String() string {
-	indented, _ := json.MarshalIndent(u, "", "  ")
-	return fmt.Sprintf("AccessibleMessage{ID: %d, Chat: @%v}\n%s\n", u.ID, u.Chat.ID, indented)
-}
-
-func (u *AccessibleMessage) Verify() error {
-	if u.ID == 0 {
-		return fmt.Errorf("telebot: AccessibleMessage ID is empty")
-	}
-
-	return nil
 }
 
 func (u *AccessibleMessage) Type() string {

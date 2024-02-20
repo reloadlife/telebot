@@ -61,7 +61,7 @@ func (u *User) Type() string {
 }
 
 func (u *User) ReflectType() string {
-	return "telebot.User{}"
+	return fmt.Sprintf("%T", u)
 }
 
 // Recipient Mention returns a string which mentions the user.

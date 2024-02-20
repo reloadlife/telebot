@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"testing"
+	"time"
 )
 
 func Test_Online_SendMessage(t *testing.T) {
@@ -33,27 +34,27 @@ func Test_Online_SendMessage(t *testing.T) {
 
 func TestMessage(t *testing.T) {
 	t.Run("MaybeInaccessibleMessage", func(t *testing.T) {
-		miMsg := &MaybeInaccessibleMessage{}
+		miMsg := &MaybeInaccessibleMessage{
+			InaccessibleMessage: nil,
+			AccessibleMessage:   nil,
+		}
+
 		require.NotNil(t, miMsg)
 
 		require.NotPanics(t, func() {
 			require.Equal(t, miMsg.MessageType(), MaybeInaccessibleMessageType)
 		})
 
-		require.Panics(t, func() {
-			_ = miMsg.IsAccessible()
-		})
+		require.False(t, miMsg.IsAccessible())
 
-		t.Run("InaccessibleMessage/Verify", func(t *testing.T) {
-			require.NotPanics(t, func() {
-				_ = miMsg.Verify()
-			})
+		t.Run("/Verify", func(t *testing.T) {
+			require.Error(t, miMsg.Verify())
 		})
 
 		t.Run("AccessibleMessage/Fill", func(t *testing.T) {
-			// fill in the MaybeInaccessibleMessage fields
 			miMsg.AccessibleMessage = &AccessibleMessage{
-				ID: 12,
+				ID:   12,
+				Date: time.Now().Unix(),
 			}
 			require.NotNil(t, miMsg.AccessibleMessage)
 
@@ -65,7 +66,38 @@ func TestMessage(t *testing.T) {
 				require.True(t, miMsg.IsAccessible())
 			})
 		})
+
+		t.Run("MaybeInaccessibleMessage/MarshalJSON", func(t *testing.T) {
+			miMsg = &MaybeInaccessibleMessage{}
+			miMsg.AccessibleMessage = &AccessibleMessage{
+				ID:   12,
+				Date: time.Now().Unix(),
+				From: &User{
+					ID: 1234,
+				},
+			}
+			miMsg.InaccessibleMessage = nil
+			t.Logf("isAccessible: %v", miMsg.IsAccessible())
+			t.Logf("miMsg: %v", miMsg)
+			in, err := miMsg.MarshalJSON()
+			require.NoError(t, err)
+			t.Logf("in: %s", in)
+		})
+
+		t.Run("MaybeInaccessibleMessage/UnmarshalJSON", func(t *testing.T) {
+			miMsg = &MaybeInaccessibleMessage{}
+
+			in := []byte(`{"id":12,"date":1620000000,"from":{"id":1234}}`)
+			err := miMsg.UnmarshalJSON(in)
+			require.NoError(t, err)
+
+			t.Logf("IsAccessible: %v", miMsg.IsAccessible())
+
+			require.True(t, miMsg.IsAccessible())
+			t.Logf("miMsg: %v", miMsg)
+		})
 	})
+
 	aMsg := &AccessibleMessage{}
 	require.NotNil(t, aMsg)
 
