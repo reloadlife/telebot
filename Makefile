@@ -74,5 +74,5 @@ junit:
 	@mkdir -p ./resources/cover
 	@rm -f ./resources/cover/tmp-cover.log;
 	@go install github.com/jstemmer/go-junit-report@latest
-	@go test -p 1 -v ./... -coverprofile resources/cover/cover.out | go-junit-report > resources/cover/report.xml
+	@go test -p 1 -v ./... -coverprofile resources/cover/cover.out | go-junit-report -set-exit-code > resources/cover/report.xml
 
