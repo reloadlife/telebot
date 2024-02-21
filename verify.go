@@ -67,7 +67,7 @@ func verify(t interface{}) error {
 
 	var existsCount int
 	var hasEitherExistsTag = false
-	var eitehrExistsDependentFieldNames []string
+	var eitherExistsDependentFieldNames []string
 
 	typeOfT := valueOfT.Type()
 
@@ -172,8 +172,8 @@ func verify(t interface{}) error {
 			hasEitherExistsTag = true
 			dependentFieldName := strings.Split(tag, ":")[1]
 			dependentField := field.FieldByName(dependentFieldName)
-			eitehrExistsDependentFieldNames = append(eitehrExistsDependentFieldNames, tag)
-			if !dependentField.IsZero() {
+			eitherExistsDependentFieldNames = append(eitherExistsDependentFieldNames, tag)
+			if !dependentField.IsZero() || !dependentField.IsNil() {
 				existsCount++
 			}
 
@@ -191,7 +191,7 @@ func verify(t interface{}) error {
 	}
 
 	if hasEitherExistsTag && existsCount != 1 {
-		return fmt.Errorf("exactly one of the %s should exist", strings.Join(eitehrExistsDependentFieldNames, ", "))
+		return fmt.Errorf("exactly one of the %s should exist", strings.Join(eitherExistsDependentFieldNames, ", "))
 	}
 
 	return nil

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"io"
+	"os"
 	"regexp"
+	"strings"
 )
 
 const (
@@ -16,7 +18,8 @@ const (
 )
 
 var (
-	Prefix = color.New(color.BgHiWhite, color.FgBlue).Sprintf("[TeleBot]") + " "
+	PrefixTag = "TeleBot"
+	Prefix    = color.New(color.BgHiWhite, color.FgBlue).Sprintf("[%s]", PrefixTag) + " "
 )
 var (
 	Level = LevelWarn
@@ -24,6 +27,29 @@ var (
 
 func init() {
 	SetLevel(LevelDebug)
+	switch strings.ToUpper(os.Getenv("LOG_LEVEL")) {
+	case "DEBUG":
+		SetLevel(LevelDebug)
+	case "INFO":
+		SetLevel(LevelInfo)
+	case "WARN":
+		SetLevel(LevelWarn)
+	case "ERROR":
+		SetLevel(LevelError)
+	case "FATAL":
+		SetLevel(LevelFatal)
+
+	default:
+		switch strings.ToUpper(os.Getenv("ENV")) {
+		case "DEV":
+			SetLevel(LevelDebug)
+		case "PROD":
+			SetLevel(LevelWarn)
+
+		default:
+			SetLevel(LevelWarn) // defaults to warning
+		}
+	}
 }
 
 func SetLevel(level int) {

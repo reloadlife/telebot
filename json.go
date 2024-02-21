@@ -1,6 +1,8 @@
 package telebot
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 func (u *Update) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*u)
@@ -65,6 +67,37 @@ func (c *ChatBoostRemoved) MarshalJSON() ([]byte, error) {
 
 // /// //// ////// ////// ////// ////// ////// ////// ////// ////// ////// //////
 
+// UnmarshalJSON in MaybeInaccessibleMessage is a custom unmarshaler that
+// checks if the message is accessible or not and unmarshals it accordingly.
+// It first checks if the message is accessible by checking the date field.
+// note from the author: I'm not sure if this is the best way to do it, but it works.
+// if you find a better way of doing it that passes the UnitTests, i'd appreciate the PR <3.
+func (u *MaybeInaccessibleMessage) UnmarshalJSON(b []byte) error {
+	var where struct {
+		Date int64 `json:"date"`
+	}
+	err := json.Unmarshal(b, &where)
+	if err != nil {
+		return err
+	}
+	if where.Date == 0 {
+		InM := &InaccessibleMessage{}
+		err := InM.UnmarshalJSON(b)
+		if err == nil {
+			u.AccessibleMessage = nil
+			u.InaccessibleMessage = InM
+		}
+		return err
+	}
+	AcM := &AccessibleMessage{}
+	err = AcM.UnmarshalJSON(b)
+	if err == nil {
+		u.InaccessibleMessage = nil
+		u.AccessibleMessage = AcM
+	}
+	return err
+}
+
 func (u *Update) UnmarshalJSON(b []byte) error {
 	type Alias Update
 	aux := &struct {
@@ -76,19 +109,6 @@ func (u *Update) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
-}
-func (u *MaybeInaccessibleMessage) UnmarshalJSON(b []byte) error {
-	var where struct {
-		Date int64 `json:"date"`
-	}
-	err := json.Unmarshal(b, &where)
-	if err != nil {
-		return err
-	}
-	if where.Date == 0 {
-		return u.InaccessibleMessage.UnmarshalJSON(b)
-	}
-	return u.AccessibleMessage.UnmarshalJSON(b)
 }
 func (u *AccessibleMessage) UnmarshalJSON(b []byte) error {
 	type Alias AccessibleMessage

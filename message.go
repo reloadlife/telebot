@@ -35,8 +35,8 @@ func (u *InaccessibleMessage) MessageType() string      { return InaccessibleMes
 // — AccessibleMessage (*AccessibleMessage): Optional. The message itself, if it is accessible to the bot.
 // — InaccessibleMessage (*InaccessibleMessage): Optional. Information about the message that is inaccessible to the bot.
 type MaybeInaccessibleMessage struct {
-	*AccessibleMessage   `verify:"either_exists:InaccessibleMessage"`
-	*InaccessibleMessage `verify:"either_exists:AccessibleMessage"`
+	*AccessibleMessage
+	*InaccessibleMessage
 }
 
 func (u *MaybeInaccessibleMessage) Type() string {
@@ -48,10 +48,7 @@ func (u *MaybeInaccessibleMessage) ReflectType() string {
 }
 
 func (u *MaybeInaccessibleMessage) IsAccessible() bool {
-	if u.AccessibleMessage != nil {
-		return u.AccessibleMessage.Date != 0
-	}
-	return false
+	return u.AccessibleMessage != nil
 }
 
 // InaccessibleMessage
