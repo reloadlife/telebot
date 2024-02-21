@@ -140,6 +140,17 @@ type Chat struct {
 	// Location is the location to which the supergroup is connected.
 	// Returned only in getChat.
 	Location *ChatLocation `json:"location,omitempty"`
+
+	// UnRestrictBoostCount For supergroups, the minimum number of boosts that a
+	// non-administrator user needs to add in order to ignore slow mode and chat
+	// permissions. Returned only in getChat.
+	UnRestrictBoostCount *int `json:"unrestrict_boost_count,omitempty"`
+
+	// CustomEmojiStickerSetName For supergroups,
+	// the name of the group's custom emoji sticker set.
+	// Custom emoji from this set can be used by all users and bots in the group.
+	// Returned only in getChat.
+	CustomEmojiStickerSetName *string `json:"custom_emoji_sticker_set_name,omitempty"`
 }
 
 func (c *Chat) ReflectType() string {

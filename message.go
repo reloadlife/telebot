@@ -197,6 +197,7 @@ type AccessibleMessage struct {
 	IsTopic                      *bool                         `json:"is_topic_message,omitempty"`
 	IsAutomaticForward           *bool                         `json:"is_automatic_forward,omitempty"`
 	ReplyTo                      *AccessibleMessage            `json:"reply_to_message,omitempty"`
+	ReplyToStory                 *Story                        `json:"reply_to_story,omitempty"`
 	ExternalReply                *ExternalReplyInfo            `json:"external_reply,omitempty"`
 	Quote                        *TextQuote                    `json:"quote,omitempty"`
 	ViaBot                       *User                         `json:"via_bot,omitempty"`
@@ -258,6 +259,8 @@ type AccessibleMessage struct {
 	VideoChatScheduled           *VideoChatScheduled           `json:"video_chat_scheduled,omitempty"`
 	VideoChatStarted             *VideoChatStarted             `json:"video_chat_started,omitempty"`
 	VideoChatEnded               *VideoChatEnded               `json:"video_chat_ended,omitempty"`
+	BoostAdded                   *ChatBoostAdded               `json:"boost_added,omitempty"`
+	SenderBoostCount             *int                          `json:"sender_boost_count,omitempty"`
 	VideoChatParticipantsInvited *VideoChatParticipantsInvited `json:"video_chat_participants_invited,omitempty"`
 	WebAppData                   *WebAppData                   `json:"web_app_data,omitempty"`
 	ReplyMarkup                  *InlineKeyboardMarkup         `json:"reply_markup,omitempty"`
