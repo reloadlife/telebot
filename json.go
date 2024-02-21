@@ -2,16 +2,11 @@ package telebot
 
 import (
 	"encoding/json"
+	"go.mamad.dev/telebot/log"
 )
 
 func (u *Update) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*u)
-}
-func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
-	if u.IsAccessible() {
-		return u.AccessibleMessage.MarshalJSON()
-	}
-	return u.InaccessibleMessage.MarshalJSON()
 }
 func (u *AccessibleMessage) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*u)
@@ -63,6 +58,17 @@ func (c *ChatBoostUpdated) MarshalJSON() ([]byte, error) {
 }
 func (c *ChatBoostRemoved) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
+}
+
+func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
+	log.Debugf("MaybeInaccessibleMessage.MarshalJSON: %v", u)
+	if u.IsAccessible() {
+		return u.AccessibleMessage.MarshalJSON()
+	}
+	if u.InaccessibleMessage != nil {
+		return u.InaccessibleMessage.MarshalJSON()
+	}
+	return nil, ErrNoMessageToMarshal
 }
 
 // /// //// ////// ////// ////// ////// ////// ////// ////// ////// ////// //////

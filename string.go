@@ -27,7 +27,10 @@ func (u *MaybeInaccessibleMessage) String() string {
 	if u.IsAccessible() {
 		return u.AccessibleMessage.String()
 	}
-	return u.InaccessibleMessage.String()
+	if u.InaccessibleMessage != nil {
+		return u.InaccessibleMessage.String()
+	}
+	return "MaybeInaccessibleMessage{nil}"
 }
 
 func (u *InaccessibleMessage) String() string {

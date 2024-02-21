@@ -35,8 +35,8 @@ func Test_Online_SendMessage(t *testing.T) {
 func TestMessage(t *testing.T) {
 	t.Run("MaybeInaccessibleMessage", func(t *testing.T) {
 		miMsg := &MaybeInaccessibleMessage{
-			//InaccessibleMessage: nil,
-			//AccessibleMessage:   nil,
+			InaccessibleMessage: nil,
+			AccessibleMessage:   nil,
 		}
 
 		require.NotNil(t, miMsg)
@@ -46,6 +46,18 @@ func TestMessage(t *testing.T) {
 		})
 
 		require.False(t, miMsg.IsAccessible())
+
+		t.Run("MarshalJSON", func(t *testing.T) {
+			in, err := miMsg.MarshalJSON()
+			require.ErrorIs(t, err, ErrNoMessageToMarshal)
+			require.Nil(t, in)
+		})
+
+		t.Run("String", func(t *testing.T) {
+			require.NotPanics(t, func() {
+				require.NotEmpty(t, miMsg.String())
+			})
+		})
 
 		t.Run("Verify", func(t *testing.T) {
 			require.Error(t, miMsg.Verify())

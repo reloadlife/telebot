@@ -76,6 +76,14 @@ var (
 	ErrNotClosed = NewError(400, "Bad Request: failed to close the bot account")
 )
 
+// Bad Type Errors
+var (
+	ErrNoMessageToMarshal = NewError(400, "Bad Type: no message to marshal (nil message)")
+	ErrNoMessageToSend    = NewError(400, "Bad Type: no message to send (nil message)")
+	ErrNoMessageToReply   = NewError(400, "Bad Type: no message to reply (nil message)")
+	ErrNoMessageToForward = NewError(400, "Bad Type: no message to forward (nil message)")
+)
+
 // Bad request errors
 var (
 	ErrBadButtonData          = NewError(400, "Bad Request: BUTTON_DATA_INVALID")
