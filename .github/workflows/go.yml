@@ -31,10 +31,18 @@ jobs:
           export GOPATH=$(go env GOPATH)
           go clean -modcache
           go mod tidy
-          make cover
+          make junit
+
+      - name: Test Summary
+        uses: test-summary/action@v1
+        if: always()
+        with:
+          paths: |
+            ./resources/cover/report.xml            
 
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v3
+        if: always()
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: ./resources/cover/cover.out
