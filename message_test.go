@@ -69,6 +69,44 @@ func Test_Online_SendMessage(t *testing.T) {
 
 		require.True(t, markup.deepEqual(msg.ReplyMarkup))
 	})
+
+	t.Run("WithMarkDown", func(t *testing.T) {
+		text := "*MarkDownMessage* [link](https://github.com/reloadlife/telebot) `code`"
+		markup := NewMarkup()
+		markup.Inline()
+		markup.AddRow(NewInlineKeyboardButton("Hey", "hey"))
+		markup.AddRow(NewInlineKeyboardButton("TeleBot !!", "hey"))
+
+		msg, err = tg.SendMessage(whereTo, text, toPtr(ParseModeMarkdown))
+		require.NoError(t, err)
+		require.NotNil(t, msg)
+
+		require.Equal(t, msg.Entities, []Entity{
+			{
+				Type:   "bold",
+				Offset: 0,
+				Length: 15,
+			},
+			{
+				Type:   "url",
+				Offset: 16,
+				Length: 4,
+			},
+			{
+				Type:   "code",
+				Offset: 21,
+				Length: 4,
+			},
+		})
+	})
+
+	t.Run("WithBadOptions", func(t *testing.T) {
+		text := fmt.Sprintf("Hello, World, With reply markup and Reply Message (%d)!", msg.ID)
+		require.Panics(t, func() {
+			msg, err = tg.SendMessage(whereTo, text, false, true)
+		})
+	})
+
 }
 
 func TestMessage(t *testing.T) {

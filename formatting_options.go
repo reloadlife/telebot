@@ -3,10 +3,10 @@ package telebot
 type ParseMode string
 
 const (
-	ParseModeDefault    = ""
-	ParseModeMarkdown   = "Markdown"
-	ParseModeMarkdownV2 = "MarkdownV2"
-	ParseModeHTML       = "HTML"
+	ParseModeDefault    ParseMode = ""
+	ParseModeMarkdown   ParseMode = "Markdown"
+	ParseModeMarkdownV2 ParseMode = "MarkdownV2"
+	ParseModeHTML       ParseMode = "HTML"
 )
 
 type EntityType string
