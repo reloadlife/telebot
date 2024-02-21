@@ -2,37 +2,7 @@ package telebot
 
 import (
 	"fmt"
-	"strconv"
 )
-
-type ChatType string
-
-const (
-	ChatTypeSender ChatType = "sender" // Only for InlineQuery.
-
-	ChatPrivate        ChatType = "private"
-	ChatGroup          ChatType = "group"
-	ChatSuperGroup     ChatType = "supergroup"
-	ChatChannel        ChatType = "channel"
-	ChatChannelPrivate ChatType = "privatechannel"
-)
-
-// ChatLocation represents a location to which a chat is connected.
-type ChatLocation struct {
-	Location Location `json:"location,omitempty"`
-	Address  string   `json:"address,omitempty"`
-}
-
-// ChatPhoto object represents a chat photo.
-type ChatPhoto struct {
-	// File identifiers of small (160x160) chat photo
-	SmallFileID   string `json:"small_file_id"`
-	SmallUniqueID string `json:"small_file_unique_id"`
-
-	// File identifiers of big (640x640) chat photo
-	BigFileID   string `json:"big_file_id"`
-	BigUniqueID string `json:"big_file_unique_id"`
-}
 
 // Chat represents a chat.
 type Chat struct {
@@ -73,6 +43,7 @@ type Chat struct {
 
 	// AccentColorID is the identifier of the accent color for the chat name and backgrounds of the chat photo,
 	// reply header, and link preview. Returned only in getChat. Always returned in getChat.
+	// todo: make Custom enum
 	AccentColorID *int `json:"accent_color_id,omitempty"`
 
 	// BackgroundCustomEmojiID is the custom emoji identifier of emoji chosen by the chat for the reply header and link preview background.
@@ -176,10 +147,21 @@ func (c *Chat) ReflectType() string {
 }
 
 func (c *Chat) Type() string {
-	return string(c.ChatType)
-}
+	switch c.ChatType {
+	case ChatPrivate:
+		return "private"
+	case ChatGroup:
+		return "group"
+	case ChatSuperGroup:
+		return "supergroup"
+	case ChatChannel:
+		return "channel"
+	case ChatChannelPrivate:
+		return "channelprivate"
+	case ChatTypeSender:
+		return "sender"
 
-// Recipient returns the chat's recipient.
-func (c *Chat) Recipient() string {
-	return strconv.FormatInt(c.ID, 10)
+	default:
+		return "unknown"
+	}
 }

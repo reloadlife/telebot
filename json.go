@@ -60,6 +60,14 @@ func (c *ChatBoostRemoved) MarshalJSON() ([]byte, error) {
 }
 func (i *InlineKeyboardButton) MarshalJSON() ([]byte, error) { return json.Marshal(*i) }
 func (i *KeyboardButton) MarshalJSON() ([]byte, error)       { return json.Marshal(*i) }
+func (c *ChatPhoto) MarshalJSON() ([]byte, error)            { return json.Marshal(*c) }
+func (c *ChatLocation) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
+func (c *ChatPermissions) MarshalJSON() ([]byte, error)      { return json.Marshal(*c) }
+func (c *CallbackGame) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
+func (c *LoginURL) MarshalJSON() ([]byte, error)             { return json.Marshal(*c) }
+func (c *ChatMember) MarshalJSON() ([]byte, error)           { return json.Marshal(*c) }
+func (c *ReactionType) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
+func (c *ReactionCount) MarshalJSON() ([]byte, error)        { return json.Marshal(*c) }
 
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
 	if u.IsAccessible() {
@@ -332,6 +340,102 @@ func (i *KeyboardButton) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
+func (c *ChatPhoto) UnmarshalJSON(data []byte) error {
+	type Alias ChatPhoto
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatLocation) UnmarshalJSON(data []byte) error {
+	type Alias ChatLocation
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatPermissions) UnmarshalJSON(data []byte) error {
+	type Alias ChatPermissions
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *CallbackGame) UnmarshalJSON(data []byte) error {
+	type Alias CallbackGame
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *LoginURL) UnmarshalJSON(data []byte) error {
+	type Alias LoginURL
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatMember) UnmarshalJSON(data []byte) error {
+	type Alias ChatMember
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ReactionType) UnmarshalJSON(data []byte) error {
+	type Alias ReactionType
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ReactionCount) UnmarshalJSON(data []byte) error {
+	type Alias ReactionCount
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
 
 ///// ReplyMarkup Custom UnmarshalJSON / MarshalJSON.
 
@@ -351,7 +455,7 @@ func (r *Row) UnmarshalJSON(data []byte) error {
 		var rawButton struct {
 			URL                          *string                      `json:"url,omitempty"`
 			CallbackData                 *string                      `json:"callback_data,omitempty"`
-			LoginURL                     *LoginUrl                    `json:"login_url,omitempty"`
+			LoginURL                     *LoginURL                    `json:"login_url,omitempty"`
 			SwitchInlineQuery            *string                      `json:"switch_inline_query,omitempty"`
 			SwitchInlineQueryCurrentChat *string                      `json:"switch_inline_query_current_chat,omitempty"`
 			SwitchInlineQueryChosenChat  *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`

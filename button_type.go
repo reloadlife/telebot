@@ -88,7 +88,7 @@ type InlineKeyboardButton struct {
 
 	// LoginURL is the optional HTTPS URL used to automatically authorize the user.
 	// Can be used as a replacement for the Telegram Login Widget.
-	LoginURL *LoginUrl `json:"login_url,omitempty"`
+	LoginURL *LoginURL `json:"login_url,omitempty"`
 
 	// SwitchInlineQuery is the optional inline query to prompt the user to select one of their chats and insert the bot's username and the specified inline query in the input field.
 	// May be empty, in which case just the bot's username will be inserted.
@@ -129,7 +129,7 @@ func NewInlineKeyboardButton(text string, options ...any) Button {
 		case *WebAppInfo:
 			btn.WebApp = value
 
-		case *LoginUrl:
+		case *LoginURL:
 			btn.LoginURL = value
 
 		case *SwitchInlineQueryStringType:

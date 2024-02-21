@@ -37,7 +37,7 @@ var (
 		&tele.InlineKeyboardMarkup{},
 		&tele.ReplyKeyboardMarkup{},
 		&tele.ReplyKeyboardRemove{},
-		&tele.LoginUrl{},
+		&tele.LoginURL{},
 		&tele.CallbackGame{},
 	}
 

@@ -24,10 +24,6 @@ type Game struct {
 	Animation *Animation `json:"animation,omitempty"`
 }
 
-// CallbackGame represents a placeholder for game-related information.
-// Use BotFather to set up your game.
-type CallbackGame struct{}
-
 type GameHighScore struct {
 	Position int  `json:"position"`
 	User     User `json:"user"`

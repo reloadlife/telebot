@@ -115,4 +115,89 @@ func (c *ChatBoostRemoved) String() string {
 func (i *InlineKeyboardButton) String() string {
 	return fmt.Sprintf("InlineButton{%s %v}", i.Text, i.CallbackData)
 }
+
 func (i *KeyboardButton) String() string { return fmt.Sprintf("Keyboard{%si.Text}", i.Text) }
+
+func (c *ChatPhoto) String() string {
+	return fmt.Sprintf("%s{\nSmallFileID: %s, \nSmallUniqueID: %s, \nBigFileID: %s, \nBigUniqueID: %s\n}",
+		c.ReflectType(),
+		c.SmallFileID, c.SmallUniqueID, c.BigFileID, c.BigUniqueID)
+}
+
+func (c *ChatLocation) String() string {
+	return fmt.Sprintf("%s{Address: %s}",
+		c.ReflectType(),
+		c.Address,
+	)
+}
+
+func (c *ChatPermissions) String() string {
+	return fmt.Sprintf("%s{}",
+		c.ReflectType(),
+	)
+}
+
+func (p *ChatMemberPermission) String() string {
+	switch *p {
+	case IsAnonymous:
+		return "IsAnonymous"
+	case CanManageChat:
+		return "CanManageChat"
+	case CanDeleteMessages:
+		return "CanDeleteMessages"
+	case CanManageVideoChats:
+		return "CanManageVideoChats"
+	case CanRestrictMembers:
+		return "CanRestrictMembers"
+	case CanPromoteMembers:
+		return "CanPromoteMembers"
+	case CanChangeInfo:
+		return "CanChangeInfo"
+	case CanInviteUsers:
+		return "CanInviteUsers"
+	case CanPostMessages:
+		return "CanPostMessages"
+	case CanEditMessages:
+		return "CanEditMessages"
+	case CanPinMessages:
+		return "CanPinMessages"
+	case CanPostStories:
+		return "CanPostStories"
+	case CanEditStories:
+		return "CanEditStories"
+	case CanDeleteStories:
+		return "CanDeleteStories"
+	case CanManageTopics:
+		return "CanManageTopics"
+	default:
+		return fmt.Sprintf("Unknown ChatMemberPermission: %d", p)
+	}
+}
+
+func (c *CallbackGame) String() string {
+	return fmt.Sprintf("%s{}",
+		c.ReflectType(),
+	)
+}
+
+func (c *LoginURL) String() string {
+	return fmt.Sprintf("%s{}",
+		c.ReflectType(),
+	)
+}
+
+func (c *ChatMember) String() string {
+	return fmt.Sprintf("%s{%s %s}",
+		c.ReflectType(),
+		c.User.String(),
+		c.Status,
+	)
+}
+
+func (c *ReactionType) String() string {
+	return fmt.Sprintf("%s{%s %s}", c.ReflectType(), c.ReactionType, c.Emoji)
+}
+
+func (c *ReactionCount) String() string {
+	return fmt.Sprintf("%s{%s %d}", c.ReflectType(), c.ReactionType, c.Count)
+}

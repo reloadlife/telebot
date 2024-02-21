@@ -1,97 +1,8 @@
 package telebot
 
-type StickerEmoji string
-type Emoji StickerEmoji
+import "fmt"
 
-const (
-	EmojiLike       Emoji = "👍"
-	EmojiDislike    Emoji = "👎"
-	EmojiHeart      Emoji = "❤"
-	EmojiFire       Emoji = "🔥"
-	EmojiLove       Emoji = "🥰"
-	EmojiClap       Emoji = "👏"
-	EmojiSmile      Emoji = "😁"
-	EmojiThink      Emoji = "🤔"
-	EmojiMindBlown  Emoji = "🤯"
-	EmojiScream     Emoji = "😱"
-	EmojiAngry      Emoji = "🤬"
-	EmojiCry        Emoji = "😢"
-	EmojiParty      Emoji = "🎉"
-	EmojiExcited    Emoji = "🤩"
-	EmojiVomit      Emoji = "🤮"
-	EmojiPoop       Emoji = "💩"
-	EmojiPray       Emoji = "🙏"
-	EmojiOk         Emoji = "👌"
-	EmojiDove       Emoji = "🕊"
-	EmojiClown      Emoji = "🤡"
-	EmojiYawn       Emoji = "🥱"
-	EmojiDrunk      Emoji = "🥴"
-	EmojiHeartEyes  Emoji = "😍"
-	EmojiDolphin    Emoji = "🐳"
-	EmojiHeartFire  Emoji = "❤‍🔥"
-	EmojiMoon       Emoji = "🌚"
-	EmojiHotdog     Emoji = "🌭"
-	EmojiHundred    Emoji = "💯"
-	EmojiLaugh      Emoji = "🤣"
-	EmojiLightning  Emoji = "⚡"
-	EmojiBanana     Emoji = "🍌"
-	EmojiTrophy     Emoji = "🏆"
-	EmojiBroken     Emoji = "💔"
-	EmojiSkeptical  Emoji = "🤨"
-	EmojiNeutral    Emoji = "😐"
-	EmojiStrawberry Emoji = "🍓"
-	EmojiChampagne  Emoji = "🍾"
-	EmojiKiss       Emoji = "💋"
-	EmojiFuckYou    Emoji = "🖕"
-	EmojiEvil       Emoji = "😈"
-	EmojiSleep      Emoji = "😴"
-	EmojiCrying     Emoji = "😭"
-	EmojiNerd       Emoji = "🤓"
-	EmojiGhost      Emoji = "👻"
-	EmojiComputer   Emoji = "👨‍💻"
-	EmojiEyes       Emoji = "👀"
-	EmojiJackO      Emoji = "🎃"
-	EmojiSeeNoEvil  Emoji = "🙈"
-	EmojiAngel      Emoji = "😇"
-	EmojiFearful    Emoji = "😨"
-	EmojiHandshake  Emoji = "🤝"
-	EmojiWriting    Emoji = "✍"
-	EmojiHugging    Emoji = "🤗"
-	EmojiSmiling    Emoji = "🫡"
-	EmojiSanta      Emoji = "🎅"
-	EmojiChristmas  Emoji = "🎄"
-	EmojiSnowman    Emoji = "☃"
-	EmojiNailPolish Emoji = "💅"
-	EmojiZany       Emoji = "🤪"
-	EmojiMoai       Emoji = "🗿"
-	EmojiCool       Emoji = "🆒"
-	EmojiHearts     Emoji = "💘"
-	EmojiHearNoEvil Emoji = "🙉"
-	EmojiUnicorn    Emoji = "🦄"
-	EmojiKissing    Emoji = "😘"
-	EmojiPill       Emoji = "💊"
-	EmojiSayNoEvil  Emoji = "🙊"
-	EmojiSunglasses Emoji = "😎"
-	EmojiAlien      Emoji = "👾"
-	EmojiMan        Emoji = "🤷‍♂"
-	EmojiWoman      Emoji = "🤷"
-	EmojiWoman2     Emoji = "🤷‍♀"
-	EmojiAngry2     Emoji = "😡"
-)
-
-type ReactionTypeType string
-
-const (
-	ReactionTypeTypeEmoji       ReactionTypeType = "emoji"
-	ReactionTypeTypeCustomEmoji ReactionTypeType = "custom_emoji"
-)
-
-type ReactionType struct {
-	Type          ReactionTypeType `json:"type"`
-	Emoji         Emoji            `json:"emoji,omitempty"`
-	CustomEmojiID string           `json:"custom_emoji_id,omitempty"`
-}
-
+// setMessageReactionRequest is the request body for the methodSetMessageReaction (Bot.SetMessageReaction) method.
 type setMessageReactionRequest struct {
 	ChatID    any            `json:"chat_id"`
 	MessageID int            `json:"message_id"`
@@ -99,11 +10,34 @@ type setMessageReactionRequest struct {
 	IsBig     bool           `json:"is_big,omitempty"`
 }
 
+// ReactionType represents the type of a reaction.
+type ReactionType struct {
+	ReactionType  ReactionTypeType `json:"type"`
+	Emoji         Emoji            `json:"emoji,omitempty"`
+	CustomEmojiID string           `json:"custom_emoji_id,omitempty"`
+}
+
+func (c *ReactionType) Type() string {
+	if c.ReactionType == "" {
+		return "unknown"
+	}
+	return string(c.ReactionType)
+}
+func (c *ReactionType) ReflectType() string { return fmt.Sprintf("%T", c) }
+
 // ReactionCount represents the count of a specific reaction on a message.
 type ReactionCount struct {
-	// Type is the type of reaction.
-	Type ReactionType `json:"type"`
+	// ReactionType is the type of reaction.
+	ReactionType ReactionType `json:"type"`
 
 	// Count is the count of reactions of the specified type.
 	Count int `json:"count"`
 }
+
+func (c *ReactionCount) Type() string {
+	if c.ReactionType.ReactionType == "" {
+		return "unknown"
+	}
+	return string(c.ReactionType.ReactionType)
+}
+func (c *ReactionCount) ReflectType() string { return fmt.Sprintf("%T", c) }

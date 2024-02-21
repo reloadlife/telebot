@@ -2,7 +2,6 @@ package telebot
 
 import (
 	"fmt"
-	"strconv"
 )
 
 // User represents a Telegram user or bot.
@@ -45,26 +44,12 @@ type User struct {
 	SupportsInlineQueries *bool `json:"supports_inline_queries,omitempty"`
 }
 
-func (u *User) Verify() error {
-	if u.ID == 0 {
-		return fmt.Errorf("telebot: Update ID is empty")
-	}
-
-	return nil
-}
-
 func (u *User) Type() string {
 	if u.IsBot {
 		return "Bot"
 	}
 	return "User"
 }
-
 func (u *User) ReflectType() string {
 	return fmt.Sprintf("%T", u)
-}
-
-// Recipient Mention returns a string which mentions the user.
-func (u *User) Recipient() string {
-	return strconv.FormatInt(u.ID, 10)
 }

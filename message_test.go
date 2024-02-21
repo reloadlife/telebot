@@ -91,6 +91,7 @@ func Test_Online_SendMessage(t *testing.T) {
 				Type:   EntityTypeTextLink,
 				Offset: 16,
 				Length: 4,
+				URL:    "https://github.com/reloadlife/telebot",
 			},
 			{
 				Type:   EntityTypeCode,
