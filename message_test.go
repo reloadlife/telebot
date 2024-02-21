@@ -83,17 +83,17 @@ func Test_Online_SendMessage(t *testing.T) {
 
 		require.Equal(t, msg.Entities, []Entity{
 			{
-				Type:   "bold",
+				Type:   EntityTypeBold,
 				Offset: 0,
 				Length: 15,
 			},
 			{
-				Type:   "url",
+				Type:   EntityTypeTextLink,
 				Offset: 16,
 				Length: 4,
 			},
 			{
-				Type:   "code",
+				Type:   EntityTypeCode,
 				Offset: 21,
 				Length: 4,
 			},
