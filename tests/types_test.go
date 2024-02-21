@@ -231,6 +231,8 @@ var (
 
 		"InputMessageContent",
 		"InputMediaType",
+
+		"PollType",
 	}
 )
 
