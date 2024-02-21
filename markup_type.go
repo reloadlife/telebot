@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // ForceReplyMarkup requests clients to display a reply interface to the user (act as if the user selected the bot's message and tapped 'Reply').
 // This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
 // Available in private chats only
@@ -51,3 +53,14 @@ type ReplyKeyboardMarkup struct {
 	// 2) If the bot's message is a reply to a message in the same chat and forum topic, the sender of the original message.
 	Selective *bool `json:"selective,omitempty"`
 }
+
+// Type Functions
+
+func (m *ForceReplyMarkup) Type() string            { return "ForceReplyMarkup" }
+func (m *ForceReplyMarkup) ReflectType() string     { return fmt.Sprintf("%T", m) }
+func (m *ReplyKeyboardRemove) Type() string         { return "ReplyKeyboardRemove" }
+func (m *ReplyKeyboardRemove) ReflectType() string  { return fmt.Sprintf("%T", m) }
+func (m *InlineKeyboardMarkup) Type() string        { return "InlineKeyboardMarkup" }
+func (m *InlineKeyboardMarkup) ReflectType() string { return fmt.Sprintf("%T", m) }
+func (m *ReplyKeyboardMarkup) Type() string         { return "ReplyKeyboardMarkup" }
+func (m *ReplyKeyboardMarkup) ReflectType() string  { return fmt.Sprintf("%T", m) }

@@ -227,3 +227,46 @@ func (m *MessageOrigin) String() string {
 		m.Type(),
 	)
 }
+
+func (u *ExternalReplyInfo) String() string {
+	return fmt.Sprintf("%s{ID: %s}",
+		u.ReflectType(),
+		u.Origin.String(),
+	)
+}
+
+func (m *ForceReplyMarkup) String() string {
+	return fmt.Sprintf("%s{ %p, %v, %v }", m.ReflectType(),
+		m.InputFieldPlaceholder,
+		m.Selective,
+		m.ForceReply)
+}
+func (m *ReplyKeyboardRemove) String() string {
+	return fmt.Sprintf("%s{ %v }", m.ReflectType(), m.Selective)
+}
+func (m *InlineKeyboardMarkup) String() string {
+	return fmt.Sprintf("%s{ rows: %d }", m.ReflectType(), len(m.InlineKeyboard))
+}
+func (m *ReplyKeyboardMarkup) String() string {
+	return fmt.Sprintf("%s{ rows: %d,  %p, %v, %v, %v, %v }", m.ReflectType(),
+		len(m.Keyboard),
+		m.InputFieldPlaceholder,
+		m.Selective,
+		m.OneTimeKeyboard,
+		m.IsPersistent,
+		m.ResizeKeyboard,
+	)
+}
+
+func (i *SwitchInlineQueryChosenChat) String() string {
+	return fmt.Sprintf("%s{ %p }", i.ReflectType(), i.Query)
+}
+func (i *KeyboardButtonRequestChat) String() string {
+	return fmt.Sprintf("%s{ %d }", i.ReflectType(), i.RequestID)
+}
+func (i *KeyboardButtonRequestUsers) String() string {
+	return fmt.Sprintf("%s{ %d }", i.ReflectType(), i.RequestID)
+}
+func (i *KeyboardButtonPollType) String() string {
+	return fmt.Sprintf("%s{ %s }", i.ReflectType(), i.Type())
+}

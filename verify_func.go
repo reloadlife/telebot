@@ -42,3 +42,17 @@ func (c *ChatMemberUpdated) Verify() error { return verify(c) }
 func (c *ChatInviteLink) Verify() error    { return verify(c) }
 func (r *Rights) Verify() error            { return verify(r) }
 func (m *MessageOrigin) Verify() error     { return verify(m) }
+func (u *ExternalReplyInfo) Verify() error { return verify(u) }
+
+func (m *ForceReplyMarkup) Verify() error     { return verify(m) }
+func (m *ReplyKeyboardRemove) Verify() error  { return verify(m) }
+func (m *InlineKeyboardMarkup) Verify() error { return verify(m) }
+func (m *ReplyKeyboardMarkup) Verify() error  { return verify(m) }
+
+func (i *KeyboardButton) Verify() error       { return verify(i) }
+func (i *InlineKeyboardButton) Verify() error { return verify(i) }
+
+func (i *SwitchInlineQueryChosenChat) Verify() error { return verify(i) }
+func (i *KeyboardButtonRequestChat) Verify() error   { return verify(i) }
+func (i *KeyboardButtonRequestUsers) Verify() error  { return verify(i) }
+func (i *KeyboardButtonPollType) Verify() error      { return verify(i) }

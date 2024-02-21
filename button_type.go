@@ -1,6 +1,7 @@
 package telebot
 
 import (
+	"fmt"
 	"net/url"
 )
 
@@ -63,7 +64,7 @@ type KeyboardButtonPollType struct {
 	// If regular is passed,
 	// only regular polls will be allowed.
 	// Otherwise, the user will be allowed to create a poll of any type.
-	Type *PollType `json:"type,omitempty"`
+	PollType PollType `json:"type,omitempty"`
 }
 
 // Actual Button Types =>
@@ -215,3 +216,22 @@ func NewKeyboardButton(text string, options ...any) Button {
 
 	return btn
 }
+
+func (i *InlineKeyboardButton) Type() string        { return "InlineKeyboardButton" }
+func (i *InlineKeyboardButton) ReflectType() string { return fmt.Sprintf("%T", i) }
+func (i *KeyboardButton) Type() string              { return "KeyboardButton" }
+func (i *KeyboardButton) ReflectType() string       { return fmt.Sprintf("%T", i) }
+
+func (i *SwitchInlineQueryChosenChat) Type() string        { return "SwitchInlineQueryChosenChat" }
+func (i *SwitchInlineQueryChosenChat) ReflectType() string { return fmt.Sprintf("%T", i) }
+func (i *KeyboardButtonRequestChat) Type() string          { return "KeyboardButtonRequestChat" }
+func (i *KeyboardButtonRequestChat) ReflectType() string   { return fmt.Sprintf("%T", i) }
+func (i *KeyboardButtonRequestUsers) Type() string         { return "KeyboardButtonRequestUsers" }
+func (i *KeyboardButtonRequestUsers) ReflectType() string  { return fmt.Sprintf("%T", i) }
+func (i *KeyboardButtonPollType) Type() string {
+	if i.PollType == "" {
+		return "unknown"
+	}
+	return string(i.PollType)
+}
+func (i *KeyboardButtonPollType) ReflectType() string { return fmt.Sprintf("%T", i) }

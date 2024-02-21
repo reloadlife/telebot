@@ -1,10 +1,5 @@
 package telebot
 
-import (
-	"encoding/json"
-	"errors"
-)
-
 type ReplyMarkup interface {
 	ReplyMarkup()
 
@@ -137,56 +132,6 @@ func (b *baseMarkUp) Keyboard(opts ...any) {
 		InputFieldPlaceholder: &input,
 		Selective:             &isSelective,
 	}
-}
-
-func (b *baseMarkUp) MarshalJSON() ([]byte, error) {
-	switch b.markupType {
-	case markupTypeInline:
-		return json.Marshal(b.inline)
-	case markupTypeKeyboard:
-		return json.Marshal(b.keyboard)
-	case markupTypeRemoveKeyboard:
-		return json.Marshal(b.remove)
-	case markupTypeForceReply:
-		return json.Marshal(b.forceReply)
-	}
-	return nil, nil
-}
-
-func (b *baseMarkUp) UnmarshalJSON(data []byte) error {
-	var temp struct {
-		InlineKeyboard any `json:"inline_keyboard"`
-		Keyboard       any `json:"keyboard"`
-		RemoveKeyboard any `json:"remove_keyboard"`
-		ForceReply     any `json:"force_reply"`
-	}
-	if err := json.Unmarshal(data, &temp); err != nil {
-		return err
-	}
-
-	switch {
-	case temp.InlineKeyboard != nil:
-		b.markupType = markupTypeInline
-		b.inline = &InlineKeyboardMarkup{}
-		return b.inline.UnmarshalJSON(data)
-
-	case temp.Keyboard != nil:
-		b.markupType = markupTypeKeyboard
-		b.keyboard = &ReplyKeyboardMarkup{}
-		return b.keyboard.UnmarshalJSON(data)
-
-	case temp.RemoveKeyboard != nil:
-		b.markupType = markupTypeRemoveKeyboard
-		b.remove = &ReplyKeyboardRemove{}
-		return json.Unmarshal(data, b.remove)
-
-	case temp.ForceReply != nil:
-		b.markupType = markupTypeForceReply
-		b.forceReply = &ForceReplyMarkup{}
-		return json.Unmarshal(data, b.forceReply)
-	}
-
-	return errors.New("telebot: unknown markup type")
 }
 
 func (b *baseMarkUp) AddRows(rows ...Row) {

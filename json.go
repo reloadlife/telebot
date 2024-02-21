@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"encoding/json"
+	"errors"
 )
 
 func (u *Update) MarshalJSON() ([]byte, error) {
@@ -71,6 +72,16 @@ func (c *ReactionCount) MarshalJSON() ([]byte, error)        { return json.Marsh
 func (c *ChatInviteLink) MarshalJSON() ([]byte, error)       { return json.Marshal(*c) }
 func (r *Rights) MarshalJSON() ([]byte, error)               { return json.Marshal(*r) }
 func (m *MessageOrigin) MarshalJSON() ([]byte, error)        { return json.Marshal(*m) }
+func (u *ExternalReplyInfo) MarshalJSON() ([]byte, error)    { return json.Marshal(*u) }
+func (m *ForceReplyMarkup) MarshalJSON() ([]byte, error)     { return json.Marshal(*m) }
+func (m *ReplyKeyboardRemove) MarshalJSON() ([]byte, error)  { return json.Marshal(*m) }
+func (m *InlineKeyboardMarkup) MarshalJSON() ([]byte, error) { return json.Marshal(*m) }
+func (m *ReplyKeyboardMarkup) MarshalJSON() ([]byte, error)  { return json.Marshal(*m) }
+
+func (i *SwitchInlineQueryChosenChat) MarshalJSON() ([]byte, error) { return json.Marshal(*i) }
+func (i *KeyboardButtonRequestChat) MarshalJSON() ([]byte, error)   { return json.Marshal(*i) }
+func (i *KeyboardButtonRequestUsers) MarshalJSON() ([]byte, error)  { return json.Marshal(*i) }
+func (i *KeyboardButtonPollType) MarshalJSON() ([]byte, error)      { return json.Marshal(*i) }
 
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
 	if u.IsAccessible() {
@@ -331,18 +342,6 @@ func (c *ChatBoostRemoved) UnmarshalJSON(b []byte) error {
 	}
 	return nil
 }
-func (i *KeyboardButton) UnmarshalJSON(data []byte) error {
-	type Alias KeyboardButton
-	aux := &struct {
-		*Alias
-	}{
-		Alias: (*Alias)(i),
-	}
-	if err := json.Unmarshal(data, &aux); err != nil {
-		return err
-	}
-	return nil
-}
 func (c *ChatPhoto) UnmarshalJSON(data []byte) error {
 	type Alias ChatPhoto
 	aux := &struct {
@@ -469,6 +468,90 @@ func (m *MessageOrigin) UnmarshalJSON(data []byte) error {
 		*Alias
 	}{
 		Alias: (*Alias)(m),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (u *ExternalReplyInfo) UnmarshalJSON(data []byte) error {
+	type Alias ExternalReplyInfo
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(u),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (m *ForceReplyMarkup) UnmarshalJSON(data []byte) error {
+	type Alias ForceReplyMarkup
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(m),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (m *ReplyKeyboardRemove) UnmarshalJSON(data []byte) error {
+	type Alias ReplyKeyboardRemove
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(m),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (i *SwitchInlineQueryChosenChat) UnmarshalJSON(data []byte) error {
+	type Alias SwitchInlineQueryChosenChat
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (i *KeyboardButtonRequestChat) UnmarshalJSON(data []byte) error {
+	type Alias KeyboardButtonRequestChat
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (i *KeyboardButtonRequestUsers) UnmarshalJSON(data []byte) error {
+	type Alias KeyboardButtonRequestUsers
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (i *KeyboardButtonPollType) UnmarshalJSON(data []byte) error {
+	type Alias KeyboardButtonPollType
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -617,4 +700,68 @@ func (i *InlineKeyboardButton) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (i *KeyboardButton) UnmarshalJSON(data []byte) error {
+	type Alias KeyboardButton
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *baseMarkUp) UnmarshalJSON(data []byte) error {
+	var temp struct {
+		InlineKeyboard any `json:"inline_keyboard"`
+		Keyboard       any `json:"keyboard"`
+		RemoveKeyboard any `json:"remove_keyboard"`
+		ForceReply     any `json:"force_reply"`
+	}
+	if err := json.Unmarshal(data, &temp); err != nil {
+		return err
+	}
+
+	switch {
+	case temp.InlineKeyboard != nil:
+		b.markupType = markupTypeInline
+		b.inline = &InlineKeyboardMarkup{}
+		return b.inline.UnmarshalJSON(data)
+
+	case temp.Keyboard != nil:
+		b.markupType = markupTypeKeyboard
+		b.keyboard = &ReplyKeyboardMarkup{}
+		return b.keyboard.UnmarshalJSON(data)
+
+	case temp.RemoveKeyboard != nil:
+		b.markupType = markupTypeRemoveKeyboard
+		b.remove = &ReplyKeyboardRemove{}
+		return json.Unmarshal(data, b.remove)
+
+	case temp.ForceReply != nil:
+		b.markupType = markupTypeForceReply
+		b.forceReply = &ForceReplyMarkup{}
+		return json.Unmarshal(data, b.forceReply)
+	}
+
+	return errors.New("telebot: unknown markup type")
+}
+
+// MarshalJSON implements json.Marshaler.
+func (b *baseMarkUp) MarshalJSON() ([]byte, error) {
+	switch b.markupType {
+	case markupTypeInline:
+		return json.Marshal(b.inline)
+	case markupTypeKeyboard:
+		return json.Marshal(b.keyboard)
+	case markupTypeRemoveKeyboard:
+		return json.Marshal(b.remove)
+	case markupTypeForceReply:
+		return json.Marshal(b.forceReply)
+	}
+	return nil, nil
 }

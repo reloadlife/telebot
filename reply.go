@@ -1,9 +1,11 @@
 package telebot
 
+import "fmt"
+
 type ExternalReplyInfo struct {
 	Origin             MessageOrigin       `json:"origin"`
 	Chat               *Chat               `json:"chat,omitempty"`
-	MessageID          *int                `json:"message_id,omitempty"`
+	ID                 *int                `json:"message_id,omitempty"`
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 	Animation          *Animation          `json:"animation,omitempty"`
 	Audio              *Audio              `json:"audio,omitempty"`
@@ -24,4 +26,12 @@ type ExternalReplyInfo struct {
 	Location           *Location           `json:"location,omitempty"`
 	Poll               *Poll               `json:"poll,omitempty"`
 	Venue              *Venue              `json:"venue,omitempty"`
+}
+
+func (u *ExternalReplyInfo) Type() string {
+	return "ExternalReplyInfo"
+}
+
+func (u *ExternalReplyInfo) ReflectType() string {
+	return fmt.Sprintf("%T", u)
 }

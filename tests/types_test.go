@@ -34,11 +34,10 @@ var (
 	// TTType ✅
 
 	replyMarkupTypes = []any{
+		&tele.InlineKeyboardButton{},
 		&tele.InlineKeyboardMarkup{},
 		&tele.ReplyKeyboardMarkup{},
 		&tele.ReplyKeyboardRemove{},
-		&tele.LoginURL{},
-		&tele.CallbackGame{},
 	}
 
 	recipients = []any{
@@ -162,7 +161,6 @@ var (
 		&tele.ChatBoostSource{},
 
 		&tele.ReactionCount{},
-		&tele.InlineKeyboardButton{},
 
 		&tele.InputContactMessageContent{},
 		&tele.InputLocationMessageContent{},
@@ -171,6 +169,9 @@ var (
 		&tele.InputInvoiceMessageContent{},
 		&tele.InputSticker{},
 		&tele.InputMedia{},
+
+		&tele.LoginURL{},
+		&tele.CallbackGame{},
 	}
 
 	notStructTypes = []string{
