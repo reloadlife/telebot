@@ -60,15 +60,14 @@ func (b *body) MarshalJSON() ([]byte, error) {
 }
 
 func (b *body) Add(key string, value any) {
-	switch value.(type) {
+	switch v := value.(type) {
 	case []byte:
 		b.hasFiles = true
 		b.files = append(b.files, file{
 			name: key,
-			data: value.([]byte),
+			data: v,
 		})
 	case Uploadable:
-		v := value.(Uploadable)
 		switch {
 		case v.InCloud():
 			b.b[key] = v.GetFileID()
