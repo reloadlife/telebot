@@ -2,6 +2,15 @@ package telebot
 
 // a place for all Custom Types, that are either String or Int or ENUM or what ever (except Struct and Interface)
 
+type MessageOriginType string
+
+const (
+	MessageOriginUser       MessageOriginType = "user"
+	MessageOriginHiddenUser MessageOriginType = "hidden_user"
+	MessageOriginChat       MessageOriginType = "chat"
+	MessageOriginChannel    MessageOriginType = "channel"
+)
+
 type StickerEmoji string
 type Emoji StickerEmoji
 

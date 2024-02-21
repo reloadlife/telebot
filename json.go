@@ -68,6 +68,9 @@ func (c *LoginURL) MarshalJSON() ([]byte, error)             { return json.Marsh
 func (c *ChatMember) MarshalJSON() ([]byte, error)           { return json.Marshal(*c) }
 func (c *ReactionType) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
 func (c *ReactionCount) MarshalJSON() ([]byte, error)        { return json.Marshal(*c) }
+func (c *ChatInviteLink) MarshalJSON() ([]byte, error)       { return json.Marshal(*c) }
+func (r *Rights) MarshalJSON() ([]byte, error)               { return json.Marshal(*r) }
+func (m *MessageOrigin) MarshalJSON() ([]byte, error)        { return json.Marshal(*m) }
 
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
 	if u.IsAccessible() {
@@ -430,6 +433,42 @@ func (c *ReactionCount) UnmarshalJSON(data []byte) error {
 		*Alias
 	}{
 		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatInviteLink) UnmarshalJSON(data []byte) error {
+	type Alias ChatInviteLink
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (r *Rights) UnmarshalJSON(data []byte) error {
+	type Alias Rights
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(r),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (m *MessageOrigin) UnmarshalJSON(data []byte) error {
+	type Alias MessageOrigin
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(m),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

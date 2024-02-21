@@ -1,23 +1,5 @@
 package telebot
 
-type Rights struct {
-	IsAnonymous         bool  `json:"is_anonymous"`
-	CanManageChat       bool  `json:"can_manage_chat"`
-	CanDeleteMessages   bool  `json:"can_delete_messages"`
-	CanManageVideoChats bool  `json:"can_manage_video_chats"`
-	CanRestrictMembers  bool  `json:"can_restrict_members"`
-	CanPromoteMembers   bool  `json:"can_promote_members"`
-	CanChangeInfo       bool  `json:"can_change_info"`
-	CanInviteUsers      bool  `json:"can_invite_users"`
-	CanPostMessages     *bool `json:"can_post_messages,omitempty"`
-	CanEditMessages     *bool `json:"can_edit_messages,omitempty"`
-	CanPinMessages      *bool `json:"can_pin_messages,omitempty"`
-	CanPostStories      *bool `json:"can_post_stories,omitempty"`
-	CanEditStories      *bool `json:"can_edit_stories,omitempty"`
-	CanDeleteStories    *bool `json:"can_delete_stories,omitempty"`
-	CanManageTopics     *bool `json:"can_manage_topics,omitempty"`
-}
-
 type banChatMemberRequest struct {
 	ChatID         any    `json:"chat_id"`
 	UserID         int64  `json:"user_id"`
@@ -105,36 +87,6 @@ type editChatInviteLinkRequest struct {
 type revokeChatInviteLinkRequest struct {
 	ChatID     any    `json:"chat_id"`
 	InviteLink string `json:"invite_link"`
-}
-
-// ChatInviteLink represents an invite link for a chat.
-type ChatInviteLink struct {
-	// InviteLink is the invite link.
-	InviteLink string `json:"invite_link"`
-
-	// Creator is the creator of the link.
-	Creator *User `json:"creator,omitempty"`
-
-	// CreatesJoinRequest indicates if users joining the chat via the link need to be approved by chat administrators.
-	CreatesJoinRequest bool `json:"creates_join_request,omitempty"`
-
-	// IsPrimary indicates if the link is primary.
-	IsPrimary bool `json:"is_primary,omitempty"`
-
-	// IsRevoked indicates if the link is revoked.
-	IsRevoked bool `json:"is_revoked,omitempty"`
-
-	// Name is the invite link name.
-	Name string `json:"name,omitempty"`
-
-	// ExpireDate is the point in time (Unix timestamp) when the link will expire or has been expired.
-	ExpireDate int64 `json:"expire_date,omitempty"`
-
-	// MemberLimit is the maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999.
-	MemberLimit int `json:"member_limit,omitempty"`
-
-	// PendingJoinRequestCount is the number of pending join requests created using this link.
-	PendingJoinRequestCount int `json:"pending_join_request_count,omitempty"`
 }
 
 type approveChatJoinRequestParams struct {

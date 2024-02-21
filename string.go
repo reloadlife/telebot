@@ -92,11 +92,6 @@ func (c *PollAnswer) String() string {
 	return fmt.Sprintf("%s{ID: %s}\n%s\n", c.ReflectType(), c.ID, indented)
 }
 
-func (c *ChatMemberUpdated) String() string {
-	indented, _ := json.MarshalIndent(c, "", "  ")
-	return fmt.Sprintf("%s{}\n%s\n", c.ReflectType(), indented)
-}
-
 func (c *ChatJoinRequest) String() string {
 	indented, _ := json.MarshalIndent(c, "", "  ")
 	return fmt.Sprintf("%s{}\n%s\n", c.ReflectType(), indented)
@@ -200,4 +195,35 @@ func (c *ReactionType) String() string {
 
 func (c *ReactionCount) String() string {
 	return fmt.Sprintf("%s{%s %d}", c.ReflectType(), c.ReactionType, c.Count)
+}
+
+func (c *ChatMemberUpdated) String() string {
+	return fmt.Sprintf("%s{%s %s}",
+		c.ReflectType(),
+		c.Chat.String(),
+		c.From.String(),
+	)
+}
+
+func (c *ChatInviteLink) String() string {
+	return fmt.Sprintf("%s{ID: %s, Creator: %s, IsPrimary: %v}",
+		c.ReflectType(),
+		c.InviteLink,
+		c.Creator,
+		c.IsPrimary,
+	)
+}
+
+func (r *Rights) String() string {
+	return fmt.Sprintf("%s{}",
+		r.ReflectType(),
+	)
+}
+
+func (m *MessageOrigin) String() string {
+	return fmt.Sprintf("%s{ID: %d, %s}",
+		m.ReflectType(),
+		m.ID,
+		m.Type(),
+	)
 }

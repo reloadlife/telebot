@@ -29,12 +29,16 @@ func (u *MaybeInaccessibleMessage) Verify() error {
 
 func (c *Chat) Verify() error { return verify(c) }
 
-func (c *ChatPhoto) Verify() error       { return verify(c) }
-func (c *ChatLocation) Verify() error    { return verify(c) }
-func (c *ChatPermissions) Verify() error { return verify(c) }
-func (c *CallbackGame) Verify() error    { return verify(c) }
-func (c *LoginURL) Verify() error        { return verify(c) }
-func (c *ChatMember) Verify() error      { return verify(c) }
-func (u *User) Verify() error            { return verify(u) }
-func (c *ReactionType) Verify() error    { return verify(c) }
-func (c *ReactionCount) Verify() error   { return verify(c) }
+func (c *ChatPhoto) Verify() error         { return verify(c) }
+func (c *ChatLocation) Verify() error      { return verify(c) }
+func (c *ChatPermissions) Verify() error   { return verify(c) }
+func (c *CallbackGame) Verify() error      { return verify(c) }
+func (c *LoginURL) Verify() error          { return verify(c) }
+func (c *ChatMember) Verify() error        { return verify(c) }
+func (u *User) Verify() error              { return verify(u) }
+func (c *ReactionType) Verify() error      { return verify(c) }
+func (c *ReactionCount) Verify() error     { return verify(c) }
+func (c *ChatMemberUpdated) Verify() error { return verify(c) }
+func (c *ChatInviteLink) Verify() error    { return verify(c) }
+func (r *Rights) Verify() error            { return verify(r) }
+func (m *MessageOrigin) Verify() error     { return verify(m) }
