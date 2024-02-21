@@ -111,3 +111,8 @@ func (c *ChatBoostRemoved) String() string {
 	indented, _ := json.MarshalIndent(c, "", "  ")
 	return fmt.Sprintf("%s{}\n%s\n", c.ReflectType(), indented)
 }
+
+func (i *InlineKeyboardButton) String() string {
+	return fmt.Sprintf("InlineButton{%s %v}", i.Text, i.CallbackData)
+}
+func (i *KeyboardButton) String() string { return fmt.Sprintf("Keyboard{%si.Text}", i.Text) }

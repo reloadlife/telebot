@@ -1,14 +1,72 @@
 package telebot
 
 import (
-	"encoding/json"
 	"net/url"
 )
 
-type SwitchInlineQueryStringType string
-type SwitchInlineQueryChosenChatStringType string
-type RequestContact bool
-type RequestLocation bool
+// SwitchInlineQueryChosenChat represents an inline button that switches the current user to inline mode
+// in a chosen chat, with an optional default inline query.
+type SwitchInlineQueryChosenChat struct {
+	// Query is the default inline query to be inserted in the input field.
+	// If left empty, only the bot's username will be inserted.
+	Query *string `json:"query,omitempty"`
+
+	// AllowUserChats, if true, allows private chats with users to be chosen.
+	AllowUserChats *bool `json:"allow_user_chats,omitempty"`
+
+	// AllowBotChats, if true, allows private chats with bots to be chosen.
+	AllowBotChats *bool `json:"allow_bot_chats,omitempty"`
+
+	// AllowGroupChats, if true, allows group and supergroup chats to be chosen.
+	AllowGroupChats *bool `json:"allow_group_chats,omitempty"`
+
+	// AllowChannelChats, if true, allows channel chats to be chosen.
+	AllowChannelChats *bool `json:"allow_channel_chats,omitempty"`
+}
+
+// KeyboardButtonRequestChat defines the criteria used to request a suitable chat.
+type KeyboardButtonRequestChat struct {
+	// RequestID Signed 32-bit identifier of the request
+	RequestID int32 `json:"request_id"`
+	// ChatIsChannel Pass true to request a channel chat, pass false to request a group or a supergroup chat
+	ChatIsChannel bool `json:"chat_is_channel"`
+	// ChatIsForum  Optional. Pass true to request a forum supergroup, pass false to request a non-forum chat
+	ChatIsForum bool `json:"chat_is_forum,omitempty"`
+	// ChatHasUsernameOptional. Pass true to request a supergroup or a channel with a username, pass false to request a chat without a username
+	ChatHasUsername bool `json:"chat_has_username,omitempty"`
+	// ChatIsCreated Optional. Pass true to request a chat owned by the user. Otherwise, no additional restrictions are applied
+	ChatIsCreated bool `json:"chat_is_created,omitempty"`
+	// UserRights Optional. Administrator rights required for the user in the chat
+	UserRights Rights `json:"user_administrator_rights,omitempty"`
+	// BotRights  Optional. Administrator rights required for the bot in the chat
+	BotRights Rights `json:"bot_administrator_rights,omitempty"`
+	// BotIsMember Optional. Pass true to request a chat with the bot as a member. Otherwise, no additional restrictions are applied
+	BotIsMember bool `json:"bot_is_member,omitempty"`
+}
+
+// KeyboardButtonRequestUsers defines the criteria used to request suitable users.
+type KeyboardButtonRequestUsers struct {
+	// RequestID  Signed 32-bit identifier of the request
+	RequestID int32 `json:"request_id"`
+	// UserIsBot. Request bots if true, regular users if false
+	UserIsBot *bool `json:"user_is_bot,omitempty"`
+	// UserIsPremium. Request premium users if true, non-premium users if false
+	UserIsPremium *bool `json:"user_is_premium,omitempty"`
+	// MaxQuantity. Maximum number of users to be selected; 1-10. Defaults to 1.
+	MaxQuantity *int `json:"max_quantity,omitempty"`
+}
+
+// KeyboardButtonPollType represents the type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
+type KeyboardButtonPollType struct {
+	// Type
+	// If quiz is passed, the user will be allowed to create only polls in the quiz mode.
+	// If regular is passed,
+	// only regular polls will be allowed.
+	// Otherwise, the user will be allowed to create a poll of any type.
+	Type *PollType `json:"type,omitempty"`
+}
+
+// Actual Button Types =>
 
 // InlineKeyboardButton represents one button of an inline keyboard. You must use exactly one of the optional fields.
 type InlineKeyboardButton struct {
@@ -94,26 +152,6 @@ func NewInlineKeyboardButton(text string, options ...any) Button {
 	return btn
 }
 
-func (i *InlineKeyboardButton) String() string {
-	return i.Text
-}
-func (*InlineKeyboardButton) Button() {}
-func (i *InlineKeyboardButton) MarshalJSON() ([]byte, error) {
-	return json.Marshal(*i)
-}
-func (i *InlineKeyboardButton) UnmarshalJSON(data []byte) error {
-	type Alias InlineKeyboardButton
-	aux := &struct {
-		*Alias
-	}{
-		Alias: (*Alias)(i),
-	}
-	if err := json.Unmarshal(data, &aux); err != nil {
-		return err
-	}
-	return nil
-}
-
 // KeyboardButton represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text.
 // The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
 type KeyboardButton struct {
@@ -176,24 +214,4 @@ func NewKeyboardButton(text string, options ...any) Button {
 	}
 
 	return btn
-}
-
-func (i *KeyboardButton) String() string {
-	return i.Text
-}
-func (*KeyboardButton) Button() {}
-func (i *KeyboardButton) MarshalJSON() ([]byte, error) {
-	return json.Marshal(*i)
-}
-func (i *KeyboardButton) UnmarshalJSON(data []byte) error {
-	type Alias KeyboardButton
-	aux := &struct {
-		*Alias
-	}{
-		Alias: (*Alias)(i),
-	}
-	if err := json.Unmarshal(data, &aux); err != nil {
-		return err
-	}
-	return nil
 }

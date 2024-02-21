@@ -2,7 +2,6 @@ package telebot
 
 import (
 	"encoding/json"
-	"go.mamad.dev/telebot/log"
 )
 
 func (u *Update) MarshalJSON() ([]byte, error) {
@@ -59,9 +58,10 @@ func (c *ChatBoostUpdated) MarshalJSON() ([]byte, error) {
 func (c *ChatBoostRemoved) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
 }
+func (i *InlineKeyboardButton) MarshalJSON() ([]byte, error) { return json.Marshal(*i) }
+func (i *KeyboardButton) MarshalJSON() ([]byte, error)       { return json.Marshal(*i) }
 
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
-	log.Debugf("MaybeInaccessibleMessage.MarshalJSON: %v", u)
 	if u.IsAccessible() {
 		return u.AccessibleMessage.MarshalJSON()
 	}
@@ -316,6 +316,161 @@ func (c *ChatBoostRemoved) UnmarshalJSON(b []byte) error {
 		Alias: (*Alias)(c),
 	}
 	if err := json.Unmarshal(b, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (i *KeyboardButton) UnmarshalJSON(data []byte) error {
+	type Alias KeyboardButton
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+
+///// ReplyMarkup Custom UnmarshalJSON / MarshalJSON.
+
+// UnmarshalJSON implements json.Unmarshaler.
+// It supports both InlineKeyboardButton and KeyboardButton.
+// It is a bit complicated to unmarshal into interface types, believe me.
+// this thing works perfectly for our goal, if you have a better idea, a PR is appreciated.
+func (r *Row) UnmarshalJSON(data []byte) error {
+	var buttons []json.RawMessage
+	if err := json.Unmarshal(data, &buttons); err != nil {
+		return err
+	}
+
+	butts := make([]Button, 0, len(buttons))
+
+	for _, buttonData := range buttons {
+		var rawButton struct {
+			URL                          *string                      `json:"url,omitempty"`
+			CallbackData                 *string                      `json:"callback_data,omitempty"`
+			LoginURL                     *LoginUrl                    `json:"login_url,omitempty"`
+			SwitchInlineQuery            *string                      `json:"switch_inline_query,omitempty"`
+			SwitchInlineQueryCurrentChat *string                      `json:"switch_inline_query_current_chat,omitempty"`
+			SwitchInlineQueryChosenChat  *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`
+			CallbackGame                 *CallbackGame                `json:"callback_game,omitempty"`
+			Pay                          *bool                        `json:"pay,omitempty"`
+
+			RequestUsers    *KeyboardButtonRequestUsers `json:"request_users,omitempty"`
+			RequestChat     *KeyboardButtonRequestChat  `json:"request_chat,omitempty"`
+			RequestContact  *bool                       `json:"request_contact,omitempty"`
+			RequestLocation *bool                       `json:"request_location,omitempty"`
+			RequestPoll     *KeyboardButtonPollType     `json:"request_poll,omitempty"`
+
+			Text   string      `json:"text"`
+			WebApp *WebAppInfo `json:"web_app,omitempty"`
+		}
+
+		if err := json.Unmarshal(buttonData, &rawButton); err != nil {
+			return err
+		}
+
+		switch {
+		case rawButton.URL != nil || rawButton.LoginURL != nil || rawButton.CallbackData != nil ||
+			rawButton.SwitchInlineQuery != nil || rawButton.SwitchInlineQueryCurrentChat != nil ||
+			rawButton.SwitchInlineQueryChosenChat != nil || rawButton.CallbackGame != nil || rawButton.Pay != nil:
+			butts = append(butts, &InlineKeyboardButton{
+				Text:                         rawButton.Text,
+				URL:                          rawButton.URL,
+				CallbackData:                 rawButton.CallbackData,
+				WebApp:                       rawButton.WebApp,
+				LoginURL:                     rawButton.LoginURL,
+				SwitchInlineQuery:            rawButton.SwitchInlineQuery,
+				SwitchInlineQueryCurrentChat: rawButton.SwitchInlineQueryCurrentChat,
+				SwitchInlineQueryChosenChat:  rawButton.SwitchInlineQueryChosenChat,
+				CallbackGame:                 rawButton.CallbackGame,
+				Pay:                          rawButton.Pay,
+			})
+
+		case rawButton.RequestUsers != nil || rawButton.RequestChat != nil ||
+			rawButton.RequestContact != nil || rawButton.RequestLocation != nil || rawButton.RequestPoll != nil:
+			butts = append(butts, &KeyboardButton{
+				Text:            rawButton.Text,
+				RequestUsers:    rawButton.RequestUsers,
+				RequestChat:     rawButton.RequestChat,
+				RequestContact:  rawButton.RequestContact,
+				RequestLocation: rawButton.RequestLocation,
+				RequestPoll:     rawButton.RequestPoll,
+			})
+
+		default:
+			return ErrUnsupportedButton
+		}
+	}
+
+	*r = butts
+	return nil
+}
+
+func (m *InlineKeyboardMarkup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		InlineKeyboard []json.RawMessage `json:"inline_keyboard"`
+	}
+
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.InlineKeyboard = make([]Row, len(raw.InlineKeyboard))
+	for i, row := range raw.InlineKeyboard {
+		r := Row{}
+		err := r.UnmarshalJSON(row)
+		if err != nil {
+			return err
+		}
+		m.InlineKeyboard[i] = r
+	}
+	return nil
+}
+
+func (m *ReplyKeyboardMarkup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Keyboard              []json.RawMessage `json:"inline_keyboard"`
+		IsPersistent          *bool             `json:"is_persistent,omitempty"`
+		ResizeKeyboard        *bool             `json:"resize_keyboard,omitempty"`
+		OneTimeKeyboard       *bool             `json:"one_time_keyboard,omitempty"`
+		InputFieldPlaceholder *string           `json:"input_field_placeholder,omitempty"`
+		Selective             *bool             `json:"selective,omitempty"`
+	}
+
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.Keyboard = make([]Row, len(raw.Keyboard))
+	m.IsPersistent = raw.IsPersistent
+	m.ResizeKeyboard = raw.ResizeKeyboard
+	m.OneTimeKeyboard = raw.OneTimeKeyboard
+	m.InputFieldPlaceholder = raw.InputFieldPlaceholder
+	m.Selective = raw.Selective
+
+	m.Keyboard = make([]Row, len(raw.Keyboard))
+	for i, row := range raw.Keyboard {
+		r := Row{}
+		err := r.UnmarshalJSON(row)
+		if err != nil {
+			return err
+		}
+		m.Keyboard[i] = r
+	}
+	return nil
+}
+
+func (i *InlineKeyboardButton) UnmarshalJSON(data []byte) error {
+	type Alias InlineKeyboardButton
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil

@@ -22,7 +22,7 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Acc
 		case *ReplyParameters:
 			params.ReplyParameters = v
 
-		case *ReplyMarkup:
+		case ReplyMarkup:
 			params.ReplyMarkup = v
 
 		case Option:

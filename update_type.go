@@ -1,31 +1,5 @@
 package telebot
 
-// UpdateType represents the type of update.
-type UpdateType int
-
-// Update types.
-const (
-	UpdateTypeMessage UpdateType = iota
-	UpdateTypeEditedMessage
-	UpdateTypeChannelPost
-	UpdateTypeEditedChannelPost
-	UpdateTypeMessageReaction
-	UpdateTypeMessageReactionCount
-	UpdateTypeInlineQuery
-	UpdateTypeChosenInlineResult
-	UpdateTypeCallbackQuery
-	UpdateTypeShippingQuery
-	UpdateTypePreCheckoutQuery
-	UpdateTypePoll
-	UpdateTypePollAnswer
-	UpdateTypeMyChatMember
-	UpdateTypeChatMember
-	UpdateTypeChatJoinRequest
-	UpdateTypeChatBoost
-	UpdateTypeChatBoostRemoved
-	UpdateTypeUnknown
-)
-
 // String returns the string representation of the UpdateType.
 func (ut UpdateType) String() string {
 	switch ut {

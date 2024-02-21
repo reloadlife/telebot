@@ -2,13 +2,6 @@ package telebot
 
 import "fmt"
 
-type PollType string
-
-const (
-	PollTypeRegular PollType = "regular"
-	PollTypeQuiz    PollType = "quiz"
-)
-
 // Poll contains information about a poll.
 type Poll struct {
 	// ID is the unique poll identifier.

@@ -1,7 +1,5 @@
 package telebot
 
-type CustomEmoji string
-
 type Sticker struct {
 	FileID           string        `json:"file_id"`
 	FileUniqueID     string        `json:"file_unique_id"`

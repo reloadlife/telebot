@@ -24,7 +24,7 @@ func Test_Online_SendMessage(t *testing.T) {
 
 	whereTo := &Chat{ID: chat}
 
-	var msg *AccessibleMessage = nil
+	var msg *AccessibleMessage
 
 	t.Run("Normal", func(t *testing.T) {
 		msg, err = tg.SendMessage(whereTo, "Hello, World!")
@@ -49,14 +49,16 @@ func Test_Online_SendMessage(t *testing.T) {
 		require.Equal(t, *msg.Text, text) // nullable stuff are pointer. So,
 		// we need to dereference it.
 		require.NotNil(t, msg.ReplyTo)
-		require.Equal(t, msg.ReplyTo.ID, msg.ID)
+		require.Equal(t, msg.ReplyTo.ID, msg.ID-1)
 	})
 
 	t.Run("WithReplyMarkup", func(t *testing.T) {
 		text := fmt.Sprintf("Hello, World, With reply markup and Reply Message (%d)!", msg.ID)
 		markup := NewMarkup()
 		markup.Inline()
-		markup.AddRow(&InlineKeyboardButton{Text: "Hello, World!", CallbackData: toPtr("hello-world")})
+		markup.AddRow(NewInlineKeyboardButton("Hey", "hey"))
+		markup.AddRow(NewInlineKeyboardButton("Test From GH", "hey"))
+
 		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
 			ChatID:                   whereTo.Recipient(),
 			MessageID:                int(msg.ID),
@@ -65,7 +67,7 @@ func Test_Online_SendMessage(t *testing.T) {
 		require.NoError(t, err)
 		require.NotNil(t, msg)
 
-		require.Equal(t, msg.ReplyMarkup, markup)
+		require.True(t, markup.deepEqual(msg.ReplyMarkup))
 	})
 }
 

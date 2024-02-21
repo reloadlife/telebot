@@ -18,6 +18,8 @@ type ReplyMarkup interface {
 
 	MarshalJSON() ([]byte, error)
 	UnmarshalJSON(data []byte) error
+
+	deepEqual(other any) bool
 }
 
 func NewMarkup() ReplyMarkup {

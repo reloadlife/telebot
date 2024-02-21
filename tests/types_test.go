@@ -233,6 +233,16 @@ var (
 		"InputMediaType",
 
 		"PollType",
+		"SwitchInlineQueryStringType",
+		"SwitchInlineQueryChosenChatStringType",
+		"Button",
+		"Row",
+		"RequestLocation",
+		"RequestContact",
+		"ForceReplyMarkup",
+
+		"MenuButtonType",
+		"Equal",
 	}
 )
 
