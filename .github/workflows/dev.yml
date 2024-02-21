@@ -18,16 +18,28 @@ jobs:
         uses: actions/checkout@v4
       - name: Run unit tests with coverage.
         run: |
+          export TELEBOT_SECRET=${{ secrets.TELEBOT_SECRET }}
+          export CHAT_ID=${{ secrets.CHAT_ID }}
+          export USER_ID=${{ secrets.USER_ID }}
+          export GOPATH=$(go env GOPATH)
           go clean -modcache
           go mod tidy
-          
-          mkdir -p ./resources/cover
-          rm -f ./resources/cover/tmp-cover.log;
-          
-          export TELEBOT_SECRET=${{ secrets.TELEBOT_SECRET }} && export CHAT_ID=${{ secrets.CHAT_ID }} && export USER_ID=${{ secrets.USER_ID }} && go test -p 1 ./... -coverprofile resources/cover/cover.out
+          make junit
+
+      - name: Test Summary
+        uses: test-summary/action@v1
+        if: always()
+        with:
+          paths: |
+            ./resources/cover/report.xml            
 
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v3
+        if: always()
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: ./resources/cover/cover.out
+
+      - name: Go cover diff
+        uses: kskitek/coverdiff@v0.3.0
+        if: always()

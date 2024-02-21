@@ -2,6 +2,10 @@ name: "PR Checks"
 
 on: [ pull_request ]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   check-commit-messages:
     runs-on: ubuntu-latest
@@ -75,10 +79,14 @@ jobs:
           export GOPATH=$(go env GOPATH)
           go clean -modcache
           go mod tidy
-          make cover
+          make junit
 
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v3
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: ./resources/cover/cover.out
+
+      - name: Go cover diff
+        uses: kskitek/coverdiff@v0.3.0
+        if: always()
