@@ -1,5 +1,18 @@
 package telebot
 
+import "encoding/json"
+
+// markupType is the type of the markup.
+// telegram as if v7.1 has 4 types of markup:
+type markupType int
+
+const (
+	markupTypeInline markupType = iota
+	markupTypeKeyboard
+	markupTypeRemoveKeyboard
+	markupTypeForceReply
+)
+
 type MenuButton struct {
 }
 
@@ -23,49 +36,6 @@ type SwitchInlineQueryChosenChat struct {
 	AllowChannelChats *bool `json:"allow_channel_chats,omitempty"`
 }
 
-// InlineKeyboardButton represents one button of an inline keyboard. You must use exactly one of the optional fields.
-type InlineKeyboardButton struct {
-	// Text is the label text on the button.
-	Text string `json:"text"`
-
-	// URL is the optional HTTP or tg:// URL to be opened when the button is pressed.
-	// Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username,
-	// if this is allowed by their privacy settings.
-	URL string `json:"url,omitempty"`
-
-	// CallbackData is the optional data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes.
-	CallbackData string `json:"callback_data,omitempty"`
-
-	// WebApp is the optional description of the Web App that will be launched when the user presses the button.
-	// The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.
-	// Available only in private chats between a user and the bot.
-	WebApp *WebAppInfo `json:"web_app,omitempty"`
-
-	// LoginURL is the optional HTTPS URL used to automatically authorize the user.
-	// Can be used as a replacement for the Telegram Login Widget.
-	LoginURL *LoginUrl `json:"login_url,omitempty"`
-
-	// SwitchInlineQuery is the optional inline query to prompt the user to select one of their chats and insert the bot's username and the specified inline query in the input field.
-	// May be empty, in which case just the bot's username will be inserted.
-	SwitchInlineQuery string `json:"switch_inline_query,omitempty"`
-
-	// SwitchInlineQueryCurrentChat is the optional inline query to insert the bot's username and the specified inline query in the current chat's input field.
-	// May be empty, in which case only the bot's username will be inserted.
-	SwitchInlineQueryCurrentChat string `json:"switch_inline_query_current_chat,omitempty"`
-
-	// SwitchInlineQueryChosenChat is the optional inline query to prompt the user to select one of their chats of the specified type,
-	// open that chat and insert the bot's username and the specified inline query in the input field.
-	SwitchInlineQueryChosenChat *SwitchInlineQueryChosenChat `json:"switch_inline_query_chosen_chat,omitempty"`
-
-	// CallbackGame is the optional description of the game that will be launched when the user presses the button.
-	// NOTE: This type of button must always be the first button in the first row.
-	CallbackGame *CallbackGame `json:"callback_game,omitempty"`
-
-	// Pay is the optional boolean to specify True, to send a Pay button.
-	// NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
-	Pay bool `json:"pay,omitempty"`
-}
-
 // KeyboardButtonRequestChat defines the criteria used to request a suitable chat.
 type KeyboardButtonRequestChat struct {
 	// RequestID Signed 32-bit identifier of the request
@@ -84,6 +54,17 @@ type KeyboardButtonRequestChat struct {
 	BotRights Rights `json:"bot_administrator_rights,omitempty"`
 	// BotIsMember Optional. Pass true to request a chat with the bot as a member. Otherwise, no additional restrictions are applied
 	BotIsMember bool `json:"bot_is_member,omitempty"`
+}
+
+type ForceReplyMarkup struct {
+	// ForceReply requests clients to display a reply interface to the user (act as if the user selected the bot's message and tapped 'Reply').
+	// This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
+	// Available in private chats only
+	ForceReply bool `json:"force_reply"`
+	// InputFieldPlaceholder is the placeholder to be shown in the input field when the reply interface is active; 1-64 characters
+	InputFieldPlaceholder *string `json:"input_field_placeholder,omitempty"`
+	// Selective Use this parameter if you want to force reply from specific users only
+	Selective *bool `json:"selective,omitempty"`
 }
 
 // ReplyKeyboardRemove removes the current custom keyboard and displays the default letter-keyboard.
@@ -116,36 +97,88 @@ type KeyboardButtonPollType struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// KeyboardButton represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text.
-// The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
-type KeyboardButton struct {
-	// Text is the text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed.
-	Text string `json:"text"`
+func (m *InlineKeyboardMarkup) ReplyMarkup() {}
 
-	// RequestUsers, if specified, pressing the button will open a list of suitable users.
-	// Identifiers of selected users will be sent to the bot in a “users_shared” service message.
-	// Available in private chats only.
-	RequestUsers *KeyboardButtonRequestUsers `json:"request_users,omitempty"`
+// InlineKeyboardMarkup represents an inline keyboard that appears right next to the message it belongs to.
+type InlineKeyboardMarkup struct {
+	// InlineKeyboard is an array of button rows, each represented by an array of InlineKeyboardButton objects.
+	InlineKeyboard []Row `json:"inline_keyboard"`
+}
 
-	// RequestChat, if specified, pressing the button will open a list of suitable chats.
-	// Tapping on a chat will send its identifier to the bot in a “chat_shared” service message.
-	// Available in private chats only.
-	RequestChat *KeyboardButtonRequestChat `json:"request_chat,omitempty"`
+func (m *InlineKeyboardMarkup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		InlineKeyboard []json.RawMessage `json:"inline_keyboard"`
+	}
 
-	// RequestContact, if True, the user's phone number will be sent as a contact when the button is pressed.
-	// Available in private chats only.
-	RequestContact bool `json:"request_contact,omitempty"`
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
 
-	// RequestLocation, if True, the user's current location will be sent when the button is pressed.
-	// Available in private chats only.
-	RequestLocation bool `json:"request_location,omitempty"`
+	m.InlineKeyboard = make([]Row, len(raw.InlineKeyboard))
+	for i, row := range raw.InlineKeyboard {
+		r := Row{}
+		err := r.UnmarshalJSON(row)
+		if err != nil {
+			return err
+		}
+		m.InlineKeyboard[i] = r
+	}
+	return nil
+}
 
-	// RequestPoll, if specified, the user will be asked to create a poll and send it to the bot when the button is pressed.
-	// Available in private chats only.
-	RequestPoll *KeyboardButtonPollType `json:"request_poll,omitempty"`
+// ReplyKeyboardMarkup represents a custom keyboard with reply options.
+type ReplyKeyboardMarkup struct {
+	// Keyboard is an array of button rows, each represented by an array of KeyboardButton objects.
+	Keyboard []Row `json:"keyboard"`
 
-	// WebApp, if specified, the described Web App will be launched when the button is pressed.
-	// The Web App will be able to send a “web_app_data” service message.
-	// Available in private chats only.
-	WebApp *WebAppInfo `json:"web_app,omitempty"`
+	// IsPersistent requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
+	IsPersistent *bool `json:"is_persistent,omitempty"`
+
+	// ResizeKeyboard requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
+	ResizeKeyboard *bool `json:"resize_keyboard,omitempty"`
+
+	// OneTimeKeyboard requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
+	OneTimeKeyboard *bool `json:"one_time_keyboard,omitempty"`
+
+	// InputFieldPlaceholder is the placeholder to be shown in the input field when the keyboard is active; 1-64 characters.
+	InputFieldPlaceholder *string `json:"input_field_placeholder,omitempty"`
+
+	// Selective is used if you want to show the keyboard to specific users only.
+	// Targets:
+	// 1) Users that are @mentioned in the text of the AccessibleMessage object.
+	// 2) If the bot's message is a reply to a message in the same chat and forum topic, the sender of the original message.
+	Selective *bool `json:"selective,omitempty"`
+}
+
+func (m *ReplyKeyboardMarkup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Keyboard              []json.RawMessage `json:"inline_keyboard"`
+		IsPersistent          *bool             `json:"is_persistent,omitempty"`
+		ResizeKeyboard        *bool             `json:"resize_keyboard,omitempty"`
+		OneTimeKeyboard       *bool             `json:"one_time_keyboard,omitempty"`
+		InputFieldPlaceholder *string           `json:"input_field_placeholder,omitempty"`
+		Selective             *bool             `json:"selective,omitempty"`
+	}
+
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.Keyboard = make([]Row, len(raw.Keyboard))
+	m.IsPersistent = raw.IsPersistent
+	m.ResizeKeyboard = raw.ResizeKeyboard
+	m.OneTimeKeyboard = raw.OneTimeKeyboard
+	m.InputFieldPlaceholder = raw.InputFieldPlaceholder
+	m.Selective = raw.Selective
+
+	m.Keyboard = make([]Row, len(raw.Keyboard))
+	for i, row := range raw.Keyboard {
+		r := Row{}
+		err := r.UnmarshalJSON(row)
+		if err != nil {
+			return err
+		}
+		m.Keyboard[i] = r
+	}
+	return nil
 }

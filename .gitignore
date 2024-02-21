@@ -36,3 +36,5 @@ terraform*
 .vscode
 .old
 .env
+resources
+coverage.*

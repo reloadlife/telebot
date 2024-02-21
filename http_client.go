@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"reflect"
+	"strings"
 )
 
 func (b *bot) sendMethodRequest(method method, params any) ([]byte, error) {
@@ -49,7 +50,15 @@ func structToMap(input any) map[string]any {
 			continue
 		}
 
-		result[jsonTag] = val.Field(i).Interface()
+		v := val.Field(i).Interface()
+		if strings.Contains(jsonTag, "omitempty") {
+			if reflect.DeepEqual(v, reflect.Zero(field.Type).Interface()) {
+				continue
+			}
+		}
+
+		jsonTag = strings.ReplaceAll(jsonTag, ",omitempty", "")
+		result[jsonTag] = v
 	}
 
 	return result

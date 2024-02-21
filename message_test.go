@@ -1,6 +1,7 @@
 package telebot
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/require"
 	"os"
 	"strconv"
@@ -23,13 +24,49 @@ func Test_Online_SendMessage(t *testing.T) {
 
 	whereTo := &Chat{ID: chat}
 
-	b, err := tg.SendMessage(whereTo, "Hello, World!")
-	require.NoError(t, err)
+	var msg *AccessibleMessage = nil
 
-	require.NotNil(t, b)
+	t.Run("Normal", func(t *testing.T) {
+		msg, err = tg.SendMessage(whereTo, "Hello, World!")
+		require.NoError(t, err)
+		require.NotNil(t, msg)
 
-	require.Equal(t, b.Chat.ID, chat)
-	require.Equal(t, *b.Text, "Hello, World!") // nullable stuff are pointer. So, we need to dereference it.
+		require.Equal(t, msg.Chat.ID, chat)
+		require.Equal(t, *msg.Text, "Hello, World!") // nullable stuff are pointer. So, we need to dereference it.
+	})
+
+	t.Run("WithReplyToPreviousMessage", func(t *testing.T) {
+		text := fmt.Sprintf("Hello, World, With reply to previous message (%d)!", msg.ID)
+		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
+			ChatID:                   whereTo.Recipient(),
+			MessageID:                int(msg.ID),
+			AllowSendingWithoutReply: toPtr(false),
+		})
+		require.NoError(t, err)
+		require.NotNil(t, msg)
+
+		require.Equal(t, msg.Chat.ID, chat)
+		require.Equal(t, *msg.Text, text) // nullable stuff are pointer. So,
+		// we need to dereference it.
+		require.NotNil(t, msg.ReplyTo)
+		require.Equal(t, msg.ReplyTo.ID, msg.ID)
+	})
+
+	t.Run("WithReplyMarkup", func(t *testing.T) {
+		text := fmt.Sprintf("Hello, World, With reply markup and Reply Message (%d)!", msg.ID)
+		markup := NewMarkup()
+		markup.Inline()
+		markup.AddRow(&InlineKeyboardButton{Text: "Hello, World!", CallbackData: toPtr("hello-world")})
+		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
+			ChatID:                   whereTo.Recipient(),
+			MessageID:                int(msg.ID),
+			AllowSendingWithoutReply: toPtr(false),
+		}, markup)
+		require.NoError(t, err)
+		require.NotNil(t, msg)
+
+		require.Equal(t, msg.ReplyMarkup, markup)
+	})
 }
 
 func TestMessage(t *testing.T) {

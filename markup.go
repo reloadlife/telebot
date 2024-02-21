@@ -1,48 +1,211 @@
 package telebot
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"errors"
+)
 
 type ReplyMarkup interface {
 	ReplyMarkup()
+
+	AddRow(row ...Button)
+	AddRows(rows ...Row)
+
+	Inline()
+	Keyboard(opts ...any)
+	Remove(opts ...any)
+	ForceReply(opts ...any)
 
 	MarshalJSON() ([]byte, error)
 	UnmarshalJSON(data []byte) error
 }
 
-// InlineKeyboardMarkup represents an inline keyboard that appears right next to the message it belongs to.
-type InlineKeyboardMarkup struct {
-	// InlineKeyboard is an array of button rows, each represented by an array of InlineKeyboardButton objects.
-	InlineKeyboard [][]InlineKeyboardButton `json:"inline_keyboard"`
+func NewMarkup() ReplyMarkup {
+	return &baseMarkUp{}
 }
 
-func (m *InlineKeyboardMarkup) ReplyMarkup() {}
-func (m *InlineKeyboardMarkup) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m)
+func (*baseMarkUp) ReplyMarkup() {}
+
+type baseMarkUp struct {
+	markupType markupType
+	inline     *InlineKeyboardMarkup
+	keyboard   *ReplyKeyboardMarkup
+	remove     *ReplyKeyboardRemove
+	forceReply *ForceReplyMarkup
 }
-func (m *InlineKeyboardMarkup) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, m)
+
+func (b *baseMarkUp) Remove(opts ...any) {
+	isSelective := false
+	if len(opts) > 0 {
+		for _, opt := range opts {
+			switch opt.(type) {
+			case Option:
+				switch opt.(Option) {
+				case Selective:
+					isSelective = true
+				default:
+					panic("telebot: unsupported option for RemoveKeyboard")
+				}
+			default:
+				panic("telebot: unsupported option for RemoveKeyboard")
+			}
+
+		}
+	}
+	b.markupType = markupTypeRemoveKeyboard
+	b.remove = &ReplyKeyboardRemove{
+		RemoveKeyboard: true,
+		Selective:      &isSelective,
+	}
+}
+func (b *baseMarkUp) ForceReply(opts ...any) {
+	isSelective := false
+	input := ""
+
+	if len(opts) > 0 {
+		for _, opt := range opts {
+			switch opt.(type) {
+			case string:
+				input = opt.(string)
+
+			case Option:
+				switch opt.(Option) {
+				case Selective:
+					isSelective = true
+				default:
+					panic("telebot: unsupported option for forceReplyKeyboard")
+				}
+			default:
+				panic("telebot: unsupported option for forceReplyKeyboard")
+			}
+
+		}
+	}
+	b.markupType = markupTypeForceReply
+	b.forceReply = &ForceReplyMarkup{
+		ForceReply:            true,
+		InputFieldPlaceholder: &input,
+		Selective:             &isSelective,
+	}
+}
+func (b *baseMarkUp) Inline() {
+	b.markupType = markupTypeInline
+	b.inline = &InlineKeyboardMarkup{
+		InlineKeyboard: make([]Row, 0), // basically a Nil Slice of Rows with no Keys
+	}
+}
+func (b *baseMarkUp) Keyboard(opts ...any) {
+	isSelective := false
+	input := ""
+	resize := false
+	oneTime := false
+	persistent := false
+
+	if len(opts) > 0 {
+		for _, opt := range opts {
+			switch opt.(type) {
+			case string:
+				input = opt.(string)
+
+			case Option:
+				switch opt.(Option) {
+				case ResizeKeyboard:
+					resize = true
+				case OneTimeKeyboard:
+					oneTime = true
+				case PersistentKeyboard:
+					persistent = true
+				case Selective:
+					isSelective = true
+				default:
+					panic("telebot: unsupported option for keyboard")
+				}
+			default:
+				panic("telebot: unsupported option for keyboard")
+			}
+
+		}
+	}
+	b.markupType = markupTypeKeyboard
+	b.keyboard = &ReplyKeyboardMarkup{
+		Keyboard:              make([]Row, 0),
+		IsPersistent:          &persistent,
+		ResizeKeyboard:        &resize,
+		OneTimeKeyboard:       &oneTime,
+		InputFieldPlaceholder: &input,
+		Selective:             &isSelective,
+	}
 }
 
-// ReplyKeyboardMarkup represents a custom keyboard with reply options.
-type ReplyKeyboardMarkup struct {
-	// Keyboard is an array of button rows, each represented by an array of KeyboardButton objects.
-	Keyboard [][]KeyboardButton `json:"keyboard"`
+func (b *baseMarkUp) MarshalJSON() ([]byte, error) {
+	switch b.markupType {
+	case markupTypeInline:
+		return json.Marshal(b.inline)
+	case markupTypeKeyboard:
+		return json.Marshal(b.keyboard)
+	case markupTypeRemoveKeyboard:
+		return json.Marshal(b.remove)
+	case markupTypeForceReply:
+		return json.Marshal(b.forceReply)
+	}
+	return nil, nil
+}
 
-	// IsPersistent requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
-	IsPersistent bool `json:"is_persistent,omitempty"`
+func (b *baseMarkUp) UnmarshalJSON(data []byte) error {
+	var temp struct {
+		InlineKeyboard any `json:"inline_keyboard"`
+		Keyboard       any `json:"keyboard"`
+		RemoveKeyboard any `json:"remove_keyboard"`
+		ForceReply     any `json:"force_reply"`
+	}
+	if err := json.Unmarshal(data, &temp); err != nil {
+		return err
+	}
 
-	// ResizeKeyboard requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
-	ResizeKeyboard bool `json:"resize_keyboard,omitempty"`
+	switch {
+	case temp.InlineKeyboard != nil:
+		b.markupType = markupTypeInline
+		b.inline = &InlineKeyboardMarkup{}
+		return b.inline.UnmarshalJSON(data)
 
-	// OneTimeKeyboard requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
-	OneTimeKeyboard bool `json:"one_time_keyboard,omitempty"`
+	case temp.Keyboard != nil:
+		b.markupType = markupTypeKeyboard
+		b.keyboard = &ReplyKeyboardMarkup{}
+		return b.keyboard.UnmarshalJSON(data)
 
-	// InputFieldPlaceholder is the placeholder to be shown in the input field when the keyboard is active; 1-64 characters.
-	InputFieldPlaceholder string `json:"input_field_placeholder,omitempty"`
+	case temp.RemoveKeyboard != nil:
+		b.markupType = markupTypeRemoveKeyboard
+		b.remove = &ReplyKeyboardRemove{}
+		return json.Unmarshal(data, b.remove)
 
-	// Selective is used if you want to show the keyboard to specific users only.
-	// Targets:
-	// 1) Users that are @mentioned in the text of the AccessibleMessage object.
-	// 2) If the bot's message is a reply to a message in the same chat and forum topic, the sender of the original message.
-	Selective bool `json:"selective,omitempty"`
+	case temp.ForceReply != nil:
+		b.markupType = markupTypeForceReply
+		b.forceReply = &ForceReplyMarkup{}
+		return json.Unmarshal(data, b.forceReply)
+	}
+
+	return errors.New("telebot: unknown markup type")
+}
+
+func (b *baseMarkUp) AddRows(rows ...Row) {
+	switch b.markupType {
+	case markupTypeInline:
+		b.inline.InlineKeyboard = append(b.inline.InlineKeyboard, rows...)
+	case markupTypeKeyboard:
+		b.keyboard.Keyboard = append(b.keyboard.Keyboard, rows...)
+
+	default:
+		panic("telebot: only Inline and Keyboard markups can have rows.")
+	}
+}
+func (b *baseMarkUp) AddRow(row ...Button) {
+	switch b.markupType {
+	case markupTypeInline:
+		b.inline.InlineKeyboard = append(b.inline.InlineKeyboard, row)
+	case markupTypeKeyboard:
+		b.keyboard.Keyboard = append(b.keyboard.Keyboard, row)
+
+	default:
+		panic("telebot: only Inline and Keyboard markups can have rows.")
+	}
 }

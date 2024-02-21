@@ -11,4 +11,9 @@ const (
 
 	DisableContentTypeDetection
 	Streamable
+
+	ResizeKeyboard
+	OneTimeKeyboard
+	PersistentKeyboard
+	Selective
 )

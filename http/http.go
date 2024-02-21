@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const DefaultTelegramApiURL = "https://api.telegram.org"
+const DefaultTelegramAPIURL = "https://api.telegram.org"
 
 type Client interface {
 	Do(req *http.Request) (*http.Response, error)
@@ -20,20 +20,22 @@ type httpClient struct {
 	client  *http.Client
 }
 
-func NewHTTPClient(baseUrl string, timeOut time.Duration) Client {
-	if baseUrl == "" {
-		defaultUrl, has := os.LookupEnv("TELEBOT_API_URL")
-		baseUrl = DefaultTelegramApiURL
+func NewHTTPClient(baseURL string, timeOut time.Duration) Client {
+	if baseURL == "" {
+		defaultURL, has := os.LookupEnv("TELEBOT_API_URL")
+		baseURL = DefaultTelegramAPIURL
 		if has {
-			baseUrl = defaultUrl
+			baseURL = defaultURL
 		}
 	}
 	return &httpClient{
-		url:     baseUrl,
+		url:     baseURL,
 		timeout: timeOut,
 		client: &http.Client{
-			Transport: http.DefaultTransport,
-			Timeout:   timeOut,
+			Transport: &LoggingTransport{
+				Transport: http.DefaultTransport,
+			},
+			Timeout: timeOut,
 		},
 	}
 }

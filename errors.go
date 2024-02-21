@@ -79,6 +79,7 @@ var (
 // Bad Type Errors
 var (
 	ErrNoMessageToMarshal = NewError(400, "Bad Type: no message to marshal (nil message)")
+	ErrUnsupportedButton  = NewError(400, "Bad Type: unsupported button")
 	ErrNoMessageToSend    = NewError(400, "Bad Type: no message to send (nil message)")
 	ErrNoMessageToReply   = NewError(400, "Bad Type: no message to reply (nil message)")
 	ErrNoMessageToForward = NewError(400, "Bad Type: no message to forward (nil message)")

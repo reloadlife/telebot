@@ -32,6 +32,9 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Acc
 
 			case Protected:
 				params.ProtectContent = toPtr(true)
+
+			default:
+				panic("telebot: option type not supported")
 			}
 
 		case *int:
