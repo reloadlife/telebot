@@ -172,6 +172,8 @@ var (
 
 		&tele.LoginURL{},
 		&tele.CallbackGame{},
+
+		&tele.ChatBoostAdded{},
 	}
 
 	notStructTypes = []string{

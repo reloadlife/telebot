@@ -71,8 +71,8 @@ cover-html: cover ## Run tests with coverage and opens browser with result (html
 	@go tool cover -html resources/cover/cover.out
 
 junit:
-	@go install github.com/jstemmer/go-junit-report@latest
 	@mkdir -p ./resources/cover
 	@rm -f ./resources/cover/tmp-cover.log;
-	@go test -p 1 ./... -coverprofile resources/cover/cover.out | go-junit-report -set-exit-code > resources/cover/report.xml
+	@go install github.com/jstemmer/go-junit-report@latest
+	@go test -p 1 -v ./... -coverprofile resources/cover/cover.out | go-junit-report > resources/cover/report.xml
 
