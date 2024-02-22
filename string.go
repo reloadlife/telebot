@@ -384,3 +384,155 @@ func (f *PassportFile) String() string {
 func (f *WriteAccessAllowed) String() string {
 	return fmt.Sprintf("%s{}", f.ReflectType())
 }
+
+func (f *ForumTopicCreated) String() string {
+	return fmt.Sprintf("%s{%s}", f.ReflectType(), f.Name)
+}
+
+func (f *ForumTopicEdited) String() string {
+	return fmt.Sprintf("%s{%s}", f.ReflectType(), f.Name)
+}
+
+func (f *ForumTopicClosed) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *ForumTopicReopened) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *GeneralForumTopicHidden) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *GeneralForumTopicUnhidden) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *GiveawayCreated) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *GiveawayCompleted) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *GiveawayWinners) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *Giveaway) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *VideoChatScheduled) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *VideoChatEnded) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *VideoChatStarted) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *VideoChatParticipantsInvited) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *WebAppData) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *SentWebAppMessage) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *WebAppInfo) String() string {
+	return fmt.Sprintf("%s{%s}", f.ReflectType(), f.URL)
+}
+
+func (f *BotCommand) String() string {
+	return fmt.Sprintf("%s{ /%s %s }", f.ReflectType(), f.Command, f.Description)
+}
+
+func (f *BotCommandScope) String() string {
+	return fmt.Sprintf("%s{ %s %d %d}", f.ReflectType(), f.Type(), f.ChatID, f.UserID)
+}
+
+func (f *UserProfilePhotos) String() string {
+	return fmt.Sprintf("%s{ %d %d }", f.ReflectType(), f.TotalCount, len(f.Photos))
+}
+
+func (f *UserChatBoosts) String() string {
+	return fmt.Sprintf("%s{ %d }", f.ReflectType(), len(f.Boosts))
+}
+
+func (f *StickerSet) String() string {
+	return fmt.Sprintf("%s{ %s %s }", f.ReflectType(), f.Name, f.Title)
+}
+
+func (f *ReplyParameters) String() string {
+	return fmt.Sprintf("%s{ %d -> %s }", f.ReflectType(), f.MessageID, f.ChatID)
+}
+
+func (f *QueryResult) String() string {
+	return fmt.Sprintf("%s{ %s %s }", f.ReflectType(), f.Type(), f.ID)
+}
+
+func (f *PassportElementError) String() string {
+	return fmt.Sprintf("%s{ }", f.ReflectType())
+}
+
+func (f *MenuButton) String() string {
+	return fmt.Sprintf("%s{ %s %p }", f.ReflectType(), f.Type(), f.Text)
+}
+
+func (f *MaskPosition) String() string {
+	return fmt.Sprintf("%s{ }", f.ReflectType())
+}
+
+func (f *ForumTopic) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Name)
+}
+
+func (f *ChatBoost) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.BoostID)
+}
+
+func (f *ChatBoostSource) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Source)
+}
+
+func (f *InputContactMessageContent) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.PhoneNumber)
+}
+
+func (f *InputLocationMessageContent) String() string {
+	return fmt.Sprintf("%s{ %v %v }", f.ReflectType(), f.Latitude, f.Longitude)
+}
+
+func (f *InputTextMessageContent) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.MessageText)
+}
+
+func (f *InputVenueMessageContent) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Title)
+}
+
+func (f *InputInvoiceMessageContent) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Title)
+}
+
+func (f *InputSticker) String() string {
+	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Sticker.String())
+}
+
+func (f *InputMedia) String() string {
+	return fmt.Sprintf("%s{ %s %s }", f.ReflectType(), f.Type(), f.Media.String())
+}
+
+func (f *ChatBoostAdded) String() string {
+	return fmt.Sprintf("%s{ %d }", f.ReflectType(), f.BoostCount)
+}

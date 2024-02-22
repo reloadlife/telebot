@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 type InputMessageContent interface {
 	JSONer
 	InputMessageContent()
@@ -12,6 +14,9 @@ type InputTextMessageContent struct {
 	LinkPreviewOptions LinkPreviewOptions `json:"link_preview_options,omitempty"`
 }
 
+func (c *InputTextMessageContent) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputTextMessageContent) Type() string        { return "InputTextMessageContent" }
+
 type InputLocationMessageContent struct {
 	Latitude             float64 `json:"latitude"`
 	Longitude            float64 `json:"longitude"`
@@ -20,6 +25,9 @@ type InputLocationMessageContent struct {
 	Heading              int     `json:"heading,omitempty"`
 	ProximityAlertRadius int     `json:"proximity_alert_radius,omitempty"`
 }
+
+func (c *InputLocationMessageContent) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputLocationMessageContent) Type() string        { return "InputLocationMessageContent" }
 
 type InputVenueMessageContent struct {
 	Latitude        float64 `json:"latitude"`
@@ -32,12 +40,18 @@ type InputVenueMessageContent struct {
 	GooglePlaceType string  `json:"google_place_type,omitempty"`
 }
 
+func (c *InputVenueMessageContent) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputVenueMessageContent) Type() string        { return "InputVenueMessageContent" }
+
 type InputContactMessageContent struct {
 	PhoneNumber string `json:"phone_number"`
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name,omitempty"`
 	VCard       string `json:"vcard,omitempty"`
 }
+
+func (c *InputContactMessageContent) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputContactMessageContent) Type() string        { return "InputContactMessageContent" }
 
 type InputInvoiceMessageContent struct {
 	Title                     string         `json:"title"`
@@ -61,6 +75,9 @@ type InputInvoiceMessageContent struct {
 	SendEmailToProvider       bool           `json:"send_email_to_provider,omitempty"`
 	IsFlexible                bool           `json:"is_flexible,omitempty"`
 }
+
+func (c *InputInvoiceMessageContent) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputInvoiceMessageContent) Type() string        { return "InputInvoiceMessageContent" }
 
 func (i *InputTextMessageContent) InputMessageContent()     {}
 func (i *InputLocationMessageContent) InputMessageContent() {}

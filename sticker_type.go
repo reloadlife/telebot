@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // StickerSet represents a sticker set.
 type StickerSet struct {
 	// Name represents the sticker set name.
@@ -24,9 +26,15 @@ type StickerSet struct {
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 }
 
+func (c *StickerSet) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *StickerSet) Type() string        { return "StickerSet" }
+
 type InputSticker struct {
 	Sticker      File           `json:"sticker"`
 	EmojiList    []StickerEmoji `json:"emoji_list,omitempty"`
 	MaskPosition *MaskPosition  `json:"mask_position,omitempty"`
 	Keywords     []string       `json:"keywords,omitempty"`
 }
+
+func (c *InputSticker) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputSticker) Type() string        { return "InputSticker" }

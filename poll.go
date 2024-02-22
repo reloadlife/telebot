@@ -50,5 +50,8 @@ func (c *Poll) ReflectType() string {
 }
 
 func (c *Poll) Type() string {
+	if c.PollType == "" {
+		return Unknown
+	}
 	return string(c.PollType)
 }

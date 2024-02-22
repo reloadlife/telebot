@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // WebAppData describes data sent from a Web App to the bot.
 type WebAppData struct {
 	// Data is the data sent from the Web App. Be aware that a bad client can send arbitrary data in this field.
@@ -10,12 +12,21 @@ type WebAppData struct {
 	ButtonText string `json:"button_text"`
 }
 
+func (c *WebAppData) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *WebAppData) Type() string        { return "WebAppData" }
+
 // WebAppInfo describes a Web App.
 type WebAppInfo struct {
 	// URL is an HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps.
 	URL string `json:"url"`
 }
 
+func (c *WebAppInfo) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *WebAppInfo) Type() string        { return "WebAppInfo" }
+
 type SentWebAppMessage struct {
 	InlineMessageID *string `json:"inline_message_id,omitempty"`
 }
+
+func (c *SentWebAppMessage) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *SentWebAppMessage) Type() string        { return "SentWebAppMessage" }

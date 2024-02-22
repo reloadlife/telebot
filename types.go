@@ -2,6 +2,63 @@ package telebot
 
 // a place for all Custom Types, that are either String or Int or ENUM or what ever (except Struct and Interface)
 
+const Unknown = "unknown"
+
+type InputMediaType string
+
+const (
+	InputMediaAnimation InputMediaType = "animation"
+	InputMediaDocument  InputMediaType = "document"
+	InputMediaAudio     InputMediaType = "audio"
+	InputMediaPhoto     InputMediaType = "photo"
+	InputMediaVideo     InputMediaType = "video"
+)
+
+type InlineQueryResultType string
+
+const (
+	InlineQueryResultCachedAudio    InlineQueryResultType = "audio"
+	InlineQueryResultCachedDocument InlineQueryResultType = "document"
+	InlineQueryResultCachedGif      InlineQueryResultType = "gif"
+	InlineQueryResultCachedMpeg4Gif InlineQueryResultType = "mpeg4_gif"
+	InlineQueryResultCachedPhoto    InlineQueryResultType = "photo"
+	InlineQueryResultCachedSticker  InlineQueryResultType = "sticker"
+	InlineQueryResultCachedVideo    InlineQueryResultType = "video"
+	InlineQueryResultCachedVoice    InlineQueryResultType = "voice"
+	InlineQueryResultArticle        InlineQueryResultType = "article"
+	InlineQueryResultAudio          InlineQueryResultType = "audio"
+	InlineQueryResultContact        InlineQueryResultType = "contact"
+	InlineQueryResultGame           InlineQueryResultType = "game"
+	InlineQueryResultDocument       InlineQueryResultType = "document"
+	InlineQueryResultGif            InlineQueryResultType = "gif"
+	InlineQueryResultLocation       InlineQueryResultType = "location"
+	InlineQueryResultMpeg4Gif       InlineQueryResultType = "mpeg4_gif"
+	InlineQueryResultPhoto          InlineQueryResultType = "photo"
+	InlineQueryResultVenue          InlineQueryResultType = "venue"
+	InlineQueryResultVideo          InlineQueryResultType = "video"
+	InlineQueryResultVoice          InlineQueryResultType = "voice"
+)
+
+type BoostSource string
+
+const (
+	ChatBoostSourcePremium  BoostSource = "premium"
+	ChatBoostSourceGiftCode BoostSource = "gift_code"
+	ChatBoostSourceGiveaway BoostSource = "giveaway"
+)
+
+type BotCommandScopeType string
+
+const (
+	BotCommandScopeDefault               BotCommandScopeType = "default"
+	BotCommandScopeAllPrivateChats       BotCommandScopeType = "all_private_chats"
+	BotCommandScopeAllGroupChats         BotCommandScopeType = "all_group_chats"
+	BotCommandScopeAllChatAdministrators BotCommandScopeType = "all_chat_administrators"
+	BotCommandScopeChat                  BotCommandScopeType = "chat"
+	BotCommandScopeChatAdministrators    BotCommandScopeType = "chat_administrators"
+	BotCommandScopeChatMember            BotCommandScopeType = "chat_member"
+)
+
 type MessageOriginType string
 
 const (

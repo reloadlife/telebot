@@ -1,8 +1,13 @@
 package telebot
 
+import "fmt"
+
 // GiveawayCreated represents a service message about the creation of a scheduled giveaway.
 // Currently holds no information.
 type GiveawayCreated struct{}
+
+func (c *GiveawayCreated) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *GiveawayCreated) Type() string        { return "GiveawayCreated" }
 
 // Giveaway represents a message about a scheduled giveaway.
 type Giveaway struct {
@@ -32,6 +37,9 @@ type Giveaway struct {
 	// PremiumSubscriptionMonthCount is the number of months the Telegram Premium subscription won from the giveaway will be active for.
 	PremiumSubscriptionMonthCount int `json:"premium_subscription_month_count,omitempty"`
 }
+
+func (c *Giveaway) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Giveaway) Type() string        { return "Giveaway" }
 
 // GiveawayWinners represents a message about the completion of a giveaway with public winners.
 type GiveawayWinners struct {
@@ -69,6 +77,9 @@ type GiveawayWinners struct {
 	PrizeDescription string `json:"prize_description,omitempty"`
 }
 
+func (c *GiveawayWinners) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *GiveawayWinners) Type() string        { return "GiveawayWinners" }
+
 // GiveawayCompleted represents a service message about the completion of a giveaway without public winners.
 type GiveawayCompleted struct {
 	// WinnerCount is the number of winners in the giveaway.
@@ -80,3 +91,6 @@ type GiveawayCompleted struct {
 	// GiveawayMessage is the message with the giveaway that was completed if it wasn't deleted.
 	GiveawayMessage AccessibleMessage `json:"giveaway_message,omitempty"`
 }
+
+func (c *GiveawayCompleted) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *GiveawayCompleted) Type() string        { return "GiveawayCompleted" }

@@ -1,23 +1,12 @@
 package telebot
 
 import (
-	"encoding/json"
-	"errors"
-)
-
-type InputMediaType string
-
-const (
-	InputMediaAnimation InputMediaType = "animation"
-	InputMediaDocument  InputMediaType = "document"
-	InputMediaAudio     InputMediaType = "audio"
-	InputMediaPhoto     InputMediaType = "photo"
-	InputMediaVideo     InputMediaType = "video"
+	"fmt"
 )
 
 type InputMedia struct {
-	Type  InputMediaType `json:"type"`
-	Media File           `json:"media"`
+	MediaType InputMediaType `json:"type"`
+	Media     File           `json:"media"`
 
 	Caption   *string    `json:"caption,omitempty"`
 	ParseMode *ParseMode `json:"parse_mode,omitempty"`
@@ -39,61 +28,10 @@ type InputMedia struct {
 	DisableContentTypeDetection *bool `json:"disable_content_type_detection,omitempty"`
 }
 
-var (
-	ErrBadMediaType = errors.New("bad media type")
-)
-
-func (i *InputMedia) MarshalJSON() ([]byte, error) {
-	if err := i.Verify(); err != nil {
-		return nil, err
+func (c *InputMedia) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *InputMedia) Type() string {
+	if c.MediaType == "" {
+		return Unknown
 	}
-
-	return json.Marshal(i)
-}
-
-// Verify will verify the InputMedia struct and cleans it up before sending it to Telegram.
-func (i *InputMedia) Verify() error {
-	switch i.Type {
-	case InputMediaAnimation:
-		i.Thumb = nil
-		i.Width = nil
-		i.Height = nil
-		i.Duration = nil
-		i.Streamable = nil
-		i.DisableContentTypeDetection = nil
-
-	case InputMediaDocument:
-		i.Width = nil
-		i.Height = nil
-
-	case InputMediaAudio:
-		i.Height = nil
-		i.Duration = nil
-		i.Preformer = nil
-		i.Title = nil
-		i.DisableContentTypeDetection = nil
-
-	case InputMediaPhoto:
-		i.Thumb = nil
-		i.Width = nil
-		i.Height = nil
-		i.Duration = nil
-		i.Streamable = nil
-		i.Preformer = nil
-		i.Title = nil
-		i.DisableContentTypeDetection = nil
-
-	case InputMediaVideo:
-		i.Thumb = nil
-		i.Width = nil
-		i.Height = nil
-		i.Duration = nil
-		i.Streamable = nil
-		i.DisableContentTypeDetection = nil
-
-	default:
-		return ErrBadMediaType
-	}
-
-	return nil
+	return string(c.MediaType)
 }

@@ -1,40 +1,12 @@
 package telebot
 
-import (
-	"encoding/json"
-	"errors"
-)
+import "fmt"
 
 type QueryResults []QueryResult
 
-type InlineQueryResultType string
-
-const (
-	InlineQueryResultCachedAudio    InlineQueryResultType = "audio"
-	InlineQueryResultCachedDocument InlineQueryResultType = "document"
-	InlineQueryResultCachedGif      InlineQueryResultType = "gif"
-	InlineQueryResultCachedMpeg4Gif InlineQueryResultType = "mpeg4_gif"
-	InlineQueryResultCachedPhoto    InlineQueryResultType = "photo"
-	InlineQueryResultCachedSticker  InlineQueryResultType = "sticker"
-	InlineQueryResultCachedVideo    InlineQueryResultType = "video"
-	InlineQueryResultCachedVoice    InlineQueryResultType = "voice"
-	InlineQueryResultArticle        InlineQueryResultType = "article"
-	InlineQueryResultAudio          InlineQueryResultType = "audio"
-	InlineQueryResultContact        InlineQueryResultType = "contact"
-	InlineQueryResultGame           InlineQueryResultType = "game"
-	InlineQueryResultDocument       InlineQueryResultType = "document"
-	InlineQueryResultGif            InlineQueryResultType = "gif"
-	InlineQueryResultLocation       InlineQueryResultType = "location"
-	InlineQueryResultMpeg4Gif       InlineQueryResultType = "mpeg4_gif"
-	InlineQueryResultPhoto          InlineQueryResultType = "photo"
-	InlineQueryResultVenue          InlineQueryResultType = "venue"
-	InlineQueryResultVideo          InlineQueryResultType = "video"
-	InlineQueryResultVoice          InlineQueryResultType = "voice"
-)
-
 type QueryResult struct {
 	// Type of the result
-	Type InlineQueryResultType `json:"type"`
+	QueryType InlineQueryResultType `json:"type"`
 
 	// Unique identifier for this result, 1-64 Bytes
 	ID string `json:"id"`
@@ -67,27 +39,11 @@ type QueryResult struct {
 	ThumbnailHeight *int `json:"thumbnail_height,omitempty"`
 }
 
-var (
-	ErrBadInlineQueryResultType = errors.New("telebot: bad inline query result type")
-)
-
-func (i *QueryResult) MarshalJSON() ([]byte, error) {
-	if err := i.Verify(); err != nil {
-		return nil, err
+func (c *QueryResult) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *QueryResult) Type() string {
+	if c.QueryType == "" {
+		return Unknown
 	}
 
-	return json.Marshal(i)
-}
-
-// Verify will verify the QueryResult struct and cleans it up before sending it to Telegram.
-func (i *QueryResult) Verify() error {
-	switch i.Type {
-
-	case InlineQueryResultArticle:
-
-	default:
-		return ErrBadInlineQueryResultType
-	}
-
-	return nil
+	return string(c.QueryType)
 }

@@ -130,3 +130,5 @@ func (f *UserProfilePhotos) Verify() error            { return verify(f) }
 func (f *UserChatBoosts) Verify() error               { return verify(f) }
 func (f *SentWebAppMessage) Verify() error            { return verify(f) }
 func (f *ReplyParameters) Verify() error              { return verify(f) }
+func (f *QueryResult) Verify() error                  { return verify(f) }
+func (f *InputMedia) Verify() error                   { return verify(f) }

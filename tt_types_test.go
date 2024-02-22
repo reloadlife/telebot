@@ -249,6 +249,7 @@ var (
 		"PhotoSizes",
 		"Stringer",
 		"JSONer",
+		"IFile",
 	}
 )
 
@@ -394,8 +395,14 @@ func Test_TT_Type_CompatibilityJSON(t *testing.T) {
 			_ = t.Run(fmt.Sprintf("TestTypes/JSONer/%T/JSONMarshal", typ), func(t *testing.T) {
 				require.NotPanics(t, func() {
 					b, err := V.MarshalJSON()
-					require.NoError(t, err)
-					require.NotEmptyf(t, b, "type %T returned an empty string", typ)
+					if fmt.Sprintf("%T", typ) == "*telebot.MaybeInaccessibleMessage" {
+						// it will return an error due to nil data being provided
+						require.Error(t, err)
+						require.Emptyf(t, b, "type %T returned an empty string", typ)
+					} else {
+						require.NoError(t, err)
+						require.NotEmptyf(t, b, "type %T returned an empty string", typ)
+					}
 				})
 			})
 			_ = t.Run(fmt.Sprintf("TestTypes/JSONer/%T/JSONUnmarshal", typ), func(t *testing.T) {

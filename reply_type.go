@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 type ReplyParameters struct {
 	MessageID                int      `json:"message_id"`
 	ChatID                   any      `json:"chat_id,omitempty"`
@@ -9,3 +11,6 @@ type ReplyParameters struct {
 	QuoteEntities            []Entity `json:"quote_entities,omitempty"`
 	QuotePosition            *int     `json:"quote_position,omitempty"`
 }
+
+func (c *ReplyParameters) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *ReplyParameters) Type() string        { return "ReplyParameters" }

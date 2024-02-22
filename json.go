@@ -88,6 +88,79 @@ func (i *KeyboardButtonRequestChat) MarshalJSON() ([]byte, error)   { return jso
 func (i *KeyboardButtonRequestUsers) MarshalJSON() ([]byte, error)  { return json.Marshal(*i) }
 func (i *KeyboardButtonPollType) MarshalJSON() ([]byte, error)      { return json.Marshal(*i) }
 
+func (c *ChatBoostAdded) MarshalJSON() ([]byte, error)               { return json.Marshal(*c) }
+func (c *ShippingAddress) MarshalJSON() ([]byte, error)              { return json.Marshal(*c) }
+func (c *OrderInfo) MarshalJSON() ([]byte, error)                    { return json.Marshal(*c) }
+func (c *LabeledPrice) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
+func (c *Invoice) MarshalJSON() ([]byte, error)                      { return json.Marshal(*c) }
+func (c *SuccessfulPayment) MarshalJSON() ([]byte, error)            { return json.Marshal(*c) }
+func (c *PassportData) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
+func (c *EncryptedPassportElement) MarshalJSON() ([]byte, error)     { return json.Marshal(*c) }
+func (c *EncryptedCredentials) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
+func (c *PassportFile) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
+func (c *PassportElementError) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
+func (c *InputSticker) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
+func (c *InputInvoiceMessageContent) MarshalJSON() ([]byte, error)   { return json.Marshal(*c) }
+func (c *InputLocationMessageContent) MarshalJSON() ([]byte, error)  { return json.Marshal(*c) }
+func (c *InputVenueMessageContent) MarshalJSON() ([]byte, error)     { return json.Marshal(*c) }
+func (c *InputContactMessageContent) MarshalJSON() ([]byte, error)   { return json.Marshal(*c) }
+func (c *InputTextMessageContent) MarshalJSON() ([]byte, error)      { return json.Marshal(*c) }
+func (c *ChatBoostSource) MarshalJSON() ([]byte, error)              { return json.Marshal(*c) }
+func (c *ChatBoost) MarshalJSON() ([]byte, error)                    { return json.Marshal(*c) }
+func (f *File) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
+func (f *PhotoSize) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
+func (f *Audio) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
+func (f *Document) MarshalJSON() ([]byte, error)                     { return json.Marshal(*f) }
+func (f *Video) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
+func (f *Animation) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
+func (f *Voice) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
+func (f *VideoNote) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
+func (f *Contact) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
+func (f *Location) MarshalJSON() ([]byte, error)                     { return json.Marshal(*f) }
+func (f *Venue) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
+func (f *PollOption) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *Dice) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
+func (f *Game) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
+func (f *Sticker) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
+func (f *StickerSet) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *MaskPosition) MarshalJSON() ([]byte, error)                 { return json.Marshal(*f) }
+func (f *ForumTopic) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *ForumTopicClosed) MarshalJSON() ([]byte, error)             { return json.Marshal(*f) }
+func (f *ForumTopicReopened) MarshalJSON() ([]byte, error)           { return json.Marshal(*f) }
+func (f *ForumTopicEdited) MarshalJSON() ([]byte, error)             { return json.Marshal(*f) }
+func (f *ForumTopicCreated) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
+func (f *GameHighScore) MarshalJSON() ([]byte, error)                { return json.Marshal(*f) }
+func (f *MenuButton) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *TextQuote) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
+func (f *Entity) MarshalJSON() ([]byte, error)                       { return json.Marshal(*f) }
+func (f *LinkPreviewOptions) MarshalJSON() ([]byte, error)           { return json.Marshal(*f) }
+func (f *Story) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
+func (f *AutoDeleteTimerChanged) MarshalJSON() ([]byte, error)       { return json.Marshal(*f) }
+func (f *ProximityAlertTriggered) MarshalJSON() ([]byte, error)      { return json.Marshal(*f) }
+func (f *UsersShared) MarshalJSON() ([]byte, error)                  { return json.Marshal(*f) }
+func (f *ChatShared) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *WriteAccessAllowed) MarshalJSON() ([]byte, error)           { return json.Marshal(*f) }
+func (f *GeneralForumTopicHidden) MarshalJSON() ([]byte, error)      { return json.Marshal(*f) }
+func (f *GeneralForumTopicUnhidden) MarshalJSON() ([]byte, error)    { return json.Marshal(*f) }
+func (f *GiveawayCreated) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
+func (f *GiveawayCompleted) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
+func (f *GiveawayWinners) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
+func (f *Giveaway) MarshalJSON() ([]byte, error)                     { return json.Marshal(*f) }
+func (f *VideoChatScheduled) MarshalJSON() ([]byte, error)           { return json.Marshal(*f) }
+func (f *VideoChatEnded) MarshalJSON() ([]byte, error)               { return json.Marshal(*f) }
+func (f *VideoChatParticipantsInvited) MarshalJSON() ([]byte, error) { return json.Marshal(*f) }
+func (f *VideoChatStarted) MarshalJSON() ([]byte, error)             { return json.Marshal(*f) }
+func (f *WebAppData) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *WebAppInfo) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *BotCommand) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (f *BotCommandScope) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
+func (f *UserProfilePhotos) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
+func (f *UserChatBoosts) MarshalJSON() ([]byte, error)               { return json.Marshal(*f) }
+func (f *SentWebAppMessage) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
+func (f *ReplyParameters) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
+func (f *QueryResult) MarshalJSON() ([]byte, error)                  { return json.Marshal(*f) }
+func (f *InputMedia) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
 	if u.IsAccessible() {
 		return u.AccessibleMessage.MarshalJSON()
@@ -557,6 +630,870 @@ func (i *KeyboardButtonPollType) UnmarshalJSON(data []byte) error {
 		*Alias
 	}{
 		Alias: (*Alias)(i),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatBoostAdded) UnmarshalJSON(data []byte) error {
+	type Alias ChatBoostAdded
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ShippingAddress) UnmarshalJSON(data []byte) error {
+	type Alias ShippingAddress
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *OrderInfo) UnmarshalJSON(data []byte) error {
+	type Alias OrderInfo
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *LabeledPrice) UnmarshalJSON(data []byte) error {
+	type Alias LabeledPrice
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *Invoice) UnmarshalJSON(data []byte) error {
+	type Alias Invoice
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *SuccessfulPayment) UnmarshalJSON(data []byte) error {
+	type Alias SuccessfulPayment
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *PassportData) UnmarshalJSON(data []byte) error {
+	type Alias PassportData
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *EncryptedPassportElement) UnmarshalJSON(data []byte) error {
+	type Alias EncryptedPassportElement
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *EncryptedCredentials) UnmarshalJSON(data []byte) error {
+	type Alias EncryptedCredentials
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *PassportFile) UnmarshalJSON(data []byte) error {
+	type Alias PassportFile
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *PassportElementError) UnmarshalJSON(data []byte) error {
+	type Alias PassportElementError
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *InputSticker) UnmarshalJSON(data []byte) error {
+	type Alias InputSticker
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *InputInvoiceMessageContent) UnmarshalJSON(data []byte) error {
+	type Alias InputInvoiceMessageContent
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *InputLocationMessageContent) UnmarshalJSON(data []byte) error {
+	type Alias InputLocationMessageContent
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *InputVenueMessageContent) UnmarshalJSON(data []byte) error {
+	type Alias InputVenueMessageContent
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *InputContactMessageContent) UnmarshalJSON(data []byte) error {
+	type Alias InputContactMessageContent
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *InputTextMessageContent) UnmarshalJSON(data []byte) error {
+	type Alias InputTextMessageContent
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatBoostSource) UnmarshalJSON(data []byte) error {
+	type Alias ChatBoostSource
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (c *ChatBoost) UnmarshalJSON(data []byte) error {
+	type Alias ChatBoost
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *File) UnmarshalJSON(data []byte) error {
+	type Alias File
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *PhotoSize) UnmarshalJSON(data []byte) error {
+	type Alias PhotoSize
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Audio) UnmarshalJSON(data []byte) error {
+	type Alias Audio
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Document) UnmarshalJSON(data []byte) error {
+	type Alias Document
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Video) UnmarshalJSON(data []byte) error {
+	type Alias Video
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Animation) UnmarshalJSON(data []byte) error {
+	type Alias Animation
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Voice) UnmarshalJSON(data []byte) error {
+	type Alias Voice
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *VideoNote) UnmarshalJSON(data []byte) error {
+	type Alias VideoNote
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Contact) UnmarshalJSON(data []byte) error {
+	type Alias Contact
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Location) UnmarshalJSON(data []byte) error {
+	type Alias Location
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Venue) UnmarshalJSON(data []byte) error {
+	type Alias Venue
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *PollOption) UnmarshalJSON(data []byte) error {
+	type Alias PollOption
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Dice) UnmarshalJSON(data []byte) error {
+	type Alias Dice
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Game) UnmarshalJSON(data []byte) error {
+	type Alias Game
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Sticker) UnmarshalJSON(data []byte) error {
+	type Alias Sticker
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *StickerSet) UnmarshalJSON(data []byte) error {
+	type Alias StickerSet
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *MaskPosition) UnmarshalJSON(data []byte) error {
+	type Alias MaskPosition
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ForumTopic) UnmarshalJSON(data []byte) error {
+	type Alias ForumTopic
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ForumTopicClosed) UnmarshalJSON(data []byte) error {
+	type Alias ForumTopicClosed
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ForumTopicReopened) UnmarshalJSON(data []byte) error {
+	type Alias ForumTopicReopened
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ForumTopicEdited) UnmarshalJSON(data []byte) error {
+	type Alias ForumTopicEdited
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ForumTopicCreated) UnmarshalJSON(data []byte) error {
+	type Alias ForumTopicCreated
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *GameHighScore) UnmarshalJSON(data []byte) error {
+	type Alias GameHighScore
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *MenuButton) UnmarshalJSON(data []byte) error {
+	type Alias MenuButton
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *TextQuote) UnmarshalJSON(data []byte) error {
+	type Alias TextQuote
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Entity) UnmarshalJSON(data []byte) error {
+	type Alias Entity
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *LinkPreviewOptions) UnmarshalJSON(data []byte) error {
+	type Alias LinkPreviewOptions
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Story) UnmarshalJSON(data []byte) error {
+	type Alias Story
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *AutoDeleteTimerChanged) UnmarshalJSON(data []byte) error {
+	type Alias AutoDeleteTimerChanged
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ProximityAlertTriggered) UnmarshalJSON(data []byte) error {
+	type Alias ProximityAlertTriggered
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *UsersShared) UnmarshalJSON(data []byte) error {
+	type Alias UsersShared
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ChatShared) UnmarshalJSON(data []byte) error {
+	type Alias ChatShared
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *WriteAccessAllowed) UnmarshalJSON(data []byte) error {
+	type Alias WriteAccessAllowed
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *GeneralForumTopicHidden) UnmarshalJSON(data []byte) error {
+	type Alias GeneralForumTopicHidden
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *GeneralForumTopicUnhidden) UnmarshalJSON(data []byte) error {
+	type Alias GeneralForumTopicUnhidden
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *GiveawayCreated) UnmarshalJSON(data []byte) error {
+	type Alias GiveawayCreated
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *GiveawayCompleted) UnmarshalJSON(data []byte) error {
+	type Alias GiveawayCompleted
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *GiveawayWinners) UnmarshalJSON(data []byte) error {
+	type Alias GiveawayWinners
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *Giveaway) UnmarshalJSON(data []byte) error {
+	type Alias Giveaway
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *VideoChatScheduled) UnmarshalJSON(data []byte) error {
+	type Alias VideoChatScheduled
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *VideoChatEnded) UnmarshalJSON(data []byte) error {
+	type Alias VideoChatEnded
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *VideoChatParticipantsInvited) UnmarshalJSON(data []byte) error {
+	type Alias VideoChatParticipantsInvited
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *VideoChatStarted) UnmarshalJSON(data []byte) error {
+	type Alias VideoChatStarted
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *WebAppData) UnmarshalJSON(data []byte) error {
+	type Alias WebAppData
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *WebAppInfo) UnmarshalJSON(data []byte) error {
+	type Alias WebAppInfo
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *BotCommand) UnmarshalJSON(data []byte) error {
+	type Alias BotCommand
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *BotCommandScope) UnmarshalJSON(data []byte) error {
+	type Alias BotCommandScope
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *UserProfilePhotos) UnmarshalJSON(data []byte) error {
+	type Alias UserProfilePhotos
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *UserChatBoosts) UnmarshalJSON(data []byte) error {
+	type Alias UserChatBoosts
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *SentWebAppMessage) UnmarshalJSON(data []byte) error {
+	type Alias SentWebAppMessage
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *ReplyParameters) UnmarshalJSON(data []byte) error {
+	type Alias ReplyParameters
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *QueryResult) UnmarshalJSON(data []byte) error {
+	type Alias QueryResult
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	return nil
+}
+func (f *InputMedia) UnmarshalJSON(data []byte) error {
+	type Alias InputMedia
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(f),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

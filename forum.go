@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // ForumTopicCreated represents a service message about a new forum topic created in the chat.
 type ForumTopicCreated struct {
 	// Name is the name of the topic.
@@ -12,6 +14,9 @@ type ForumTopicCreated struct {
 	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
 }
 
+func (c *ForumTopicCreated) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *ForumTopicCreated) Type() string        { return "ForumTopicCreated" }
+
 // ForumTopicEdited represents a service message about an edited forum topic.
 type ForumTopicEdited struct {
 	// Name is optional. New name of the topic, if it was edited.
@@ -22,18 +27,33 @@ type ForumTopicEdited struct {
 	IconCustomEmojiID string `json:"icon_custom_emoji_id,omitempty"`
 }
 
+func (c *ForumTopicEdited) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *ForumTopicEdited) Type() string        { return "ForumTopicEdited" }
+
 // ForumTopicClosed represents a service message about a forum topic closed in the chat.
 // Currently holds no information.
 type ForumTopicClosed struct{}
+
+func (c *ForumTopicClosed) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *ForumTopicClosed) Type() string        { return "ForumTopicClosed" }
 
 // ForumTopicReopened represents a service message about a forum topic reopened in the chat.
 // Currently holds no information.
 type ForumTopicReopened struct{}
 
+func (c *ForumTopicReopened) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *ForumTopicReopened) Type() string        { return "ForumTopicReopened" }
+
 // GeneralForumTopicHidden represents a service message about General forum topic hidden in the chat.
 // Currently holds no information.
 type GeneralForumTopicHidden struct{}
 
+func (c *GeneralForumTopicHidden) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *GeneralForumTopicHidden) Type() string        { return "GeneralForumTopicHidden" }
+
 // GeneralForumTopicUnhidden represents a service message about General forum topic unhidden in the chat.
 // Currently holds no information.
 type GeneralForumTopicUnhidden struct{}
+
+func (c *GeneralForumTopicUnhidden) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *GeneralForumTopicUnhidden) Type() string        { return "GeneralForumTopicUnhidden" }
