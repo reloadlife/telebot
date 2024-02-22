@@ -108,6 +108,13 @@ func (f *File) GetFileName() string {
 	return f.fileName
 }
 func (f *File) GetFileReader() io.Reader {
+	if f.OnDisk() {
+		file, err := os.Open(f.FileLocal)
+		if err != nil {
+			return nil
+		}
+		return file
+	}
 	return f.FileReader
 }
 

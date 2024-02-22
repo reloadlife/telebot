@@ -5,7 +5,7 @@ import "encoding/json"
 func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*AccessibleMessage, error) {
 	params := sendPhotoRequest{
 		ChatID: to.Recipient(),
-		Photo:  photo,
+		Photo:  &photo,
 	}
 
 	for _, option := range options {

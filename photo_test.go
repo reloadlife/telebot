@@ -22,6 +22,7 @@ func Test_Online_SendPhoto(t *testing.T) {
 
 	pictureFromURL := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/telegramlogo.png")
 	pictureFromFile := FromDisk("./.github/telegramlogo.png")
+	pictureFromFile.fileName = "telegramlogo.png"
 
 	require.True(t, pictureFromFile.OnDisk())
 

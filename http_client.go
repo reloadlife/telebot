@@ -46,6 +46,8 @@ func structToMap(input any) map[string]any {
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		jsonTag := field.Tag.Get("json")
+		fileTag := field.Tag.Get("file")
+
 		if jsonTag == "" || jsonTag == "-" {
 			continue
 		}
@@ -58,6 +60,23 @@ func structToMap(input any) map[string]any {
 		}
 
 		jsonTag = strings.ReplaceAll(jsonTag, ",omitempty", "")
+		if fileTag != "" {
+			file, ok := v.(*File)
+			if ok {
+				if file.InCloud() {
+					result[jsonTag] = file.FileID
+					continue
+				}
+
+				if file.OnDisk() {
+					result[jsonTag] = file
+					continue
+				}
+
+				result[jsonTag] = file.GetFileURL()
+				continue
+			}
+		}
 		result[jsonTag] = v
 	}
 

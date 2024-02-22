@@ -3,9 +3,11 @@ package httpc
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"os"
+	"reflect"
 )
 
 type Body interface {
@@ -43,10 +45,30 @@ type body struct {
 }
 
 func NewBody(p map[string]any) Body {
+	files := make([]file, 0)
+	for k, v := range p {
+		v, ok := v.(Uploadable)
+		if ok {
+			if v.GetFileReader() != nil {
+				_b, err := io.ReadAll(v.GetFileReader())
+				if err != nil {
+					panic("httpc: failed to read file")
+				}
+				files = append(files, file{
+					name: k,
+					data: _b,
+				})
+				delete(p, k)
+				continue
+			}
+		}
+	}
 	return &body{
-		b:      p,
-		isNil:  p == nil,
-		buffer: &bytes.Buffer{},
+		files:    files,
+		hasFiles: len(files) > 0,
+		b:        p,
+		isNil:    p == nil,
+		buffer:   &bytes.Buffer{},
 	}
 }
 
@@ -125,6 +147,41 @@ func (b *body) Encode() (io.Reader, string) {
 				panic("httpc: failed to create form file")
 			}
 			_, _ = part.Write(f.data)
+		}
+
+		for key, value := range b.b {
+			var strValue string
+			switch v := value.(type) {
+			case string:
+				strValue = v
+			case *string:
+				if v != nil {
+					strValue = *v
+				}
+			case int, int32, int64, float32, float64:
+				strValue = fmt.Sprintf("%v", v)
+			case json.Marshaler:
+				j, err := v.MarshalJSON()
+				if err != nil {
+					panic("httpc: failed to encode field value to json: " + key + " " + err.Error())
+				}
+				strValue = string(j)
+			case fmt.Stringer:
+				strValue = v.String()
+
+			default:
+				t := reflect.TypeOf(v)
+				if t.Kind() == reflect.Ptr {
+					strValue = fmt.Sprintf("%p", v)
+				} else {
+					strValue = fmt.Sprintf("%v", v)
+				}
+			}
+
+			err := b.w.WriteField(key, strValue)
+			if err != nil {
+				panic("httpc: failed to add form field")
+			}
 		}
 
 		wrapError(b.w.Close())

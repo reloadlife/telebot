@@ -2,6 +2,7 @@ package httpc
 
 import (
 	"fmt"
+	"go.mamad.dev/telebot/log"
 	"net/http"
 	"net/url"
 )
@@ -11,7 +12,9 @@ func (h *httpClient) Do(req *http.Request) (*http.Response, error) {
 }
 
 func (h *httpClient) Post(_url string, headers http.Header, body Body) (*http.Response, error) {
+	log.Debugf("Content-Type: %#v", body)
 	_body, _content := body.Encode()
+	log.Debugf("Content-Type: %s", _content)
 	baseURL, err := url.Parse(h.url)
 	if err != nil {
 		return nil, err

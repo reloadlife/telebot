@@ -1,8 +1,8 @@
 package telebot
 
 type sendPhotoRequest struct {
-	ChatID any  `json:"chat_id"`
-	Photo  File `json:"photo"`
+	ChatID any   `json:"chat_id"`
+	Photo  *File `json:"photo" file:"1"`
 
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
