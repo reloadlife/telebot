@@ -4,14 +4,13 @@ type Performer string
 type Title string
 
 type sendAudioRequest struct {
-	ChatID any  `json:"chat_id"`
-	Audio  File `json:"audio"`
+	ChatID any   `json:"chat_id"`
+	Audio  *File `json:"audio" file:"1"`
 
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
 	ParseMode           *ParseMode       `json:"parse_mode,omitempty"`
 	Entities            []Entity         `json:"caption_entities,omitempty"`
-	HasSpoiler          *bool            `json:"has_spoiler,omitempty"`
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protected           *bool            `json:"protect_content,omitempty"`
 	ReplyParameters     *ReplyParameters `json:"reply_parameters,omitempty"`

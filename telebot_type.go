@@ -106,14 +106,14 @@ type Bot interface {
 	// Returns the sent AccessibleMessage and error on failure.
 	SendPhoto(recipient Recipient, photo File, options ...any) (*AccessibleMessage, error)
 
-	//// SendAudio sends an audio track to the provided recipient.
-	////
-	//// recipient is the chat to send the audio to.
-	//// audio is the audio File to send.
-	//// options contains additional send options like caption.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendAudio(recipient Recipient, audio File, options ...any) (*AccessibleMessage, error)
+	// SendAudio sends an audio track to the provided recipient.
+	//
+	// recipient is the chat to send the audio to.
+	// audio is the audio File to send.
+	// options contains additional send options like caption.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendAudio(recipient Recipient, audio File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendDocument sends a document to the provided recipient.
 	////

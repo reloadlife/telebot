@@ -8,7 +8,7 @@ import (
 func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMessage, error) {
 	params := sendAudioRequest{
 		ChatID: to.Recipient(),
-		Audio:  audio,
+		Audio:  &audio,
 	}
 
 	for _, option := range options {
@@ -25,6 +25,8 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMe
 			params.Entities = v
 		case *ReplyMarkup:
 			params.ReplyMarkup = v
+		case *ReplyParameters:
+			params.ReplyParameters = v
 
 		case time.Duration:
 			params.Duration = toPtr(int(v.Seconds()))
@@ -43,8 +45,6 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMe
 				params.DisableNotification = toPtr(true)
 			case Protected:
 				params.Protected = toPtr(true)
-			case HasSpoiler:
-				params.HasSpoiler = toPtr(true)
 			}
 
 		default:

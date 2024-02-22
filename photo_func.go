@@ -22,6 +22,8 @@ func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*AccessibleMe
 			params.Entities = v
 		case *ReplyMarkup:
 			params.ReplyMarkup = v
+		case *ReplyParameters:
+			params.ReplyParameters = v
 
 		case Option:
 			switch v {

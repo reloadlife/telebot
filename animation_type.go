@@ -4,8 +4,8 @@ type Width int
 type Height int
 
 type sendAnimationRequest struct {
-	ChatID    any  `json:"chat_id"`
-	Animation File `json:"animation"`
+	ChatID    any   `json:"chat_id"`
+	Animation *File `json:"animation" file:"1"`
 
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`

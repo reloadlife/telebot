@@ -8,7 +8,7 @@ import (
 func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*AccessibleMessage, error) {
 	params := sendAnimationRequest{
 		ChatID:    to.Recipient(),
-		Animation: animation,
+		Animation: &animation,
 	}
 
 	for _, option := range options {
