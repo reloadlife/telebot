@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Contact represents a phone contact.
 type Contact struct {
 	// PhoneNumber is the contact's phone number.
@@ -19,3 +21,6 @@ type Contact struct {
 	// VCard is an optional field providing additional data about the contact in the form of a vCard.
 	VCard *string `json:"vcard,omitempty"`
 }
+
+func (c *Contact) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Contact) Type() string        { return "Contact" }

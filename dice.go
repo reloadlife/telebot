@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Dice represents an animated emoji that displays a random value.
 type Dice struct {
 	// Emoji is the emoji on which the dice throw animation is based.
@@ -11,3 +13,6 @@ type Dice struct {
 	// For “🎰” base emoji, the value ranges from 1 to 64.
 	Value int `json:"value"`
 }
+
+func (c *Dice) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Dice) Type() string        { return "Dice" }

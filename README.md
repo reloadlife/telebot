@@ -40,5 +40,6 @@ go get -u go.mamad.dev/telebot
 - [ ] Regex Route Support
 - [ ] Code Cleanup and Refactoring
 - [ ] 100% Test Coverage
+- [ ] Better Router
 
 

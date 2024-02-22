@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -26,11 +25,6 @@ type File struct {
 	FileReader io.Reader `json:"-"`
 
 	fileName string
-}
-
-type UserProfilePhotos struct {
-	TotalCount int           `json:"total_count"`
-	Photos     [][]PhotoSize `json:"photos"`
 }
 
 // FromDisk constructs a new local (on-disk) file object.
@@ -67,6 +61,11 @@ func FromURL(url string) File {
 //	photo := &tele.Photo{File: tele.FromReader(bytes.NewReader(...))}
 func FromReader(reader io.Reader) File {
 	return File{FileReader: reader}
+}
+
+// FromFileID constructs a new file from file_id.
+func FromFileID(fileID string) File {
+	return File{FileID: fileID}
 }
 
 func (f *File) stealRef(g *File) {
@@ -112,17 +111,9 @@ func (f *File) GetFileReader() io.Reader {
 	return f.FileReader
 }
 
-// MarshalJSON to be JSON serializable, but only include non-empty fields.
-func (f *File) MarshalJSON() ([]byte, error) {
-	return json.Marshal(f)
+func (f *File) ReflectType() string {
+	return fmt.Sprintf("%T", f)
 }
-
-// UnmarshalJSON to be JSON unserializable
-func (f *File) UnmarshalJSON(b []byte) error {
-	return json.Unmarshal(b, f)
-}
-
-func (f *File) String() string {
-	indented, _ := json.MarshalIndent(f, "", "  ")
-	return fmt.Sprintf("Update{ID: %s, Size: %dMB}\n%s\n", f.UniqueID, f.FileSize/1024/1024, indented)
+func (f *File) Type() string {
+	return "File"
 }

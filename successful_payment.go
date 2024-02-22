@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // SuccessfulPayment contains basic information about a successful payment.
 type SuccessfulPayment struct {
 	// Currency is the three-letter ISO 4217 currency code.
@@ -26,7 +28,13 @@ type SuccessfulPayment struct {
 	ProviderPaymentChargeID string `json:"provider_payment_charge_id"`
 }
 
+func (c *SuccessfulPayment) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *SuccessfulPayment) Type() string        { return "SuccessfulPayment" }
+
 type LabeledPrice struct {
 	Label  string `json:"label"`
 	Amount int    `json:"amount"`
 }
+
+func (c *LabeledPrice) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *LabeledPrice) Type() string        { return "LabeledPrice" }

@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // ShippingAddress represents a shipping address.
 type ShippingAddress struct {
 	// CountryCode is the two-letter ISO 3166-1 alpha-2 country code.
@@ -21,6 +23,9 @@ type ShippingAddress struct {
 	PostCode string `json:"post_code"`
 }
 
+func (c *ShippingAddress) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *ShippingAddress) Type() string        { return "ShippingAddress" }
+
 // OrderInfo represents information about an order.
 type OrderInfo struct {
 	// Name is the user's name (optional).
@@ -35,3 +40,6 @@ type OrderInfo struct {
 	// ShippingAddress is the user's shipping address (optional).
 	ShippingAddress ShippingAddress `json:"shipping_address,omitempty"`
 }
+
+func (c *OrderInfo) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *OrderInfo) Type() string        { return "OrderInfo" }

@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // VideoNote objects represent video messages, available in Telegram apps as of v.4.0.
 type VideoNote struct {
 	// FileID is the identifier for this file, which can be used to download or reuse the file.
@@ -19,5 +21,16 @@ type VideoNote struct {
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
 	// FileSize is an optional field representing the file size in bytes.
-	FileSize *int `json:"file_size,omitempty"`
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
+func (c *VideoNote) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *VideoNote) Type() string        { return "VideoNote" }
+
+func (c *VideoNote) File() *File {
+	f := FromFileID(c.FileID)
+	f.fileName = fmt.Sprintf("video_note_%s.mp4", c.FileUniqueID)
+	f.FileSize = c.FileSize
+	f.UniqueID = c.FileUniqueID
+	return &f
 }

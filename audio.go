@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Audio represents an audio file to be treated as music by the Telegram clients.
 type Audio struct {
 	// FileID is the identifier for this file, which can be used to download or reuse the file.
@@ -26,8 +28,19 @@ type Audio struct {
 
 	// FileSize is the file size in bytes. It can be bigger than 2^31, and some programming languages may have difficulty/silent defects in interpreting it.
 	// But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value (optional).
-	FileSize int `json:"file_size,omitempty"`
+	FileSize int64 `json:"file_size,omitempty"`
 
 	// Thumbnail is the thumbnail of the album cover to which the music file belongs (optional).
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
+}
+
+func (c *Audio) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Audio) Type() string        { return "Audio" }
+
+func (c *Audio) File() *File {
+	f := FromFileID(c.FileID)
+	f.fileName = c.FileName
+	f.FileSize = c.FileSize
+	f.UniqueID = c.FileUniqueID
+	return &f
 }

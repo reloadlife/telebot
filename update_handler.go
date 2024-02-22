@@ -94,19 +94,19 @@ func (b *bot) handleMessageEvents(m *AccessibleMessage, c Context) bool {
 }
 
 func (b *bot) handleMediaAndOtherEvents(m *AccessibleMessage, c Context) bool {
-	mediaHandlers := map[interface{}]UpdateHandlerOn{
-		m.Photo:     OnPhoto,
-		m.Voice:     OnVoice,
-		m.Audio:     OnAudio,
-		m.Animation: OnAnimation,
-		m.Document:  OnDocument,
-		m.Sticker:   OnSticker,
-		m.Video:     OnVideo,
-		m.VideoNote: OnVideoNote,
+	mediaHandlers := map[UpdateHandlerOn]interface{}{
+		OnPhoto:     m.Photo,
+		OnVoice:     m.Voice,
+		OnAudio:     m.Audio,
+		OnAnimation: m.Animation,
+		OnDocument:  m.Document,
+		OnSticker:   m.Sticker,
+		OnVideo:     m.Video,
+		OnVideoNote: m.VideoNote,
 	}
 
 	// Check for media events
-	for media, event := range mediaHandlers {
+	for event, media := range mediaHandlers {
 		if media != nil {
 			return b.handle(event, c)
 		}

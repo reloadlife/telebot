@@ -83,20 +83,20 @@ func Test_Online_SendMessage(t *testing.T) {
 
 		require.Equal(t, msg.Entities, []Entity{
 			{
-				Type:   EntityTypeBold,
-				Offset: 0,
-				Length: 15,
+				EntityType: EntityTypeBold,
+				Offset:     0,
+				Length:     15,
 			},
 			{
-				Type:   EntityTypeTextLink,
-				Offset: 16,
-				Length: 4,
-				URL:    "https://github.com/reloadlife/telebot",
+				EntityType: EntityTypeTextLink,
+				Offset:     16,
+				Length:     4,
+				URL:        "https://github.com/reloadlife/telebot",
 			},
 			{
-				Type:   EntityTypeCode,
-				Offset: 21,
-				Length: 4,
+				EntityType: EntityTypeCode,
+				Offset:     21,
+				Length:     4,
 			},
 		})
 	})

@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Voice represents a voice note.
 type Voice struct {
 	// FileID is the identifier for this file, which can be used to download or reuse the file.
@@ -18,5 +20,16 @@ type Voice struct {
 	// FileSize is an optional field representing the file size in bytes.
 	// It can be bigger than 2^31, and some programming languages may have difficulty/silent defects in interpreting it.
 	// But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
-	FileSize *int64 `json:"file_size,omitempty"`
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
+func (c *Voice) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Voice) Type() string        { return "Voice" }
+
+func (c *Voice) File() *File {
+	f := FromFileID(c.FileID)
+	f.fileName = fmt.Sprintf("voice_%s.ogg", c.FileUniqueID)
+	f.FileSize = c.FileSize
+	f.UniqueID = c.FileUniqueID
+	return &f
 }

@@ -5,6 +5,11 @@ import (
 	"errors"
 )
 
+type JSONer interface {
+	MarshalJSON() ([]byte, error)
+	UnmarshalJSON([]byte) error
+}
+
 func (u *Update) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*u)
 }

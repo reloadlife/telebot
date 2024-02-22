@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 type ParseMode string
 
 const (
@@ -33,13 +35,21 @@ const (
 )
 
 type Entity struct {
-	Type          EntityType   `json:"type"`
+	EntityType    EntityType   `json:"type"`
 	Offset        int          `json:"offset"`
 	Length        int          `json:"length"`
 	URL           string       `json:"url,omitempty"`
 	User          *User        `json:"user,omitempty"`
 	Language      *string      `json:"language,omitempty"`
 	CustomEmojiID *CustomEmoji `json:"custom_emoji_id,omitempty"`
+}
+
+func (c *Entity) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Entity) Type() string {
+	if c.EntityType == "" {
+		return "unknown"
+	}
+	return string(c.EntityType)
 }
 
 type LinkPreviewOptions struct {
@@ -49,3 +59,6 @@ type LinkPreviewOptions struct {
 	PreferLargeMedia *bool   `json:"prefer_large_media,omitempty"`
 	ShowAboveText    *bool   `json:"show_above_text,omitempty"`
 }
+
+func (c *LinkPreviewOptions) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *LinkPreviewOptions) Type() string        { return "LinkPreviewOptions" }

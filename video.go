@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Video represents a video file.
 type Video struct {
 	// FileID is the identifier for this file, which can be used to download or reuse the file.
@@ -29,5 +31,16 @@ type Video struct {
 
 	// FileSize is the file size in bytes. It can be bigger than 2^31, and some programming languages may have difficulty/silent defects in interpreting it.
 	// But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value (optional).
-	FileSize int `json:"file_size,omitempty"`
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
+func (c *Video) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Video) Type() string        { return "Video" }
+
+func (c *Video) File() *File {
+	f := FromFileID(c.FileID)
+	f.fileName = c.FileName
+	f.FileSize = c.FileSize
+	f.UniqueID = c.FileUniqueID
+	return &f
 }

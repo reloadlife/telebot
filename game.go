@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Game represents a game. Use BotFather to create and edit games; their short names will act as unique identifiers.
 type Game struct {
 	// Title is the title of the game.
@@ -24,8 +26,14 @@ type Game struct {
 	Animation *Animation `json:"animation,omitempty"`
 }
 
+func (c *Game) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Game) Type() string        { return "Game" }
+
 type GameHighScore struct {
 	Position int  `json:"position"`
 	User     User `json:"user"`
 	Score    int  `json:"score"`
 }
+
+func (c *GameHighScore) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *GameHighScore) Type() string        { return "GameHighScore" }

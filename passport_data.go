@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // PassportData describes Telegram Passport data shared with the bot by the user.
 type PassportData struct {
 	// Data is an array with information about documents and other Telegram Passport elements that were shared with the bot.
@@ -8,6 +10,9 @@ type PassportData struct {
 	// Credentials encrypted credentials required to decrypt the data.
 	Credentials EncryptedCredentials `json:"credentials"`
 }
+
+func (c *PassportData) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *PassportData) Type() string        { return "PassportData" }
 
 // PassportFile represents a file uploaded to Telegram Passport. Currently, all Telegram Passport files are in JPEG format when decrypted and don't exceed 10MB.
 type PassportFile struct {
@@ -19,16 +24,27 @@ type PassportFile struct {
 	FileUniqueID string `json:"file_unique_id"`
 
 	// FileSize is the file size in bytes.
-	FileSize int `json:"file_size"`
+	FileSize int64 `json:"file_size"`
 
 	// FileDate is the Unix time when the file was uploaded.
 	FileDate int `json:"file_date"`
 }
 
+func (c *PassportFile) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *PassportFile) Type() string        { return "PassportFile" }
+
+func (c *PassportFile) File() *File {
+	f := FromFileID(c.FileID)
+	f.UniqueID = c.FileUniqueID
+	f.FileSize = c.FileSize
+	f.fileName = fmt.Sprintf("passport_data_%s.jpg", c.FileUniqueID)
+	return &f
+}
+
 // EncryptedPassportElement describes documents or other Telegram Passport elements shared with the bot by the user.
 type EncryptedPassportElement struct {
-	// Type is the element type, one of the predefined types.
-	Type string `json:"type"`
+	// ElementType is the element type, one of the predefined types.
+	ElementType string `json:"type"`
 
 	// Data is optional. Base64-encoded encrypted Telegram Passport element data provided by the user, available for certain types.
 	// Can be decrypted and verified using the accompanying EncryptedCredentials.
@@ -64,6 +80,9 @@ type EncryptedPassportElement struct {
 	Hash string `json:"hash"`
 }
 
+func (c *EncryptedPassportElement) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *EncryptedPassportElement) Type() string        { return "EncryptedPassportElement" }
+
 // EncryptedCredentials describes data required for decrypting and authenticating EncryptedPassportElement.
 type EncryptedCredentials struct {
 	// Data is Base64-encoded encrypted JSON-serialized data with unique user's payload, data hashes, and secrets required for EncryptedPassportElement decryption and authentication.
@@ -76,6 +95,12 @@ type EncryptedCredentials struct {
 	Secret string `json:"secret"`
 }
 
+func (c *EncryptedCredentials) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *EncryptedCredentials) Type() string        { return "EncryptedCredentials" }
+
 type PassportElementError struct {
 	// todo:
 }
+
+func (c *PassportElementError) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *PassportElementError) Type() string        { return "PassportElementError" }

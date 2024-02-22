@@ -245,6 +245,10 @@ var (
 
 		"MenuButtonType",
 		"Equal",
+
+		"PhotoSizes",
+		"Stringer",
+		"JSONer",
 	}
 )
 
@@ -354,30 +358,79 @@ func Test_All_Types_Covered(t *testing.T) {
 		})
 	}
 }
-func Test_TT_Type_Compatibility(t *testing.T) {
+
+func Test_TT_Type_CompatibilityVerifiable(t *testing.T) {
 	for _, typ := range listOfTypes {
-		_ = t.Run(fmt.Sprintf("TestTypes/%T", typ), func(t *testing.T) {
+		_ = t.Run(fmt.Sprintf("TestTypes/Verifiable/%T", typ), func(t *testing.T) {
+			require.Implements(t, (*Verifiable)(nil), typ, "type %T does not implement Verifiable", typ)
+			V, ok := typ.(Verifiable)
+			require.True(t, ok, "type %T does not implement Verifiable", typ)
+			_ = t.Run(fmt.Sprintf("TestTypes/Verifiable/%T/Verify", typ), func(t *testing.T) {
+				require.NotPanics(t, func() { _ = V.Verify() })
+			})
+		})
+	}
+}
+func Test_TT_Type_CompatibilityString(t *testing.T) {
+	for _, typ := range listOfTypes {
+		_ = t.Run(fmt.Sprintf("TestTypes/String/%T", typ), func(t *testing.T) {
+			require.Implements(t, (*Stringer)(nil), typ, "type %T does not implement Stringer", typ)
+			V, ok := typ.(Stringer)
+			require.True(t, ok, "type %T does not implement Stringer", typ)
+			_ = t.Run(fmt.Sprintf("TestTypes/String/%T/String", typ), func(t *testing.T) {
+				require.NotPanics(t, func() {
+					require.NotEmptyf(t, V.String(), "type %T returned an empty string", typ)
+				})
+			})
+		})
+	}
+}
+func Test_TT_Type_CompatibilityJSON(t *testing.T) {
+	for _, typ := range listOfTypes {
+		_ = t.Run(fmt.Sprintf("TestTypes/JSONer/%T", typ), func(t *testing.T) {
+			require.Implements(t, (*JSONer)(nil), typ, "type %T does not implement JSONer", typ)
+			V, ok := typ.(JSONer)
+			require.True(t, ok, "type %T does not implement JSONer", typ)
+			_ = t.Run(fmt.Sprintf("TestTypes/JSONer/%T/JSONMarshal", typ), func(t *testing.T) {
+				require.NotPanics(t, func() {
+					b, err := V.MarshalJSON()
+					require.NoError(t, err)
+					require.NotEmptyf(t, b, "type %T returned an empty string", typ)
+				})
+			})
+			_ = t.Run(fmt.Sprintf("TestTypes/JSONer/%T/JSONUnmarshal", typ), func(t *testing.T) {
+				require.NotPanics(t, func() {
+					err := V.UnmarshalJSON([]byte("{}"))
+					require.NoError(t, err)
+				})
+			})
+		})
+	}
+}
+func Test_TT_Type_CompatibilityTType(t *testing.T) {
+	for _, typ := range listOfTypes {
+		_ = t.Run(fmt.Sprintf("TestTypes/TType/%T", typ), func(t *testing.T) {
 			require.Implements(t, (*TType)(nil), typ, "type %T does not implement TType", typ)
 			TT, ok := typ.(TType)
 			require.True(t, ok, "type %T does not implement TType", typ)
-			_ = t.Run(fmt.Sprintf("TestTypes/%T/Type", typ), func(t *testing.T) {
+			_ = t.Run(fmt.Sprintf("TestTypes/TType/%T/Type", typ), func(t *testing.T) {
 				require.NotPanics(t, func() { _ = TT.Type() })
 				require.NotEmptyf(t, TT.Type(), "type %T returned an empty string", typ)
 			})
-			_ = t.Run(fmt.Sprintf("TestTypes/%T/ReflectType", typ), func(t *testing.T) {
+			_ = t.Run(fmt.Sprintf("TestTypes/TType/%T/ReflectType", typ), func(t *testing.T) {
 				require.NotPanics(t, func() { _ = TT.ReflectType() })
 				require.Equal(t, fmt.Sprintf("%T", typ), TT.ReflectType())
 			})
-			_ = t.Run(fmt.Sprintf("TestTypes/%T/Verify", typ), func(t *testing.T) {
+			_ = t.Run(fmt.Sprintf("TestTypes/TType/%T/Verify", typ), func(t *testing.T) {
 				require.NotPanics(t, func() { _ = TT.Verify() })
 			})
-			_ = t.Run(fmt.Sprintf("TestTypes/%T/String", typ), func(t *testing.T) {
+			_ = t.Run(fmt.Sprintf("TestTypes/TType/%T/String", typ), func(t *testing.T) {
 				require.NotPanics(t, func() { _ = TT.String() })
 			})
-			_ = t.Run(fmt.Sprintf("TestTypes/%T/MarshalJSON", typ), func(t *testing.T) {
+			_ = t.Run(fmt.Sprintf("TestTypes/TType/%T/MarshalJSON", typ), func(t *testing.T) {
 				require.NotPanics(t, func() { _, _ = TT.MarshalJSON() })
 			})
-			_ = t.Run(fmt.Sprintf("TestTypes/%T/UnmarshalJSON", typ), func(t *testing.T) {
+			_ = t.Run(fmt.Sprintf("TestTypes/TType/%T/UnmarshalJSON", typ), func(t *testing.T) {
 				require.NotPanics(t, func() { _ = TT.UnmarshalJSON([]byte("{}")) })
 			})
 		})

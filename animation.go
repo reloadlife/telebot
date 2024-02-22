@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Animation represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
 type Animation struct {
 	// FileID is the identifier for this file, which can be used to download or reuse the file.
@@ -29,5 +31,16 @@ type Animation struct {
 
 	// FileSize is the file size in bytes. It can be bigger than 2^31, and some programming languages may have difficulty/silent defects in interpreting it.
 	// But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value (optional).
-	FileSize int `json:"file_size,omitempty"`
+	FileSize int64 `json:"file_size,omitempty"`
+}
+
+func (c *Animation) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Animation) Type() string        { return "Animation" }
+
+func (a *Animation) File() *File {
+	f := FromFileID(a.FileID)
+	f.UniqueID = a.FileUniqueID
+	f.FileSize = a.FileSize
+	f.fileName = a.FileName
+	return &f
 }

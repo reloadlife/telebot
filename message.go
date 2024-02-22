@@ -109,7 +109,7 @@ func (u *InaccessibleMessage) ReflectType() string {
 // — Animation (*Animation): Optional. AccessibleMessage is an animation, information about the animation.
 // — Audio (*Audio): Optional. AccessibleMessage is an audio file, information about the file.
 // — Document (*Document): Optional. AccessibleMessage is a general file, information about the file.
-// — Photo ([]PhotoSize): Optional. AccessibleMessage is a photo, available sizes of the photo.
+// — Photo (PhotoSizes): Optional. AccessibleMessage is a photo, available sizes of the photo.
 // — Sticker (*Sticker): Optional. AccessibleMessage is a sticker, information about the sticker.
 // — Story (*Story): Optional. AccessibleMessage is a forwarded story.
 // — Video (*Video): Optional. AccessibleMessage is a video, information about the video.
@@ -130,7 +130,7 @@ func (u *InaccessibleMessage) ReflectType() string {
 // (the bot itself may be one of these members).
 // — LeftChatMember (*User): Optional. A member was removed from the group, information about them (this member may be the bot itself).
 // — NewChatTitle (*string): Optional. A chat title was changed to this value.
-// — NewChatPhoto ([]PhotoSize): Optional. A chat photo was changed to this value.
+// — NewChatPhoto (PhotoSizes): Optional. A chat photo was changed to this value.
 // — DeleteChatPhoto (*bool): Optional. Service message: the chat photo was deleted.
 // — GroupChatCreated (*bool): Optional. Service message: the group has been created.
 // — SupergroupChatCreated (*bool): Optional. Service message: the supergroup has been created.
@@ -211,7 +211,7 @@ type AccessibleMessage struct {
 	Animation                    *Animation                    `json:"animation,omitempty"`
 	Audio                        *Audio                        `json:"audio,omitempty"`
 	Document                     *Document                     `json:"document,omitempty"`
-	Photo                        []PhotoSize                   `json:"photo,omitempty"`
+	Photo                        PhotoSizes                    `json:"photo,omitempty"`
 	Sticker                      *Sticker                      `json:"sticker,omitempty"`
 	Story                        *Story                        `json:"story,omitempty"`
 	Video                        *Video                        `json:"video,omitempty"`
@@ -229,7 +229,7 @@ type AccessibleMessage struct {
 	NewChatMembers               []User                        `json:"new_chat_members,omitempty"`
 	LeftChatMember               *User                         `json:"left_chat_member,omitempty"`
 	NewChatTitle                 *string                       `json:"new_chat_title,omitempty"`
-	NewChatPhoto                 []PhotoSize                   `json:"new_chat_photo,omitempty"`
+	NewChatPhoto                 PhotoSizes                    `json:"new_chat_photo,omitempty"`
 	DeleteChatPhoto              *bool                         `json:"delete_chat_photo,omitempty"`
 	GroupChatCreated             *bool                         `json:"group_chat_created,omitempty"`
 	SupergroupChatCreated        *bool                         `json:"supergroup_chat_created,omitempty"`

@@ -78,6 +78,8 @@ func New(s BotSettings) Bot {
 
 		synchronous: s.Synchronous,
 		httpClient:  httpc.NewHTTPClient(s.URL, time.Minute),
+
+		group: new(Group),
 	}
 
 	telegramSecretToken = s.Token

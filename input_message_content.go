@@ -1,20 +1,15 @@
 package telebot
 
-import "encoding/json"
+type InputMessageContent interface {
+	JSONer
+	InputMessageContent()
+}
 
 type InputTextMessageContent struct {
 	MessageText        string             `json:"message_text"`
 	ParseMode          string             `json:"parse_mode,omitempty"`
 	Entities           []Entity           `json:"entities,omitempty"`
 	LinkPreviewOptions LinkPreviewOptions `json:"link_preview_options,omitempty"`
-}
-
-func (i *InputTextMessageContent) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i)
-}
-
-func (i *InputTextMessageContent) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, i)
 }
 
 type InputLocationMessageContent struct {
@@ -24,14 +19,6 @@ type InputLocationMessageContent struct {
 	LivePeriod           int     `json:"live_period,omitempty"`
 	Heading              int     `json:"heading,omitempty"`
 	ProximityAlertRadius int     `json:"proximity_alert_radius,omitempty"`
-}
-
-func (i *InputLocationMessageContent) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i)
-}
-
-func (i *InputLocationMessageContent) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, i)
 }
 
 type InputVenueMessageContent struct {
@@ -45,27 +32,11 @@ type InputVenueMessageContent struct {
 	GooglePlaceType string  `json:"google_place_type,omitempty"`
 }
 
-func (i *InputVenueMessageContent) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i)
-}
-
-func (i *InputVenueMessageContent) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, i)
-}
-
 type InputContactMessageContent struct {
 	PhoneNumber string `json:"phone_number"`
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name,omitempty"`
 	VCard       string `json:"vcard,omitempty"`
-}
-
-func (i *InputContactMessageContent) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i)
-}
-
-func (i *InputContactMessageContent) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, i)
 }
 
 type InputInvoiceMessageContent struct {
@@ -91,23 +62,8 @@ type InputInvoiceMessageContent struct {
 	IsFlexible                bool           `json:"is_flexible,omitempty"`
 }
 
-func (i *InputInvoiceMessageContent) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i)
-}
-
-func (i *InputInvoiceMessageContent) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, i)
-}
-
 func (i *InputTextMessageContent) InputMessageContent()     {}
 func (i *InputLocationMessageContent) InputMessageContent() {}
 func (i *InputVenueMessageContent) InputMessageContent()    {}
 func (i *InputContactMessageContent) InputMessageContent()  {}
 func (i *InputInvoiceMessageContent) InputMessageContent()  {}
-
-type InputMessageContent interface {
-	MarshalJSON() ([]byte, error)
-	UnmarshalJSON([]byte) error
-
-	InputMessageContent()
-}

@@ -9,12 +9,19 @@ import (
 	"fmt"
 )
 
+type Stringer interface {
+	String() string
+}
+
 func (u *Update) String() string {
 	indented, _ := json.MarshalIndent(u, "", "  ")
 	return fmt.Sprintf("%s{%d}\n%s\n", u.Type(), u.ID, indented)
 }
 
 func (u *User) String() string {
+	if u == nil {
+		return "User{nil}"
+	}
 	indented, _ := json.MarshalIndent(u, "", "  ")
 	isBot := ""
 	if u.IsBot {
@@ -269,4 +276,111 @@ func (i *KeyboardButtonRequestUsers) String() string {
 }
 func (i *KeyboardButtonPollType) String() string {
 	return fmt.Sprintf("%s{ %s }", i.ReflectType(), i.Type())
+}
+func (f *File) String() string {
+	return fmt.Sprintf("%s{ID: %s, Size: %dMB}", f.ReflectType(), f.UniqueID, f.FileSize/1024/1024)
+}
+
+func (f *TextQuote) String() string { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.Text) }
+
+func (f *Entity) String() string {
+	return fmt.Sprintf("%s{%s %s %s %p}", f.ReflectType(), f.Type(), f.URL, f.User, f.Language)
+}
+
+func (f *LinkPreviewOptions) String() string { return fmt.Sprintf("%s{%p}", f.ReflectType(), f.URL) }
+func (f *Animation) String() string          { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *Audio) String() string              { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *Document) String() string           { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *PhotoSize) String() string          { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *Sticker) String() string            { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *Video) String() string              { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *Voice) String() string              { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (f *VideoNote) String() string          { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+
+func (f *Story) String() string {
+	return fmt.Sprintf("%s{%d}", f.ReflectType(), f.ID)
+}
+
+func (f *Contact) String() string {
+	return fmt.Sprintf("%s{%s %d %p %s%p}", f.ReflectType(), f.PhoneNumber, f.UserID, f.VCard, f.FirstName, f.LastName)
+}
+
+func (f *Dice) String() string {
+	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.Emoji, f.Value)
+}
+
+func (f *Game) String() string {
+	return fmt.Sprintf("%s{%s %s}", f.ReflectType(), f.Title, f.Description)
+}
+
+func (f *GameHighScore) String() string {
+	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.User.String(), f.Score)
+}
+
+func (f *PollOption) String() string {
+	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.Text, f.VoterCount)
+}
+
+func (f *Venue) String() string {
+	return fmt.Sprintf("%s{%s %s %s}", f.ReflectType(), f.Location.String(), f.Title, f.Address)
+}
+
+func (f *Location) String() string {
+	return fmt.Sprintf("%s{%f %f}", f.ReflectType(), f.Latitude, f.Longitude)
+}
+
+func (f *Invoice) String() string {
+	return fmt.Sprintf("%s{%s %s %s%d}", f.ReflectType(), f.Title, f.Description, f.Currency, f.TotalAmount)
+}
+
+func (f *SuccessfulPayment) String() string {
+	return fmt.Sprintf("%s{%s%d %s %s}", f.ReflectType(), f.Currency, f.TotalAmount, f.InvoicePayload, f.ShippingOptionID)
+}
+
+func (f *OrderInfo) String() string {
+	return fmt.Sprintf("%s{%s %s %s %s}", f.ReflectType(), f.Name, f.PhoneNumber, f.Email, f.ShippingAddress.String())
+}
+
+func (f *ShippingAddress) String() string {
+	return fmt.Sprintf("%s{%s %s %s %s %s}", f.ReflectType(), f.CountryCode, f.State, f.City, f.StreetLine1, f.StreetLine2)
+}
+
+func (f *LabeledPrice) String() string {
+	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.Label, f.Amount)
+}
+
+func (f *ProximityAlertTriggered) String() string {
+	return fmt.Sprintf("%s{%s %s}", f.ReflectType(), f.Traveler.String(), f.Watcher.String())
+}
+
+func (f *UsersShared) String() string {
+	return fmt.Sprintf("%s{%d %v}", f.ReflectType(), f.RequestID, f.UserIDs)
+}
+
+func (f *ChatShared) String() string {
+	return fmt.Sprintf("%s{%d %d}", f.ReflectType(), f.ChatID, f.RequestID)
+}
+
+func (f *AutoDeleteTimerChanged) String() string {
+	return fmt.Sprintf("%s{%d}", f.ReflectType(), f.AutoDeleteTime)
+}
+
+func (f *PassportData) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *EncryptedPassportElement) String() string {
+	return fmt.Sprintf("%s{%s %s}", f.ReflectType(), f.Type(), f.Data)
+}
+
+func (f *EncryptedCredentials) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
+}
+
+func (f *PassportFile) String() string {
+	return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File())
+}
+
+func (f *WriteAccessAllowed) String() string {
+	return fmt.Sprintf("%s{}", f.ReflectType())
 }

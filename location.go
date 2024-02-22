@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Location represents a point on the map.
 type Location struct {
 	// Longitude is the longitude as defined by the sender.
@@ -23,3 +25,6 @@ type Location struct {
 	// For sent live locations only.
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 }
+
+func (c *Location) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Location) Type() string        { return "Location" }

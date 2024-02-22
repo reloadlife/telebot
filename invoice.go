@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Invoice contains basic information about an invoice.
 type Invoice struct {
 	// Title is the product name.
@@ -19,3 +21,6 @@ type Invoice struct {
 	// See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
 	TotalAmount int `json:"total_amount"`
 }
+
+func (c *Invoice) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Invoice) Type() string        { return "Invoice" }

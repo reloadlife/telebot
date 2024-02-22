@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // UsersShared contains information about the users whose identifiers were shared with the bot
 // using a KeyboardButtonRequestUsers button.
 type UsersShared struct {
@@ -12,3 +14,6 @@ type UsersShared struct {
 	// The bot may not have access to the users and could be unable to use these identifiers unless the users are already known to the bot by some other means.
 	UserIDs []int64 `json:"user_ids"`
 }
+
+func (c *UsersShared) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *UsersShared) Type() string        { return "UsersShared" }

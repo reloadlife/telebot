@@ -1,5 +1,7 @@
 package telebot
 
+import "fmt"
+
 // Venue represents a venue.
 type Venue struct {
 	// Location is the Venue location. It can't be a live location.
@@ -25,3 +27,6 @@ type Venue struct {
 	// See supported types for more information.
 	GooglePlaceType string `json:"google_place_type,omitempty"`
 }
+
+func (c *Venue) ReflectType() string { return fmt.Sprintf("%T", c) }
+func (c *Venue) Type() string        { return "Venue" }
