@@ -39,7 +39,7 @@ func Test_Online_SendMessage(t *testing.T) {
 		text := fmt.Sprintf("Hello, World, With reply to previous message (%d)!", msg.ID)
 		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
 			ChatID:                   whereTo.Recipient(),
-			MessageID:                int(msg.ID),
+			MessageID:                msg.ID,
 			AllowSendingWithoutReply: toPtr(false),
 		})
 		require.NoError(t, err)
@@ -61,7 +61,7 @@ func Test_Online_SendMessage(t *testing.T) {
 
 		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
 			ChatID:                   whereTo.Recipient(),
-			MessageID:                int(msg.ID),
+			MessageID:                msg.ID,
 			AllowSendingWithoutReply: toPtr(false),
 		}, markup)
 		require.NoError(t, err)
@@ -70,14 +70,20 @@ func Test_Online_SendMessage(t *testing.T) {
 		require.True(t, markup.deepEqual(msg.ReplyMarkup))
 	})
 
-	t.Run("WithMarkDown", func(t *testing.T) {
+	t.Run("WithAllOptions", func(t *testing.T) {
 		text := "*MarkDownMessage* [link](https://github.com/reloadlife/telebot) `code`"
 		markup := NewMarkup()
 		markup.Inline()
 		markup.AddRow(NewInlineKeyboardButton("Hey", "hey"))
 		markup.AddRow(NewInlineKeyboardButton("TeleBot !!", "hey"))
 
-		msg, err = tg.SendMessage(whereTo, text, toPtr(ParseModeMarkdown))
+		msg, err = tg.SendMessage(whereTo, text,
+			toPtr(ParseModeMarkdown),
+			Protected,
+			&LinkPreviewOptions{
+				URL:           toPtr("https://go.mamad.dev/telebot"),
+				ShowAboveText: toPtr(true),
+			})
 		require.NoError(t, err)
 		require.NotNil(t, msg)
 

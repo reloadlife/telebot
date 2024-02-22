@@ -1,6 +1,9 @@
 package telebot
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*AccessibleMessage, error) {
 	params := sendPhotoRequest{
@@ -36,7 +39,7 @@ func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*AccessibleMe
 			}
 
 		default:
-			panic("telebot: unknown option type")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPhoto.")
 		}
 	}
 

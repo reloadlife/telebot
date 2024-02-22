@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"os"
 	"reflect"
+	"strings"
 )
 
 type Body interface {
@@ -55,8 +57,9 @@ func NewBody(p map[string]any) Body {
 					panic("httpc: failed to read file")
 				}
 				files = append(files, file{
-					name: k,
-					data: _b,
+					name:     k,
+					data:     _b,
+					fileName: v.GetFileName(),
 				})
 				delete(p, k)
 				continue
@@ -73,8 +76,9 @@ func NewBody(p map[string]any) Body {
 }
 
 type file struct {
-	name string
-	data []byte
+	name     string
+	fileName string
+	data     []byte
 }
 
 func (b *body) MarshalJSON() ([]byte, error) {
@@ -142,9 +146,13 @@ func (b *body) Encode() (io.Reader, string) {
 		b.w = multipart.NewWriter(b.buffer)
 
 		for _, f := range b.files {
-			part, err := b.w.CreateFormFile(f.name, f.name)
+			part, err := b.w.CreateFormFile(f.name, f.fileName)
 			if err != nil {
 				panic("httpc: failed to create form file")
+			}
+			fileType := http.DetectContentType(f.data)
+			if !strings.Contains(fileType, "image") {
+				_, _ = part.Write([]byte(fmt.Sprintf("Content-Type: %s\r\n\r\n", fileType)))
 			}
 			_, _ = part.Write(f.data)
 		}

@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"testing"
+	"time"
 )
 
 func Test_Online_SendAudio(t *testing.T) {
@@ -20,16 +21,16 @@ func Test_Online_SendAudio(t *testing.T) {
 	require.NoError(t, err)
 	whereTo := &Chat{ID: chat}
 
-	pictureFromURL := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/sample.ogg")
-	pictureFromFile := FromDisk("./.github/sample.ogg")
-	pictureFromFile.fileName = "sample.ogg"
+	AudioFromURL := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/audio.m4a")
+	AudioFromFile := FromDisk("./.github/audio.m4a")
+	AudioFromFile.fileName = "audio.m4a"
 
-	require.True(t, pictureFromFile.OnDisk())
+	require.True(t, AudioFromFile.OnDisk())
 
 	var msg *AccessibleMessage
 
 	t.Run("SendFromURL", func(t *testing.T) {
-		msg, err = tg.SendAudio(whereTo, pictureFromURL, "Sample Caption.")
+		msg, err = tg.SendAudio(whereTo, AudioFromURL, "Sample Caption.")
 		require.NoError(t, err)
 		require.NotNil(t, msg)
 
@@ -38,36 +39,53 @@ func Test_Online_SendAudio(t *testing.T) {
 	})
 
 	t.Run("SendFromDiscFile", func(t *testing.T) {
-		msg, err = tg.SendAudio(whereTo, pictureFromFile, "Sample Caption. this one is from Disc.")
+		msg, err = tg.SendAudio(whereTo, AudioFromFile, "Sample Caption. this one is from Disc.")
 		require.NoError(t, err)
 		require.NotNil(t, msg)
 
 		require.Equal(t, msg.Chat.ID, chat)
 		require.Equal(t, *msg.Caption, "Sample Caption. this one is from Disc.")
+	})
 
-		t.Run("ResendFromFileID", func(t *testing.T) {
-			fromFileID := FromFileID(msg.Photo[0].FileID)
-			msg, err = tg.SendAudio(whereTo, fromFileID, "Sample Caption. this one is from FileID.")
-			require.NoError(t, err)
-			require.NotNil(t, msg)
+	fileID := FromFileID(msg.Audio.FileID)
 
-			require.Equal(t, msg.Chat.ID, chat)
-			require.Equal(t, *msg.Caption, "Sample Caption. this one is from FileID.")
+	t.Run("ResendFromFileID", func(t *testing.T) {
+		msg, err = tg.SendAudio(whereTo, fileID, "Sample Caption. this one is from FileID.")
+		require.NoError(t, err)
+		require.NotNil(t, msg)
 
-			t.Run("WithSpoiler", func(t *testing.T) {
-				msg, err = tg.SendAudio(whereTo, fromFileID, "Sample Caption. HasSpoiler = 1", HasSpoiler)
-				require.NoError(t, err)
-				require.NotNil(t, msg)
+		require.Equal(t, msg.Chat.ID, chat)
+		require.Equal(t, *msg.Caption, "Sample Caption. this one is from FileID.")
+	})
 
-				require.Equal(t, msg.Chat.ID, chat)
-				require.Equal(t, *msg.Caption, "Sample Caption. HasSpoiler = 1")
-			})
-		})
+	t.Run("WithAllTags", func(t *testing.T) {
+		markup := NewMarkup()
+		markup.Inline()
+		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
+		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/telegramlogo.png")
+
+		msg, err = tg.SendAudio(whereTo, fileID,
+			"Sample Caption. All Tags",
+			toPtr("**Caption\\.**"),
+			toPtr(ParseModeMarkdownV2),
+			markup,
+			Silent,
+			Protected,
+			106*time.Second,
+			Performer("TeleBot"),
+			Title("Test Audio"),
+			&thumb,
+		)
+		require.NoError(t, err)
+		require.NotNil(t, msg)
+
+		require.Equal(t, msg.Chat.ID, chat)
+		require.Equal(t, *msg.Caption, "Sample Caption. HasSpoiler = 1")
 	})
 
 	t.Run("WithBadOptions", func(t *testing.T) {
 		require.Panics(t, func() {
-			msg, err = tg.SendAudio(whereTo, pictureFromURL, "Some Caption!", false, true)
+			msg, err = tg.SendAudio(whereTo, AudioFromURL, "Some Caption!", false, true)
 		})
 	})
 

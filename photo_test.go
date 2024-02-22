@@ -65,6 +65,26 @@ func Test_Online_SendPhoto(t *testing.T) {
 		})
 	})
 
+	t.Run("WithAllOptionTypes", func(t *testing.T) {
+		markup := NewMarkup()
+		markup.Inline()
+		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
+
+		_, err := tg.SendPhoto(whereTo, pictureFromURL,
+			"**Sample Caption\\.**",
+			toPtr("**Sample Caption\\.**"),
+			HasSpoiler,
+			toPtr(ParseModeMarkdownV2),
+			Silent,
+			Protected,
+			markup,
+			&ReplyParameters{
+				MessageID: msg.ID,
+			})
+
+		require.NoError(t, err)
+	})
+
 	t.Run("WithBadOptions", func(t *testing.T) {
 		require.Panics(t, func() {
 			msg, err = tg.SendPhoto(whereTo, pictureFromURL, "Some Caption!", false, true)

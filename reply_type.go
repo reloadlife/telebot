@@ -3,7 +3,7 @@ package telebot
 import "fmt"
 
 type ReplyParameters struct {
-	MessageID                int      `json:"message_id"`
+	MessageID                int64    `json:"message_id"`
 	ChatID                   any      `json:"chat_id,omitempty"`
 	AllowSendingWithoutReply *bool    `json:"allow_sending_without_reply,omitempty"`
 	Quote                    *string  `json:"quote,omitempty"`
