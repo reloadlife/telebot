@@ -44,17 +44,6 @@ func tagOptions(tag string) []string {
 	return splitOptions(options)
 }
 
-func validateEitherExists(field reflect.Value, dependentFieldNames []string) bool {
-	existsCount := 0
-	for _, depFieldName := range dependentFieldNames {
-		depField := field.FieldByName(depFieldName)
-		if !depField.IsZero() {
-			existsCount++
-		}
-	}
-	return existsCount == 1
-}
-
 func verify(t interface{}) error {
 	valueOfT := reflect.ValueOf(t)
 	if valueOfT.Kind() == reflect.Ptr {
