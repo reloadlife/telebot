@@ -56,3 +56,8 @@ func (i *SwitchInlineQueryChosenChat) Verify() error { return verify(i) }
 func (i *KeyboardButtonRequestChat) Verify() error   { return verify(i) }
 func (i *KeyboardButtonRequestUsers) Verify() error  { return verify(i) }
 func (i *KeyboardButtonPollType) Verify() error      { return verify(i) }
+
+func (c *ChatBoostRemoved) Verify() error { return verify(c) }
+func (c *ChatBoostUpdated) Verify() error { return verify(c) }
+
+func (c *ChatJoinRequest) Verify() error { return verify(c) }

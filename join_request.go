@@ -2,7 +2,6 @@ package telebot
 
 import (
 	"fmt"
-	"strconv"
 )
 
 // ChatJoinRequest represents a join request sent to a chat.
@@ -27,10 +26,6 @@ type ChatJoinRequest struct {
 
 	// InviteLink is the chat invite link that was used by the user to send the join request (optional).
 	InviteLink *ChatInviteLink `json:"invite_link,omitempty"`
-}
-
-func (c *ChatJoinRequest) Recipient() string {
-	return strconv.FormatInt(c.Chat.ID, 10)
 }
 
 func (c *ChatJoinRequest) ReflectType() string {

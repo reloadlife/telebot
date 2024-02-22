@@ -14,7 +14,6 @@ type ChatBoostUpdated struct {
 func (c *ChatBoostUpdated) ReflectType() string {
 	return fmt.Sprintf("%T", c)
 }
-
 func (c *ChatBoostUpdated) Type() string {
 	return "ChatBoostUpdated"
 }
@@ -37,7 +36,6 @@ type ChatBoostRemoved struct {
 func (c *ChatBoostRemoved) ReflectType() string {
 	return fmt.Sprintf("%T", c)
 }
-
 func (c *ChatBoostRemoved) Type() string {
 	return "ChatBoostRemoved"
 }

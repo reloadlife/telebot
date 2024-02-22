@@ -83,10 +83,7 @@ var (
 		&Contact{},
 		&Dice{},
 		&Game{},
-		&Poll{},
-
 		&PollOption{},
-		&PollAnswer{},
 
 		&Venue{},
 		&Location{},

@@ -13,3 +13,7 @@ func (c *Chat) Recipient() string {
 func (u *User) Recipient() string {
 	return strconv.FormatInt(u.ID, 10)
 }
+
+func (c *ChatJoinRequest) Recipient() string {
+	return strconv.FormatInt(c.Chat.ID, 10)
+}
