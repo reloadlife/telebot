@@ -14,7 +14,7 @@ type sendAudioRequest struct {
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protected           *bool            `json:"protect_content,omitempty"`
 	ReplyParameters     *ReplyParameters `json:"reply_parameters,omitempty"`
-	ReplyMarkup         *ReplyMarkup     `json:"reply_markup,omitempty"`
+	ReplyMarkup         ReplyMarkup      `json:"reply_markup,omitempty"`
 
 	Duration  *int    `json:"duration,omitempty"`
 	Performer *string `json:"performer,omitempty"`

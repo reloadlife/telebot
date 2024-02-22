@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -23,7 +24,7 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMe
 			params.ParseMode = v
 		case []Entity:
 			params.Entities = v
-		case *ReplyMarkup:
+		case ReplyMarkup:
 			params.ReplyMarkup = v
 		case *ReplyParameters:
 			params.ReplyParameters = v
@@ -48,7 +49,7 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMe
 			}
 
 		default:
-			panic("telebot: unknown option type")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPhoto.")
 		}
 	}
 

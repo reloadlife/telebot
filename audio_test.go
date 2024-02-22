@@ -65,7 +65,7 @@ func Test_Online_SendAudio(t *testing.T) {
 		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/telegramlogo.png")
 
 		msg, err = tg.SendAudio(whereTo, fileID,
-			"Sample Caption. All Tags",
+			"**Caption\\.**",
 			toPtr("**Caption\\.**"),
 			toPtr(ParseModeMarkdownV2),
 			markup,
@@ -80,7 +80,7 @@ func Test_Online_SendAudio(t *testing.T) {
 		require.NotNil(t, msg)
 
 		require.Equal(t, msg.Chat.ID, chat)
-		require.Equal(t, *msg.Caption, "Sample Caption. HasSpoiler = 1")
+		require.Equal(t, *msg.Caption, "Caption.")
 	})
 
 	t.Run("WithBadOptions", func(t *testing.T) {
