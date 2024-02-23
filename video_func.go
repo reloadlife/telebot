@@ -25,6 +25,8 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMe
 			params.Entities = v
 		case ReplyMarkup:
 			params.ReplyMarkup = v
+		case *ReplyParameters:
+			params.ReplyParameters = v
 
 		case time.Duration:
 			params.Duration = toPtr(int(v.Seconds()))

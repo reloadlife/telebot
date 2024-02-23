@@ -26,6 +26,8 @@ func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleM
 			params.Entities = v
 		case ReplyMarkup:
 			params.ReplyMarkup = v
+		case *ReplyParameters:
+			params.ReplyParameters = v
 
 		case *File:
 			params.Thumbnail = v

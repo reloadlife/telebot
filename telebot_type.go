@@ -131,6 +131,7 @@ type Bot interface {
 	// options contains additional send options like supports streaming.
 	//
 	// Returns the sent AccessibleMessage and error on failure.
+
 	SendVideo(recipient Recipient, video File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendAnimation sends an animation to the provided recipient.

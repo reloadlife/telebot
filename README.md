@@ -41,5 +41,6 @@ go get -u go.mamad.dev/telebot
 - [ ] Code Cleanup and Refactoring
 - [ ] 100% Test Coverage
 - [ ] Better Router
+- [ ] Telegram RateLimits (queue) (RateLimits)[https://limits.tginfo.me/en]
 
 
