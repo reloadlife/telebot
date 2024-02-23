@@ -20,9 +20,9 @@ func Test_Online_SendDocument(t *testing.T) {
 	require.NoError(t, err)
 	whereTo := &Chat{ID: chat}
 
-	DocumentFileFromURL := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/sample-file.txt")
-	DocumentFileFromFile := FromDisk("./.github/sample-file.txt")
-	DocumentFileFromFile.fileName = "sample-file.txt"
+	DocumentFileFromURL := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/pdffile.pdf")
+	DocumentFileFromFile := FromDisk("./.github/pdffile.pdf")
+	DocumentFileFromFile.fileName = "pdffile.pdf"
 
 	require.True(t, DocumentFileFromFile.OnDisk())
 
