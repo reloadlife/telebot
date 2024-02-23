@@ -124,14 +124,14 @@ type Bot interface {
 	// Returns the sent AccessibleMessage and error on failure.
 	SendDocument(recipient Recipient, document File, options ...any) (*AccessibleMessage, error)
 	//
-	//// SendVideo sends a video to the provided recipient.
-	////
-	//// recipient is the chat to send the video to.
-	//// video is the video File to send.
-	//// options contains additional send options like supports streaming.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendVideo(recipient Recipient, video File, options ...any) (*AccessibleMessage, error)
+	// SendVideo sends a video to the provided recipient.
+	//
+	// recipient is the chat to send the video to.
+	// video is the video File to send.
+	// options contains additional send options like supports streaming.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendVideo(recipient Recipient, video File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendAnimation sends an animation to the provided recipient.
 	////

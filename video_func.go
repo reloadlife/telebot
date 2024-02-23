@@ -8,7 +8,7 @@ import (
 func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMessage, error) {
 	params := sendVideoParams{
 		ChatID: to.Recipient(),
-		Video:  video,
+		Video:  &video,
 	}
 
 	for _, option := range options {
@@ -23,7 +23,7 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMe
 			params.ParseMode = v
 		case []Entity:
 			params.Entities = v
-		case *ReplyMarkup:
+		case ReplyMarkup:
 			params.ReplyMarkup = v
 
 		case time.Duration:

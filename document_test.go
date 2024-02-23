@@ -61,7 +61,7 @@ func Test_Online_SendDocument(t *testing.T) {
 		markup := NewMarkup()
 		markup.Inline()
 		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
-		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/telegramlogo.png")
+		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/thumb.jpeg")
 
 		msg, err = tg.SendDocument(whereTo, fileID,
 			"**Caption\\.** with Thumbnail",
@@ -76,7 +76,7 @@ func Test_Online_SendDocument(t *testing.T) {
 		require.NotNil(t, msg)
 
 		require.Equal(t, msg.Chat.ID, chat)
-		require.Equal(t, *msg.Caption, "Caption.")
+		require.Equal(t, *msg.Caption, "Caption. with Thumbnail")
 	})
 
 	t.Run("WithBadOptions", func(t *testing.T) {

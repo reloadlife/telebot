@@ -62,7 +62,7 @@ func Test_Online_SendAudio(t *testing.T) {
 		markup := NewMarkup()
 		markup.Inline()
 		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
-		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/telegramlogo.png")
+		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/thumb.jpeg")
 
 		msg, err = tg.SendAudio(whereTo, fileID,
 			"**Caption\\.**",

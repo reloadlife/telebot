@@ -21,7 +21,7 @@ func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleM
 			params.Caption = &v
 
 		case *ParseMode:
-			params.ParseMode = v
+			params.ParseMode = *v
 		case []Entity:
 			params.Entities = v
 		case ReplyMarkup:
