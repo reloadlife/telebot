@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleMessage, error) {
@@ -43,7 +44,7 @@ func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleM
 			}
 
 		default:
-			panic("telebot: unknown option type")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendDocument.")
 		}
 	}
 

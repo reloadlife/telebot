@@ -133,24 +133,24 @@ type Bot interface {
 	// Returns the sent AccessibleMessage and error on failure.
 
 	SendVideo(recipient Recipient, video File, options ...any) (*AccessibleMessage, error)
+
+	// SendAnimation sends an animation to the provided recipient.
 	//
-	//// SendAnimation sends an animation to the provided recipient.
-	////
-	//// recipient is the chat to send the animation to.
-	//// animation is the animation File to send.
-	//// options contains additional send options like caption.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendAnimation(recipient Recipient, animation File, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the animation to.
+	// animation is the animation File to send.
+	// options contains additional send options like caption.
 	//
-	//// SendVoice sends a voice recording to the provided recipient.
-	////
-	//// recipient is the chat to send the voice to.
-	//// voice is the voice recording File to send.
-	//// options contains additional send options like caption.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendVoice(recipient Recipient, voice File, options ...any) (*AccessibleMessage, error)
+	// Returns the sent AccessibleMessage and error on failure.
+	SendAnimation(recipient Recipient, animation File, options ...any) (*AccessibleMessage, error)
+
+	// SendVoice sends a voice recording to the provided recipient.
+	//
+	// recipient is the chat to send the voice to.
+	// voice is the voice recording File to send.
+	// options contains additional send options like caption.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendVoice(recipient Recipient, voice File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendVideoNote sends a video note to the provided recipient.
 	////

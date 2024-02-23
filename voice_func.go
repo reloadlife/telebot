@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMessage, error) {
-	params := sendVideoParams{
+func (b *bot) SendVoice(to Recipient, voice File, options ...any) (*AccessibleMessage, error) {
+	params := sendVoiceRequest{
 		ChatID: to.Recipient(),
-		Video:  &video,
+		Voice:  &voice,
 	}
 
 	for _, option := range options {
@@ -32,29 +32,16 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMe
 		case time.Duration:
 			params.Duration = toPtr(int(v.Seconds()))
 
-		case Width:
-			params.Width = toPtr(int(v))
-
-		case Height:
-			params.Height = toPtr(int(v))
-
-		case *File:
-			params.Thumbnail = v
-
 		case Option:
 			switch v {
 			case Silent:
 				params.DisableNotification = toPtr(true)
 			case Protected:
 				params.Protected = toPtr(true)
-			case HasSpoiler:
-				params.HasSpoiler = toPtr(true)
-			case Streamable:
-				params.Streamable = toPtr(true)
 			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendVideo.")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendVoice.")
 		}
 	}
 
@@ -62,7 +49,7 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMe
 		Result *AccessibleMessage
 	}
 
-	req, err := b.sendMethodRequest(methodSendVideo, params)
+	req, err := b.sendMethodRequest(methodSendVoice, params)
 	if err != nil {
 		return nil, err
 	}

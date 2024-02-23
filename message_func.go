@@ -1,6 +1,9 @@
 package telebot
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*AccessibleMessage, error) {
 	params := sendMessageParams{
@@ -29,19 +32,15 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Acc
 			switch v {
 			case Silent:
 				params.DisableNotification = toPtr(true)
-
 			case Protected:
 				params.ProtectContent = toPtr(true)
-
-			default:
-				panic("telebot: option type not supported")
 			}
 
 		case *int:
 			params.MessageThreadID = v
 
 		default:
-			panic("telebot: unknown option type")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPhoto.")
 		}
 	}
 

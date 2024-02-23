@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -23,8 +24,10 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Acce
 			params.ParseMode = v
 		case []Entity:
 			params.Entities = v
-		case *ReplyMarkup:
+		case ReplyMarkup:
 			params.ReplyMarkup = v
+		case *ReplyParameters:
+			params.ReplyParameters = v
 
 		case time.Duration:
 			params.Duration = toPtr(int(v.Seconds()))
@@ -48,7 +51,7 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Acce
 			}
 
 		default:
-			panic("telebot: unknown option type")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendAnimation.")
 		}
 	}
 

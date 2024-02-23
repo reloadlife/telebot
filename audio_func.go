@@ -49,7 +49,7 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMe
 			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPhoto.")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendAudio.")
 		}
 	}
 
