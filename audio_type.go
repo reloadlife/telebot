@@ -19,5 +19,5 @@ type sendAudioRequest struct {
 	Duration  *int    `json:"duration,omitempty"`
 	Performer *string `json:"performer,omitempty"`
 	Title     *string `json:"title,omitempty"`
-	Thumbnail *File   `json:"thumbnail,omitempty"`
+	Thumbnail *File   `json:"thumbnail,omitempty" file:"1"`
 }

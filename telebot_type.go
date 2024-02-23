@@ -114,15 +114,15 @@ type Bot interface {
 	//
 	// Returns the sent AccessibleMessage and error on failure.
 	SendAudio(recipient Recipient, audio File, options ...any) (*AccessibleMessage, error)
+
+	// SendDocument sends a document to the provided recipient.
 	//
-	//// SendDocument sends a document to the provided recipient.
-	////
-	//// recipient is the chat to send the document to.
-	//// document is the document File to send.
-	//// options contains additional send options like caption.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendDocument(recipient Recipient, document File, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the document to.
+	// document is the document File to send.
+	// options contains additional send options like caption.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendDocument(recipient Recipient, document File, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendVideo sends a video to the provided recipient.
 	////
