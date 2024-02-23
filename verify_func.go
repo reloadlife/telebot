@@ -20,6 +20,52 @@ func (u *MaybeInaccessibleMessage) Verify() error {
 	return verify(u.InaccessibleMessage)
 }
 
+// Verify for InputMedia should be a Custom function
+func (m *InputMedia) Verify() error {
+	switch m.MediaType {
+	case InputMediaPhoto:
+		m.DisableContentTypeDetection = nil
+		m.Thumb = nil
+		m.Streamable = nil
+		m.Preformer = nil
+		m.Title = nil
+		m.Duration = nil
+		m.Height = nil
+		m.Width = nil
+
+	case InputMediaAnimation:
+		m.DisableContentTypeDetection = nil
+		m.Preformer = nil
+		m.Title = nil
+
+	case InputMediaAudio:
+		m.Thumb = nil
+		m.Preformer = nil
+		m.Title = nil
+		m.Duration = nil
+		m.Height = nil
+		m.Width = nil
+
+	case InputMediaDocument:
+		m.Streamable = nil
+		m.Preformer = nil
+		m.Title = nil
+		m.Duration = nil
+		m.Height = nil
+		m.Width = nil
+
+	case InputMediaVideo:
+		m.DisableContentTypeDetection = nil
+		m.Preformer = nil
+		m.Title = nil
+
+	default:
+		return errors.New("unknown media type provided in InputMedia")
+	}
+
+	return nil
+}
+
 func (u *Update) Verify() error                       { return verify(u) }
 func (r *MessageReaction) Verify() error              { return verify(r) }
 func (r *MessageReactionCountUpdated) Verify() error  { return verify(r) }
@@ -131,4 +177,3 @@ func (f *UserChatBoosts) Verify() error               { return verify(f) }
 func (f *SentWebAppMessage) Verify() error            { return verify(f) }
 func (f *ReplyParameters) Verify() error              { return verify(f) }
 func (f *QueryResult) Verify() error                  { return verify(f) }
-func (f *InputMedia) Verify() error                   { return verify(f) }

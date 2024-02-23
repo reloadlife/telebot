@@ -151,24 +151,23 @@ type Bot interface {
 	//
 	// Returns the sent AccessibleMessage and error on failure.
 	SendVoice(recipient Recipient, voice File, options ...any) (*AccessibleMessage, error)
+
+	// SendVideoNote sends a video note to the provided recipient.
 	//
-	//// SendVideoNote sends a video note to the provided recipient.
-	////
-	//// recipient is the chat to send the video note to.
-	//// videoNote is the video note File to send.
-	//// options contains additional send options like duration.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendVideoNote(recipient Recipient, videoNote File, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the video note to.
+	// videoNote is the video note File to send.
+	// options contains additional send options like duration.
 	//
-	//// SendMediaGroup sends a group of photos or videos as an album to the recipient.
-	////
-	//// recipient is the chat to send the media album to.
-	//// media is the list of photo and video Files to send.
-	//// options contains additional send options like disable_notification.
-	////
-	//// Returns the sent Messages and error on failure.
-	//SendMediaGroup(recipient Recipient, media []File, options ...any) ([]AccessibleMessage, error)
+	// Returns the sent AccessibleMessage and error on failure.
+	SendVideoNote(recipient Recipient, videoNote File, options ...any) (*AccessibleMessage, error)
+
+	// SendMediaGroup sends a group of photos or videos as an album to the recipient.
+	//
+	// recipient is the chat to send the media album to.
+	// media is the list of photo and video Files to send.
+	// options contains additional send options like disable_notification.
+	// Returns the sent Messages and error on failure.
+	SendMediaGroup(recipient Recipient, media []InputMedia, options ...any) ([]*AccessibleMessage, error)
 	//
 	//// SendLocation sends a location to the provided recipient.
 	////

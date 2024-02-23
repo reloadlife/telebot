@@ -15,6 +15,13 @@ func (b *bot) sendMethodRequest(method method, params any) ([]byte, error) {
 		return nil, nil
 	}
 
+	v, ok := params.(Verifiable)
+	if ok {
+		if err := v.Verify(); err != nil {
+			return nil, err
+		}
+	}
+
 	req, err := b.httpClient.TelegramCall(method.String(), b.token, structToMap(params))
 	if err != nil {
 		return nil, err

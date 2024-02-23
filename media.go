@@ -6,7 +6,7 @@ import (
 
 type InputMedia struct {
 	MediaType InputMediaType `json:"type"`
-	Media     File           `json:"media"`
+	Media     *File          `json:"media" file:"1"`
 
 	Caption   *string    `json:"caption,omitempty"`
 	ParseMode *ParseMode `json:"parse_mode,omitempty"`
@@ -14,7 +14,7 @@ type InputMedia struct {
 
 	HasSpoiler *bool `json:"has_spoiler,omitempty"`
 
-	Thumb *File `json:"thumbnail,omitempty"`
+	Thumb *File `json:"thumbnail,omitempty" file:"1"`
 
 	Width    *int `json:"width,omitempty"`
 	Height   *int `json:"height,omitempty"`
@@ -28,10 +28,10 @@ type InputMedia struct {
 	DisableContentTypeDetection *bool `json:"disable_content_type_detection,omitempty"`
 }
 
-func (c *InputMedia) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *InputMedia) Type() string {
-	if c.MediaType == "" {
+func (m *InputMedia) ReflectType() string { return fmt.Sprintf("%T", m) }
+func (m *InputMedia) Type() string {
+	if m.MediaType == "" {
 		return Unknown
 	}
-	return string(c.MediaType)
+	return string(m.MediaType)
 }

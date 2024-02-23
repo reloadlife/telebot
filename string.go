@@ -533,8 +533,8 @@ func (f *InputSticker) String() string {
 	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Sticker.String())
 }
 
-func (f *InputMedia) String() string {
-	return fmt.Sprintf("%s{ %s %s }", f.ReflectType(), f.Type(), f.Media.String())
+func (m *InputMedia) String() string {
+	return fmt.Sprintf("%s{ %s %s }", m.ReflectType(), m.Type(), m.Media.String())
 }
 
 func (f *ChatBoostAdded) String() string {

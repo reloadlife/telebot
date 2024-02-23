@@ -159,7 +159,7 @@ func (f *UserChatBoosts) MarshalJSON() ([]byte, error)               { return js
 func (f *SentWebAppMessage) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
 func (f *ReplyParameters) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
 func (f *QueryResult) MarshalJSON() ([]byte, error)                  { return json.Marshal(*f) }
-func (f *InputMedia) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (m *InputMedia) MarshalJSON() ([]byte, error)                   { return json.Marshal(*m) }
 
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
 	if u.IsAccessible() {
@@ -1488,12 +1488,12 @@ func (f *QueryResult) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *InputMedia) UnmarshalJSON(data []byte) error {
+func (m *InputMedia) UnmarshalJSON(data []byte) error {
 	type Alias InputMedia
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(m),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
