@@ -13,6 +13,10 @@ type Stringer interface {
 	String() string
 }
 
+func (p *ParseMode) String() string {
+	return string(*p)
+}
+
 func (u *Update) String() string {
 	indented, _ := json.MarshalIndent(u, "", "  ")
 	return fmt.Sprintf("%s{%d}\n%s\n", u.Type(), u.ID, indented)
