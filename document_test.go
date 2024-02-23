@@ -46,7 +46,7 @@ func Test_Online_SendDocument(t *testing.T) {
 		require.Equal(t, *msg.Caption, "Sample Caption. this one is from Disc.")
 	})
 
-	fileID := FromFileID(msg.Audio.FileID)
+	fileID := FromFileID(msg.Document.FileID)
 
 	t.Run("ResendFromFileID", func(t *testing.T) {
 		msg, err = tg.SendDocument(whereTo, fileID, "Sample Caption. this one is from FileID.", DisableContentTypeDetection)
