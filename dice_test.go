@@ -6,7 +6,7 @@ import (
 )
 
 func Test_Online_SendDice(t *testing.T) {
-	t.Run("Send a Contact Message With all Possible Tags", func(t *testing.T) {
+	t.Run("Send a Dice Message With all Possible Tags", func(t *testing.T) {
 		markup := NewMarkup()
 		markup.Inline()
 		markup.AddRow(NewInlineKeyboardButton("Dice Bro Dice !!", "hey"))

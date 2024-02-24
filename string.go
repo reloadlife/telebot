@@ -13,6 +13,10 @@ type Stringer interface {
 	String() string
 }
 
+func (d *MessageThreadID) String() string {
+	return fmt.Sprintf("%d", d)
+}
+
 func (d *DiceEmoji) String() string {
 	return string(*d)
 }
@@ -320,8 +324,8 @@ func (f *Story) String() string {
 	return fmt.Sprintf("%s{%d}", f.ReflectType(), f.ID)
 }
 
-func (f *Contact) String() string {
-	return fmt.Sprintf("%s{%s %d %p %s%p}", f.ReflectType(), f.PhoneNumber, f.UserID, f.VCard, f.FirstName, f.LastName)
+func (c *Contact) String() string {
+	return fmt.Sprintf("%s{%s %d %p %s%p}", c.ReflectType(), c.PhoneNumber, c.UserID, c.VCard, c.FirstName, c.LastName)
 }
 
 func (d *Dice) String() string {

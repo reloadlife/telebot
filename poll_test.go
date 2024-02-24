@@ -7,7 +7,7 @@ import (
 )
 
 func Test_Online_SendPoll(t *testing.T) {
-	t.Run("Send a Venue Message With all Possible Tags", func(t *testing.T) {
+	t.Run("Send a Poll Message With all Possible Tags", func(t *testing.T) {
 		markup := NewMarkup()
 		markup.Inline()
 		markup.AddRow(NewInlineKeyboardButton("Markup on poll !!", "hey"))

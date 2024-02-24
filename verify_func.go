@@ -133,7 +133,7 @@ func (v *Video) Verify() error                        { return verify(v) }
 func (a *Animation) Verify() error                    { return verify(a) }
 func (v *Voice) Verify() error                        { return verify(v) }
 func (v *VideoNote) Verify() error                    { return verify(v) }
-func (f *Contact) Verify() error                      { return verify(f) }
+func (c *Contact) Verify() error                      { return verify(c) }
 func (l *Location) Verify() error                     { return verify(l) }
 func (v *Venue) Verify() error                        { return verify(v) }
 func (p *PollOption) Verify() error                   { return verify(p) }

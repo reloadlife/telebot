@@ -212,14 +212,14 @@ type Bot interface {
 	//
 	// Returns the sent AccessibleMessage and error on failure.
 	SendDice(recipient Recipient, options ...any) (*AccessibleMessage, error)
+
+	// SendChatAction sends a chat action to the provided recipient.
 	//
-	//// SendChatAction sends a chat action to the provided recipient.
-	////
-	//// recipient is the chat to send the action to.
-	//// action is the chat action to send.
-	////
-	//// Returns an error on failure.
-	//SendChatAction(recipient Recipient, action ChatAction) error
+	// recipient is the chat to send the action to.
+	// action is the chat action to send.
+	//
+	// Returns an error on failure.
+	SendChatAction(recipient Recipient, action ChatAction, options ...any) error
 	//
 	//// SetMessageReaction adds a reaction to a message.
 	////

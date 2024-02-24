@@ -115,7 +115,7 @@ func (v *Video) MarshalJSON() ([]byte, error)                        { return js
 func (a *Animation) MarshalJSON() ([]byte, error)                    { return json.Marshal(*a) }
 func (v *Voice) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
 func (v *VideoNote) MarshalJSON() ([]byte, error)                    { return json.Marshal(*v) }
-func (f *Contact) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
+func (c *Contact) MarshalJSON() ([]byte, error)                      { return json.Marshal(*c) }
 func (l *Location) MarshalJSON() ([]byte, error)                     { return json.Marshal(*l) }
 func (v *Venue) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
 func (p *PollOption) MarshalJSON() ([]byte, error)                   { return json.Marshal(*p) }
@@ -960,12 +960,12 @@ func (v *VideoNote) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *Contact) UnmarshalJSON(data []byte) error {
+func (c *Contact) UnmarshalJSON(data []byte) error {
 	type Alias Contact
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(c),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
