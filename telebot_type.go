@@ -168,24 +168,24 @@ type Bot interface {
 	// options contains additional send options like disable_notification.
 	// Returns the sent Messages and error on failure.
 	SendMediaGroup(recipient Recipient, media []InputMedia, options ...any) ([]*AccessibleMessage, error)
+
+	// SendLocation sends a location to the provided recipient.
 	//
-	//// SendLocation sends a location to the provided recipient.
-	////
-	//// recipient is the chat to send the location to.
-	//// location is the latitude and longitude location to send.
-	//// options contains additional send options like live_period.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendLocation(recipient Recipient, location Location, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the location to.
+	// location is the latitude and longitude location to send.
+	// options contains additional send options like live_period.
 	//
-	//// SendVenue sends a venue to the provided recipient.
-	////
-	//// recipient is the chat to send the venue to.
-	//// venue is the venue information to send.
-	//// options contains additional send options like foursquare_id.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendVenue(recipient Recipient, venue Venue, options ...any) (*AccessibleMessage, error)
+	// Returns the sent AccessibleMessage and error on failure.
+	SendLocation(recipient Recipient, location Location, options ...any) (*AccessibleMessage, error)
+
+	// SendVenue sends a venue to the provided recipient.
+	//
+	// recipient is the chat to send the venue to.
+	// venue is the venue information to send.
+	// options contains additional send options like foursquare_id.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendVenue(recipient Recipient, venue Venue, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendContact sends a contact's info to the provided recipient.
 	////

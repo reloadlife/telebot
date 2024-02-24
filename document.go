@@ -25,13 +25,17 @@ type Document struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
-func (c *Document) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Document) Type() string        { return "Document" }
+func (d *Document) ReflectType() string { return fmt.Sprintf("%T", d) }
+func (d *Document) Type() string        { return "Document" }
 
-func (c *Document) File() *File {
-	f := FromFileID(c.FileID)
-	f.fileName = c.FileName
-	f.FileSize = c.FileSize
-	f.UniqueID = c.FileUniqueID
+func (d *Document) File() *File {
+	f := FromFileID(d.FileID)
+	f.fileName = d.FileName
+	f.FileSize = d.FileSize
+	f.UniqueID = d.FileUniqueID
 	return &f
+}
+
+func (d *Document) Send(b Bot, to Recipient, options ...any) (Message, error) {
+	return b.SendDocument(to, *d.File(), options...)
 }

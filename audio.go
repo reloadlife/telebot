@@ -34,13 +34,17 @@ type Audio struct {
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 }
 
-func (c *Audio) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Audio) Type() string        { return "Audio" }
+func (a *Audio) ReflectType() string { return fmt.Sprintf("%T", a) }
+func (a *Audio) Type() string        { return "Audio" }
 
-func (c *Audio) File() *File {
-	f := FromFileID(c.FileID)
-	f.fileName = c.FileName
-	f.FileSize = c.FileSize
-	f.UniqueID = c.FileUniqueID
+func (a *Audio) File() *File {
+	f := FromFileID(a.FileID)
+	f.fileName = a.FileName
+	f.FileSize = a.FileSize
+	f.UniqueID = a.FileUniqueID
 	return &f
+}
+
+func (a *Audio) Send(b Bot, to Recipient, options ...any) (Message, error) {
+	return b.SendAudio(to, *a.File(), options...)
 }

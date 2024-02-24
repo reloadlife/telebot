@@ -24,13 +24,17 @@ type VideoNote struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
-func (c *VideoNote) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *VideoNote) Type() string        { return "VideoNote" }
+func (v *VideoNote) ReflectType() string { return fmt.Sprintf("%T", v) }
+func (v *VideoNote) Type() string        { return "VideoNote" }
 
-func (c *VideoNote) File() *File {
-	f := FromFileID(c.FileID)
-	f.fileName = fmt.Sprintf("video_note_%s.mp4", c.FileUniqueID)
-	f.FileSize = c.FileSize
-	f.UniqueID = c.FileUniqueID
+func (v *VideoNote) File() *File {
+	f := FromFileID(v.FileID)
+	f.fileName = fmt.Sprintf("video_note_%s.mp4", v.FileUniqueID)
+	f.FileSize = v.FileSize
+	f.UniqueID = v.FileUniqueID
 	return &f
+}
+
+func (v *VideoNote) Send(b Bot, to Recipient, options ...any) (Message, error) {
+	return b.SendVideoNote(to, *v.File(), options...)
 }

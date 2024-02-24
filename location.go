@@ -26,5 +26,5 @@ type Location struct {
 	ProximityAlertRadius int `json:"proximity_alert_radius,omitempty"`
 }
 
-func (c *Location) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Location) Type() string        { return "Location" }
+func (l *Location) ReflectType() string { return fmt.Sprintf("%T", l) }
+func (l *Location) Type() string        { return "Location" }

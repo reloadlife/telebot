@@ -34,13 +34,17 @@ type Video struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
-func (c *Video) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Video) Type() string        { return "Video" }
+func (v *Video) ReflectType() string { return fmt.Sprintf("%T", v) }
+func (v *Video) Type() string        { return "Video" }
 
-func (c *Video) File() *File {
-	f := FromFileID(c.FileID)
-	f.fileName = c.FileName
-	f.FileSize = c.FileSize
-	f.UniqueID = c.FileUniqueID
+func (v *Video) File() *File {
+	f := FromFileID(v.FileID)
+	f.fileName = v.FileName
+	f.FileSize = v.FileSize
+	f.UniqueID = v.FileUniqueID
 	return &f
+}
+
+func (v *Video) Send(b Bot, to Recipient, options ...any) (Message, error) {
+	return b.SendVideo(to, *v.File(), options...)
 }

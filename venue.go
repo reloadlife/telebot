@@ -28,5 +28,5 @@ type Venue struct {
 	GooglePlaceType string `json:"google_place_type,omitempty"`
 }
 
-func (c *Venue) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Venue) Type() string        { return "Venue" }
+func (v *Venue) ReflectType() string { return fmt.Sprintf("%T", v) }
+func (v *Venue) Type() string        { return "Venue" }

@@ -108,16 +108,16 @@ func (c *InputTextMessageContent) MarshalJSON() ([]byte, error)      { return js
 func (c *ChatBoostSource) MarshalJSON() ([]byte, error)              { return json.Marshal(*c) }
 func (c *ChatBoost) MarshalJSON() ([]byte, error)                    { return json.Marshal(*c) }
 func (f *File) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
-func (f *PhotoSize) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
-func (f *Audio) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
-func (f *Document) MarshalJSON() ([]byte, error)                     { return json.Marshal(*f) }
-func (f *Video) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
-func (f *Animation) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
-func (f *Voice) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
-func (f *VideoNote) MarshalJSON() ([]byte, error)                    { return json.Marshal(*f) }
+func (p *PhotoSize) MarshalJSON() ([]byte, error)                    { return json.Marshal(*p) }
+func (a *Audio) MarshalJSON() ([]byte, error)                        { return json.Marshal(*a) }
+func (d *Document) MarshalJSON() ([]byte, error)                     { return json.Marshal(*d) }
+func (v *Video) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
+func (a *Animation) MarshalJSON() ([]byte, error)                    { return json.Marshal(*a) }
+func (v *Voice) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
+func (v *VideoNote) MarshalJSON() ([]byte, error)                    { return json.Marshal(*v) }
 func (f *Contact) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
-func (f *Location) MarshalJSON() ([]byte, error)                     { return json.Marshal(*f) }
-func (f *Venue) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
+func (l *Location) MarshalJSON() ([]byte, error)                     { return json.Marshal(*l) }
+func (v *Venue) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
 func (f *PollOption) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
 func (f *Dice) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
 func (f *Game) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
@@ -876,84 +876,84 @@ func (f *File) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *PhotoSize) UnmarshalJSON(data []byte) error {
+func (p *PhotoSize) UnmarshalJSON(data []byte) error {
 	type Alias PhotoSize
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(p),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *Audio) UnmarshalJSON(data []byte) error {
+func (a *Audio) UnmarshalJSON(data []byte) error {
 	type Alias Audio
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(a),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *Document) UnmarshalJSON(data []byte) error {
+func (d *Document) UnmarshalJSON(data []byte) error {
 	type Alias Document
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(d),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *Video) UnmarshalJSON(data []byte) error {
+func (v *Video) UnmarshalJSON(data []byte) error {
 	type Alias Video
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(v),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *Animation) UnmarshalJSON(data []byte) error {
+func (a *Animation) UnmarshalJSON(data []byte) error {
 	type Alias Animation
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(a),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *Voice) UnmarshalJSON(data []byte) error {
+func (v *Voice) UnmarshalJSON(data []byte) error {
 	type Alias Voice
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(v),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *VideoNote) UnmarshalJSON(data []byte) error {
+func (v *VideoNote) UnmarshalJSON(data []byte) error {
 	type Alias VideoNote
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(v),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -972,24 +972,24 @@ func (f *Contact) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *Location) UnmarshalJSON(data []byte) error {
+func (l *Location) UnmarshalJSON(data []byte) error {
 	type Alias Location
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(l),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *Venue) UnmarshalJSON(data []byte) error {
+func (v *Venue) UnmarshalJSON(data []byte) error {
 	type Alias Venue
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(v),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

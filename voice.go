@@ -23,13 +23,17 @@ type Voice struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
-func (c *Voice) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Voice) Type() string        { return "Voice" }
+func (v *Voice) ReflectType() string { return fmt.Sprintf("%T", v) }
+func (v *Voice) Type() string        { return "Voice" }
 
-func (c *Voice) File() *File {
-	f := FromFileID(c.FileID)
-	f.fileName = fmt.Sprintf("voice_%s.ogg", c.FileUniqueID)
-	f.FileSize = c.FileSize
-	f.UniqueID = c.FileUniqueID
+func (v *Voice) File() *File {
+	f := FromFileID(v.FileID)
+	f.fileName = fmt.Sprintf("voice_%s.ogg", v.FileUniqueID)
+	f.FileSize = v.FileSize
+	f.UniqueID = v.FileUniqueID
 	return &f
+}
+
+func (v *Voice) Send(b Bot, to Recipient, options ...any) (Message, error) {
+	return b.SendVoice(to, *v.File(), options...)
 }

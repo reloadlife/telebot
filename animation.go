@@ -34,8 +34,8 @@ type Animation struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
-func (c *Animation) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Animation) Type() string        { return "Animation" }
+func (a *Animation) ReflectType() string { return fmt.Sprintf("%T", a) }
+func (a *Animation) Type() string        { return "Animation" }
 
 func (a *Animation) File() *File {
 	f := FromFileID(a.FileID)
@@ -43,4 +43,8 @@ func (a *Animation) File() *File {
 	f.FileSize = a.FileSize
 	f.fileName = a.FileName
 	return &f
+}
+
+func (a *Animation) Send(b Bot, to Recipient, options ...any) (Message, error) {
+	return b.SendAnimation(to, *a.File(), options...)
 }

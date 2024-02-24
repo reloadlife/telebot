@@ -295,14 +295,14 @@ func (f *Entity) String() string {
 }
 
 func (f *LinkPreviewOptions) String() string { return fmt.Sprintf("%s{%p}", f.ReflectType(), f.URL) }
-func (f *Animation) String() string          { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
-func (f *Audio) String() string              { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
-func (f *Document) String() string           { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
-func (f *PhotoSize) String() string          { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (a *Animation) String() string          { return fmt.Sprintf("%s{%s}", a.ReflectType(), a.File()) }
+func (a *Audio) String() string              { return fmt.Sprintf("%s{%s}", a.ReflectType(), a.File()) }
+func (d *Document) String() string           { return fmt.Sprintf("%s{%s}", d.ReflectType(), d.File()) }
+func (p *PhotoSize) String() string          { return fmt.Sprintf("%s{%s}", p.ReflectType(), p.File()) }
 func (f *Sticker) String() string            { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
-func (f *Video) String() string              { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
-func (f *Voice) String() string              { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
-func (f *VideoNote) String() string          { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (v *Video) String() string              { return fmt.Sprintf("%s{%s}", v.ReflectType(), v.File()) }
+func (v *Voice) String() string              { return fmt.Sprintf("%s{%s}", v.ReflectType(), v.File()) }
+func (v *VideoNote) String() string          { return fmt.Sprintf("%s{%s}", v.ReflectType(), v.File()) }
 
 func (f *Story) String() string {
 	return fmt.Sprintf("%s{%d}", f.ReflectType(), f.ID)
@@ -328,12 +328,12 @@ func (f *PollOption) String() string {
 	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.Text, f.VoterCount)
 }
 
-func (f *Venue) String() string {
-	return fmt.Sprintf("%s{%s %s %s}", f.ReflectType(), f.Location.String(), f.Title, f.Address)
+func (v *Venue) String() string {
+	return fmt.Sprintf("%s{%s %s %s}", v.ReflectType(), v.Location.String(), v.Title, v.Address)
 }
 
-func (f *Location) String() string {
-	return fmt.Sprintf("%s{%f %f}", f.ReflectType(), f.Latitude, f.Longitude)
+func (l *Location) String() string {
+	return fmt.Sprintf("%s{%f %f}", l.ReflectType(), l.Latitude, l.Longitude)
 }
 
 func (f *Invoice) String() string {

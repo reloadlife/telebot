@@ -250,6 +250,8 @@ var (
 		"Stringer",
 		"JSONer",
 		"IFile",
+
+		"Sendable",
 	}
 )
 
