@@ -119,7 +119,7 @@ func (f *Contact) MarshalJSON() ([]byte, error)                      { return js
 func (l *Location) MarshalJSON() ([]byte, error)                     { return json.Marshal(*l) }
 func (v *Venue) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
 func (p *PollOption) MarshalJSON() ([]byte, error)                   { return json.Marshal(*p) }
-func (f *Dice) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
+func (d *Dice) MarshalJSON() ([]byte, error)                         { return json.Marshal(*d) }
 func (f *Game) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
 func (f *Sticker) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
 func (f *StickerSet) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
@@ -1008,12 +1008,12 @@ func (p *PollOption) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *Dice) UnmarshalJSON(data []byte) error {
+func (d *Dice) UnmarshalJSON(data []byte) error {
 	type Alias Dice
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(d),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

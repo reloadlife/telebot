@@ -204,14 +204,14 @@ type Bot interface {
 	//
 	// Returns the sent AccessibleMessage and error on failure.
 	SendPoll(recipient Recipient, question string, answerOptions []string, options ...any) (*AccessibleMessage, error)
+
+	// SendDice sends a dice with random value to the provided recipient.
 	//
-	//// SendDice sends a dice with random value to the provided recipient.
-	////
-	//// recipient is the chat to send the dice to.
-	//// options contains additional send options like emoji.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendDice(recipient Recipient, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the dice to.
+	// options contains additional send options like emoji.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendDice(recipient Recipient, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendChatAction sends a chat action to the provided recipient.
 	////

@@ -14,5 +14,5 @@ type Dice struct {
 	Value int `json:"value"`
 }
 
-func (c *Dice) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Dice) Type() string        { return "Dice" }
+func (d *Dice) ReflectType() string { return fmt.Sprintf("%T", d) }
+func (d *Dice) Type() string        { return "Dice" }

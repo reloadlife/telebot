@@ -13,6 +13,14 @@ type Stringer interface {
 	String() string
 }
 
+func (d *DiceEmoji) String() string {
+	return string(*d)
+}
+
+func (d *StickerEmoji) String() string {
+	return string(*d)
+}
+
 func (p *PollType) String() string {
 	return string(*p)
 }
@@ -316,8 +324,8 @@ func (f *Contact) String() string {
 	return fmt.Sprintf("%s{%s %d %p %s%p}", f.ReflectType(), f.PhoneNumber, f.UserID, f.VCard, f.FirstName, f.LastName)
 }
 
-func (f *Dice) String() string {
-	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.Emoji, f.Value)
+func (d *Dice) String() string {
+	return fmt.Sprintf("%s{%s %d}", d.ReflectType(), d.Emoji, d.Value)
 }
 
 func (f *Game) String() string {

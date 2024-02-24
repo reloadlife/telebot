@@ -137,7 +137,7 @@ func (f *Contact) Verify() error                      { return verify(f) }
 func (l *Location) Verify() error                     { return verify(l) }
 func (v *Venue) Verify() error                        { return verify(v) }
 func (p *PollOption) Verify() error                   { return verify(p) }
-func (f *Dice) Verify() error                         { return verify(f) }
+func (d *Dice) Verify() error                         { return verify(d) }
 func (f *Game) Verify() error                         { return verify(f) }
 func (f *Sticker) Verify() error                      { return verify(f) }
 func (f *StickerSet) Verify() error                   { return verify(f) }
