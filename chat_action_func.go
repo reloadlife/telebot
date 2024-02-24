@@ -13,7 +13,7 @@ func (b *bot) SendChatAction(recipient Recipient, action ChatAction, options ...
 		case *MessageThreadID:
 			params.ThreadID = v
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendDice.")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendChatAction.")
 		}
 	}
 

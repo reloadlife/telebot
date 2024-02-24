@@ -5,7 +5,7 @@ import "fmt"
 // setMessageReactionRequest is the request body for the methodSetMessageReaction (Bot.SetMessageReaction) method.
 type setMessageReactionRequest struct {
 	ChatID    any            `json:"chat_id"`
-	MessageID int            `json:"message_id"`
+	MessageID int64          `json:"message_id"`
 	Reaction  []ReactionType `json:"reaction,omitempty"`
 	IsBig     bool           `json:"is_big,omitempty"`
 }

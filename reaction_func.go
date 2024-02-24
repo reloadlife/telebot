@@ -1,26 +1,26 @@
 package telebot
 
-import "errors"
+import (
+	"fmt"
+)
 
-func (b *bot) SetMessageReaction(chatId Recipient, messageID int, options ...any) error {
+func (b *bot) SetMessageReaction(to Recipient, messageID int64, options ...any) error {
 	params := setMessageReactionRequest{
-		ChatID:    chatId.Recipient(),
+		ChatID:    to.Recipient(),
 		MessageID: messageID,
 		Reaction:  []ReactionType{},
 	}
 
 	for _, option := range options {
-		switch value := option.(type) {
+		switch v := option.(type) {
 		case ReactionType:
-			params.Reaction = append(params.Reaction, value)
-			break
+			params.Reaction = append(params.Reaction, v)
 		case []ReactionType:
-			params.Reaction = append(params.Reaction, value...)
-			break
+			params.Reaction = append(params.Reaction, v...)
 		case bool:
-			params.IsBig = value
+			params.IsBig = v
 		default:
-			return errors.New("telebot: invalid option type for SetMessageReaction method")
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SetMessageReaction.")
 		}
 	}
 

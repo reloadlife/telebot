@@ -220,15 +220,15 @@ type Bot interface {
 	//
 	// Returns an error on failure.
 	SendChatAction(recipient Recipient, action ChatAction, options ...any) error
+
+	// SetMessageReaction adds a reaction to a message.
 	//
-	//// SetMessageReaction adds a reaction to a message.
-	////
-	//// recipient is the chat the message is in.
-	//// messageID is the ID of the message to react to.
-	//// options contains the reaction emoji to use.
-	////
-	//// Returns an error on failure.
-	//SetMessageReaction(recipient Recipient, messageID int, options ...any) error
+	// recipient is the chat the message is in.
+	// messageID is the ID of the message to react to.
+	// options contains the reaction emoji to use.
+	//
+	// Returns an error on failure.
+	SetMessageReaction(recipient Recipient, messageID int64, options ...any) error
 	//
 	//// GetFile retrieves information about a file from its file_id.
 	////
