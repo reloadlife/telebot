@@ -45,13 +45,13 @@ type Poll struct {
 	CloseDate int `json:"close_date,omitempty"`
 }
 
-func (c *Poll) ReflectType() string {
-	return fmt.Sprintf("%T", c)
+func (p *Poll) ReflectType() string {
+	return fmt.Sprintf("%T", p)
 }
 
-func (c *Poll) Type() string {
-	if c.PollType == "" {
+func (p *Poll) Type() string {
+	if p.PollType == "" {
 		return Unknown
 	}
-	return string(c.PollType)
+	return string(p.PollType)
 }

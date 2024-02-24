@@ -40,6 +40,7 @@ go get -u go.mamad.dev/telebot
 - [ ] Regex Route Support
 - [ ] Code Cleanup and Refactoring
 - [ ] 100% Test Coverage
+- [ ] Better Test Cases and validation
 - [ ] Better Router
 - [ ] Telegram RateLimits (queue) (RateLimits)[https://limits.tginfo.me/en]
 

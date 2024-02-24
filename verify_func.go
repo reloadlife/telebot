@@ -100,7 +100,7 @@ func (c *ChatBoostRemoved) Verify() error             { return verify(c) }
 func (c *ChatBoostUpdated) Verify() error             { return verify(c) }
 func (c *ChatBoostAdded) Verify() error               { return verify(c) }
 func (c *ChatJoinRequest) Verify() error              { return verify(c) }
-func (c *Poll) Verify() error                         { return verify(c) }
+func (p *Poll) Verify() error                         { return verify(p) }
 func (c *PollAnswer) Verify() error                   { return verify(c) }
 func (c *ShippingQuery) Verify() error                { return verify(c) }
 func (c *PreCheckoutQuery) Verify() error             { return verify(c) }
@@ -136,7 +136,7 @@ func (v *VideoNote) Verify() error                    { return verify(v) }
 func (f *Contact) Verify() error                      { return verify(f) }
 func (l *Location) Verify() error                     { return verify(l) }
 func (v *Venue) Verify() error                        { return verify(v) }
-func (f *PollOption) Verify() error                   { return verify(f) }
+func (p *PollOption) Verify() error                   { return verify(p) }
 func (f *Dice) Verify() error                         { return verify(f) }
 func (f *Game) Verify() error                         { return verify(f) }
 func (f *Sticker) Verify() error                      { return verify(f) }

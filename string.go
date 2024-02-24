@@ -13,6 +13,10 @@ type Stringer interface {
 	String() string
 }
 
+func (p *PollType) String() string {
+	return string(*p)
+}
+
 func (p *ParseMode) String() string {
 	return string(*p)
 }
@@ -93,9 +97,9 @@ func (c *PreCheckoutQuery) String() string {
 	return fmt.Sprintf("%s{ID: %s, From: %s}\n%s\n", c.ReflectType(), c.ID, c.From.String(), indented)
 }
 
-func (c *Poll) String() string {
-	indented, _ := json.MarshalIndent(c, "", "  ")
-	return fmt.Sprintf("%s{ID: %s}\n%s\n", c.ReflectType(), c.ID, indented)
+func (p *Poll) String() string {
+	indented, _ := json.MarshalIndent(p, "", "  ")
+	return fmt.Sprintf("%s{ID: %s}\n%s\n", p.ReflectType(), p.ID, indented)
 }
 
 func (c *PollAnswer) String() string {
@@ -324,8 +328,8 @@ func (f *GameHighScore) String() string {
 	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.User.String(), f.Score)
 }
 
-func (f *PollOption) String() string {
-	return fmt.Sprintf("%s{%s %d}", f.ReflectType(), f.Text, f.VoterCount)
+func (p *PollOption) String() string {
+	return fmt.Sprintf("%s{%s %d}", p.ReflectType(), p.Text, p.VoterCount)
 }
 
 func (v *Venue) String() string {

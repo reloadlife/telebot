@@ -46,8 +46,8 @@ func (c *ShippingQuery) MarshalJSON() ([]byte, error) {
 func (c *PreCheckoutQuery) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
 }
-func (c *Poll) MarshalJSON() ([]byte, error) {
-	return json.Marshal(*c)
+func (p *Poll) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*p)
 }
 func (c *PollAnswer) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
@@ -118,7 +118,7 @@ func (v *VideoNote) MarshalJSON() ([]byte, error)                    { return js
 func (f *Contact) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
 func (l *Location) MarshalJSON() ([]byte, error)                     { return json.Marshal(*l) }
 func (v *Venue) MarshalJSON() ([]byte, error)                        { return json.Marshal(*v) }
-func (f *PollOption) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (p *PollOption) MarshalJSON() ([]byte, error)                   { return json.Marshal(*p) }
 func (f *Dice) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
 func (f *Game) MarshalJSON() ([]byte, error)                         { return json.Marshal(*f) }
 func (f *Sticker) MarshalJSON() ([]byte, error)                      { return json.Marshal(*f) }
@@ -348,12 +348,12 @@ func (c *PreCheckoutQuery) UnmarshalJSON(b []byte) error {
 	}
 	return nil
 }
-func (c *Poll) UnmarshalJSON(b []byte) error {
+func (p *Poll) UnmarshalJSON(b []byte) error {
 	type Alias Poll
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(c),
+		Alias: (*Alias)(p),
 	}
 	if err := json.Unmarshal(b, &aux); err != nil {
 		return err
@@ -996,12 +996,12 @@ func (v *Venue) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *PollOption) UnmarshalJSON(data []byte) error {
+func (p *PollOption) UnmarshalJSON(data []byte) error {
 	type Alias PollOption
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(p),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

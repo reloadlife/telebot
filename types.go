@@ -366,6 +366,10 @@ const (
 	OneTimeKeyboard
 	PersistentKeyboard
 	Selective
+
+	IsAnonymousPoll
+	AllowMultipleAnswers
+	IsClosedPoll
 )
 
 // markupType is the type of the markup.

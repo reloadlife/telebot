@@ -195,15 +195,15 @@ type Bot interface {
 	//
 	// Returns the sent AccessibleMessage and error on failure.
 	SendContact(recipient Recipient, contact Contact, options ...any) (*AccessibleMessage, error)
+
+	// SendPoll sends a poll to the provided recipient.
 	//
-	//// SendPoll sends a poll to the provided recipient.
-	////
-	//// recipient is the chat to send the poll to.
-	//// question is the poll question.
-	//// options contains additional send options like is_anonymous.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendPoll(recipient Recipient, question string, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the poll to.
+	// question is the poll question.
+	// options contains additional send options like is_anonymous.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendPoll(recipient Recipient, question string, answerOptions []string, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendDice sends a dice with random value to the provided recipient.
 	////
