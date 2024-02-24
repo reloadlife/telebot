@@ -13,8 +13,11 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Acc
 
 	for _, opt := range option {
 		switch v := opt.(type) {
-		case *ParseMode:
-			params.ParseMode = v
+		case *MessageThreadID:
+			params.MessageThreadID = v
+
+		case ParseMode:
+			params.ParseMode = &v
 
 		case []Entity:
 			params.Entities = v
@@ -35,9 +38,6 @@ func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*Acc
 			case Protected:
 				params.ProtectContent = toPtr(true)
 			}
-
-		case *int:
-			params.MessageThreadID = v
 
 		default:
 			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPhoto.")

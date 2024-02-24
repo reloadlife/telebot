@@ -4,6 +4,14 @@ import "fmt"
 
 type PhotoSizes []PhotoSize
 
+func (p *PhotoSizes) HighRes() *PhotoSize {
+	if len(*p) == 0 {
+		return nil
+	}
+
+	return &(*p)[len(*p)-1]
+}
+
 type PhotoSize struct {
 	FileID       string `json:"file_id"`
 	FileUniqueID string `json:"file_unique_id"`

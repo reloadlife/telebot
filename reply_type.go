@@ -12,5 +12,5 @@ type ReplyParameters struct {
 	QuotePosition            *int     `json:"quote_position,omitempty"`
 }
 
-func (c *ReplyParameters) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *ReplyParameters) Type() string        { return "ReplyParameters" }
+func (r *ReplyParameters) ReflectType() string { return fmt.Sprintf("%T", r) }
+func (r *ReplyParameters) Type() string        { return "ReplyParameters" }

@@ -19,8 +19,8 @@ func (b *bot) SendPhoto(to Recipient, photo File, options ...any) (*AccessibleMe
 			params.Caption = v
 		case string:
 			params.Caption = &v
-		case *ParseMode:
-			params.ParseMode = v
+		case ParseMode:
+			params.ParseMode = &v
 		case []Entity:
 			params.Entities = v
 		case ReplyMarkup:

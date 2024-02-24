@@ -484,8 +484,8 @@ func (f *BotCommandScope) String() string {
 	return fmt.Sprintf("%s{ %s %d %d}", f.ReflectType(), f.Type(), f.ChatID, f.UserID)
 }
 
-func (f *UserProfilePhotos) String() string {
-	return fmt.Sprintf("%s{ %d %d }", f.ReflectType(), f.TotalCount, len(f.Photos))
+func (u *UserProfilePhotos) String() string {
+	return fmt.Sprintf("%s{ %d %d }", u.ReflectType(), u.TotalCount, len(u.Photos))
 }
 
 func (f *UserChatBoosts) String() string {
@@ -496,8 +496,8 @@ func (f *StickerSet) String() string {
 	return fmt.Sprintf("%s{ %s %s }", f.ReflectType(), f.Name, f.Title)
 }
 
-func (f *ReplyParameters) String() string {
-	return fmt.Sprintf("%s{ %d -> %s }", f.ReflectType(), f.MessageID, f.ChatID)
+func (r *ReplyParameters) String() string {
+	return fmt.Sprintf("%s{ %d -> %s }", r.ReflectType(), r.MessageID, r.ChatID)
 }
 
 func (f *QueryResult) String() string {

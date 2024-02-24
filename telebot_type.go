@@ -229,22 +229,22 @@ type Bot interface {
 	//
 	// Returns an error on failure.
 	SetMessageReaction(recipient Recipient, messageID int64, options ...any) error
+
+	// GetUserProfilePhotos retrieves a user's profile photos.
 	//
-	//// GetFile retrieves information about a file from its file_id.
-	////
-	//// fileID is the ID of the file to get info about.
-	////
-	//// Returns File object and error on failure.
-	//GetFile(fileID string) (*File, error)
+	// userID is the ID of the user to get profile photos for.
+	// offset optionally offsets the list of returned photos.
+	// limit limits the number of photos returned.
 	//
-	//// GetUserProfilePhotos retrieves a user's profile photos.
-	////
-	//// userID is the ID of the user to get profile photos for.
-	//// offset optionally offsets the list of returned photos.
-	//// limit limits the number of photos returned.
-	////
-	//// Returns UserProfilePhotos and error on failure.
-	//GetUserProfilePhotos(userID int64, offset, limit int) (*UserProfilePhotos, error)
+	// Returns UserProfilePhotos and error on failure.
+	GetUserProfilePhotos(userID int64, offset, limit int) (*UserProfilePhotos, error)
+
+	// GetFile retrieves information about a file from its file_id.
+	//
+	// fileID is the ID of the file to get info about.
+	//
+	// Returns File object and error on failure.
+	GetFile(fileID string) (*File, error)
 	//
 	//// Ban bans a user from a chat.
 	////

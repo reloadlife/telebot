@@ -61,7 +61,7 @@ func New(s BotSettings) Bot {
 	}
 
 	b := &bot{
-		self:  &User{},
+		self:  nil,
 		token: s.Token,
 		onError: func(err error, _ Context) {
 			if s.OfflineMode {
@@ -89,6 +89,13 @@ func New(s BotSettings) Bot {
 			panic(errors.Join(err, errors.New("telebot: can't get bot info")))
 		}
 		b.self = self
+	}
+	if s.OfflineMode {
+		b.self = &User{
+			ID:        123456789,
+			IsBot:     true,
+			FirstName: "TeleBot",
+		}
 	}
 
 	return b

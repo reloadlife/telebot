@@ -12,35 +12,32 @@ func Test_Online_SendAudio(t *testing.T) {
 	AudioFromFile.fileName = "audio.m4a"
 	require.True(t, AudioFromFile.OnDisk())
 
-	t.Run("Upload an Audio file using a URL with all possible Tags", func(t *testing.T) {
-		markup := NewMarkup()
-		markup.Inline()
-		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
-		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/thumb.jpeg")
+	markup := NewMarkup()
+	markup.Inline()
+	markup.AddRow(NewInlineKeyboardButton("Audio TEST", "hey"))
 
-		msg, err := tg.SendAudio(whereTo, AudioFromURL,
-			"**Caption\\.**",
-			toPtr("**Caption\\.**"),
-			toPtr(ParseModeMarkdownV2),
-			markup,
-			Silent,
-			Protected,
-			106*time.Second,
-			Performer("TeleBot"),
-			Title("Test Audio"),
-			&thumb,
-		)
-		require.NoError(t, err)
-		require.NotNil(t, msg)
+	msg, err = tg.SendAudio(whereTo, AudioFromURL,
+		"**Caption\\.**",
+		ParseModeMarkdownV2,
+		markup,
+		Silent,
+		Protected,
+		106*time.Second,
+		Performer("TeleBot"),
+		Title("Test Audio"),
+		&thumb,
+		replyParam,
+	)
+	require.NoError(t, err)
+	require.NotNil(t, msg)
 
-		require.Equal(t, msg.Chat.ID, intChatID)
-		require.Equal(t, *msg.Caption, "Caption.")
-	})
+	require.Equal(t, msg.Chat.ID, intChatID)
+	require.Equal(t, *msg.Caption, "Caption.")
 
-	t.Run("WithBadOptions", func(t *testing.T) {
-		require.Panics(t, func() {
-			_, _ = tg.SendAudio(whereTo, AudioFromURL, "Some Caption!", false, true)
-		})
+	replyParam.MessageID = msg.ID
+
+	require.Panics(t, func() {
+		_, _ = tg.SendAudio(whereTo, AudioFromURL, "Some Caption!", false, true)
 	})
 
 }

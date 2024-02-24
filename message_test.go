@@ -3,112 +3,50 @@ package telebot
 import (
 	"fmt"
 	"github.com/stretchr/testify/require"
-	"os"
-	"strconv"
 	"testing"
 	"time"
 )
 
 func Test_Online_SendMessage(t *testing.T) {
-	tg := GetBot()
+	text := "*MarkDownMessage* [link](https://github.com/reloadlife/telebot) `code`"
+	markup := NewMarkup()
+	markup.Inline()
+	markup.AddRow(NewInlineKeyboardButton("Hey", "hey"))
+	markup.AddRow(NewInlineKeyboardButton("TeleBot !!", "hey"))
 
-	chatID, hasChatID := os.LookupEnv("CHAT_ID")
-
-	if !hasChatID {
-		panic("CHAT_ID is not set")
-	}
-
-	chat, err := strconv.ParseInt(chatID, 10, 64)
-
+	msg, err = tg.SendMessage(whereTo, text,
+		ParseModeMarkdown,
+		Protected,
+		&LinkPreviewOptions{
+			URL:           toPtr("https://go.mamad.dev/telebot"),
+			ShowAboveText: toPtr(true),
+		})
 	require.NoError(t, err)
+	require.NotNil(t, msg)
 
-	whereTo := &Chat{ID: chat}
-
-	var msg *AccessibleMessage
-
-	t.Run("Normal", func(t *testing.T) {
-		msg, err = tg.SendMessage(whereTo, "Hello, World!")
-		require.NoError(t, err)
-		require.NotNil(t, msg)
-
-		require.Equal(t, msg.Chat.ID, chat)
-		require.Equal(t, *msg.Text, "Hello, World!") // nullable stuff are pointer. So, we need to dereference it.
+	require.Equal(t, msg.Entities, []Entity{
+		{
+			EntityType: EntityTypeBold,
+			Offset:     0,
+			Length:     15,
+		},
+		{
+			EntityType: EntityTypeTextLink,
+			Offset:     16,
+			Length:     4,
+			URL:        "https://github.com/reloadlife/telebot",
+		},
+		{
+			EntityType: EntityTypeCode,
+			Offset:     21,
+			Length:     4,
+		},
 	})
 
-	t.Run("WithReplyToPreviousMessage", func(t *testing.T) {
-		text := fmt.Sprintf("Hello, World, With reply to previous message (%d)!", msg.ID)
-		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
-			ChatID:                   whereTo.Recipient(),
-			MessageID:                msg.ID,
-			AllowSendingWithoutReply: toPtr(false),
-		})
-		require.NoError(t, err)
-		require.NotNil(t, msg)
-
-		require.Equal(t, msg.Chat.ID, chat)
-		require.Equal(t, *msg.Text, text) // nullable stuff are pointer. So,
-		// we need to dereference it.
-		require.NotNil(t, msg.ReplyTo)
-		require.Equal(t, msg.ReplyTo.ID, msg.ID-1)
-	})
-
-	t.Run("WithReplyMarkup", func(t *testing.T) {
-		text := fmt.Sprintf("Hello, World, With reply markup and Reply Message (%d)!", msg.ID)
-		markup := NewMarkup()
-		markup.Inline()
-		markup.AddRow(NewInlineKeyboardButton("Hey", "hey"))
-		markup.AddRow(NewInlineKeyboardButton("Test From GH", "hey"))
-
-		msg, err = tg.SendMessage(whereTo, text, &ReplyParameters{
-			ChatID:                   whereTo.Recipient(),
-			MessageID:                msg.ID,
-			AllowSendingWithoutReply: toPtr(false),
-		}, markup)
-		require.NoError(t, err)
-		require.NotNil(t, msg)
-
-		require.True(t, markup.deepEqual(msg.ReplyMarkup))
-	})
-
-	t.Run("WithAllOptions", func(t *testing.T) {
-		text := "*MarkDownMessage* [link](https://github.com/reloadlife/telebot) `code`"
-		markup := NewMarkup()
-		markup.Inline()
-		markup.AddRow(NewInlineKeyboardButton("Hey", "hey"))
-		markup.AddRow(NewInlineKeyboardButton("TeleBot !!", "hey"))
-
-		msg, err = tg.SendMessage(whereTo, text,
-			toPtr(ParseModeMarkdown),
-			Protected,
-			&LinkPreviewOptions{
-				URL:           toPtr("https://go.mamad.dev/telebot"),
-				ShowAboveText: toPtr(true),
-			})
-		require.NoError(t, err)
-		require.NotNil(t, msg)
-
-		require.Equal(t, msg.Entities, []Entity{
-			{
-				EntityType: EntityTypeBold,
-				Offset:     0,
-				Length:     15,
-			},
-			{
-				EntityType: EntityTypeTextLink,
-				Offset:     16,
-				Length:     4,
-				URL:        "https://github.com/reloadlife/telebot",
-			},
-			{
-				EntityType: EntityTypeCode,
-				Offset:     21,
-				Length:     4,
-			},
-		})
-	})
+	replyParam.MessageID = msg.ID
 
 	t.Run("WithBadOptions", func(t *testing.T) {
-		text := fmt.Sprintf("Hello, World, With reply markup and Reply Message (%d)!", msg.ID)
+		text = fmt.Sprintf("Hello, World, With reply markup and Reply Message (%d)!", msg.ID)
 		require.Panics(t, func() {
 			msg, err = tg.SendMessage(whereTo, text, false, true)
 		})

@@ -2,12 +2,10 @@ package telebot
 
 import (
 	"encoding/json"
-	"go.mamad.dev/telebot/log"
 )
 
 func (b *bot) GetMe() (*User, error) {
 	if b.offlineMode {
-		log.Infof("Bot is in offline mode, GetMe() was called with a mock response")
 		return &User{
 			ID:        12345678,
 			IsBot:     true,
@@ -15,6 +13,10 @@ func (b *bot) GetMe() (*User, error) {
 			LastName:  nil,
 			Username:  toPtr("TestBot"),
 		}, nil
+	}
+
+	if b.self != nil {
+		return b.self, nil // Avoid Spam Calls to GetMe
 	}
 
 	raw, err := b.sendMethodRequest(methodGetMe, nil)

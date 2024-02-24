@@ -7,8 +7,7 @@ import (
 
 func Test_Online_SendReaction(t *testing.T) {
 	t.Run("Send a message then react to it with Banana", func(t *testing.T) {
-		msg, _ := tg.SendMessage(whereTo, "TestForReaction")
-		err := tg.SetMessageReaction(whereTo, msg.ID, ReactionType{
+		err = tg.SetMessageReaction(whereTo, msg.ID, ReactionType{
 			ReactionType: ReactionTypeTypeEmoji,
 			Emoji:        EmojiBanana,
 		})

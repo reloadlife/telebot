@@ -154,10 +154,10 @@ func (f *WebAppData) MarshalJSON() ([]byte, error)                   { return js
 func (f *WebAppInfo) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
 func (f *BotCommand) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
 func (f *BotCommandScope) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
-func (f *UserProfilePhotos) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
+func (u *UserProfilePhotos) MarshalJSON() ([]byte, error)            { return json.Marshal(*u) }
 func (f *UserChatBoosts) MarshalJSON() ([]byte, error)               { return json.Marshal(*f) }
 func (f *SentWebAppMessage) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
-func (f *ReplyParameters) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
+func (r *ReplyParameters) MarshalJSON() ([]byte, error)              { return json.Marshal(*r) }
 func (f *QueryResult) MarshalJSON() ([]byte, error)                  { return json.Marshal(*f) }
 func (m *InputMedia) MarshalJSON() ([]byte, error)                   { return json.Marshal(*m) }
 
@@ -1428,12 +1428,12 @@ func (f *BotCommandScope) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *UserProfilePhotos) UnmarshalJSON(data []byte) error {
+func (u *UserProfilePhotos) UnmarshalJSON(data []byte) error {
 	type Alias UserProfilePhotos
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(u),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -1464,12 +1464,12 @@ func (f *SentWebAppMessage) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *ReplyParameters) UnmarshalJSON(data []byte) error {
+func (r *ReplyParameters) UnmarshalJSON(data []byte) error {
 	type Alias ReplyParameters
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(r),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

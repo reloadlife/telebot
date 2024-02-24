@@ -19,6 +19,18 @@ var (
 	tg        = GetBot() // so we initiate it only once in tests. (for less spam on GetMe)
 	whereTo   Recipient  // also we can do this one once ?
 	intChatID int64
+	msg       *AccessibleMessage
+	err       error
+
+	fileID string
+
+	thumb = FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/thumb.jpeg")
+
+	replyParam = &ReplyParameters{
+		ChatID:                   intChatID,
+		MessageID:                1,
+		AllowSendingWithoutReply: toPtr(true),
+	}
 )
 
 func init() {
@@ -32,4 +44,5 @@ func init() {
 	}
 	whereTo = &Chat{ID: chat}
 	intChatID = chat
+	replyParam.ChatID = intChatID
 }

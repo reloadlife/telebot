@@ -26,24 +26,23 @@ func Test_Online_SendMediaGroup(t *testing.T) {
 		},
 	}
 
-	t.Run("SendMediaGroup URL with all possible Tags", func(t *testing.T) {
-		msg, err := tg.SendMediaGroup(whereTo, MediaList,
-			Silent,
-			Protected,
-		)
-		require.NoError(t, err)
-		require.NotNil(t, msg)
-	})
+	msgs, err := tg.SendMediaGroup(whereTo, MediaList,
+		Silent,
+		Protected,
+		replyParam,
+	)
+	require.NoError(t, err)
+	require.NotNil(t, msgs)
+	require.Len(t, msgs, 3)
+	require.Equal(t, *msgs[0].Caption, "Caption")
 
-	t.Run("WithBadOptions", func(t *testing.T) {
-		require.Panics(t, func() {
-			_, _ = tg.SendMediaGroup(whereTo, []InputMedia{
-				{
-					MediaType: InputMediaPhoto,
-					Media:     &PhotoFromFromURL,
-					Caption:   toPtr("Caption"),
-				}})
-		})
+	require.Panics(t, func() {
+		_, _ = tg.SendMediaGroup(whereTo, []InputMedia{
+			{
+				MediaType: InputMediaPhoto,
+				Media:     &PhotoFromFromURL,
+				Caption:   toPtr("Caption"),
+			}})
 	})
 
 }

@@ -15,14 +15,11 @@ func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleM
 		switch v := option.(type) {
 		case *MessageThreadID:
 			params.ThreadID = v
-
-		case *string:
-			params.Caption = v
 		case string:
 			params.Caption = &v
 
-		case *ParseMode:
-			params.ParseMode = *v
+		case ParseMode:
+			params.ParseMode = v
 		case []Entity:
 			params.Entities = v
 		case ReplyMarkup:

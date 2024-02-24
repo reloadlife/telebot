@@ -172,8 +172,8 @@ func (f *WebAppData) Verify() error                   { return verify(f) }
 func (f *WebAppInfo) Verify() error                   { return verify(f) }
 func (f *BotCommand) Verify() error                   { return verify(f) }
 func (f *BotCommandScope) Verify() error              { return verify(f) }
-func (f *UserProfilePhotos) Verify() error            { return verify(f) }
+func (u *UserProfilePhotos) Verify() error            { return verify(u) }
 func (f *UserChatBoosts) Verify() error               { return verify(f) }
 func (f *SentWebAppMessage) Verify() error            { return verify(f) }
-func (f *ReplyParameters) Verify() error              { return verify(f) }
+func (r *ReplyParameters) Verify() error              { return verify(r) }
 func (f *QueryResult) Verify() error                  { return verify(f) }

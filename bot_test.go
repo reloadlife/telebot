@@ -6,8 +6,6 @@ import (
 )
 
 func TestBot_GetMe(t *testing.T) {
-	tg := GetBot()
-
 	b, err := tg.GetMe()
 	require.NoError(t, err)
 
