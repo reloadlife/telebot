@@ -186,15 +186,15 @@ type Bot interface {
 	//
 	// Returns the sent AccessibleMessage and error on failure.
 	SendVenue(recipient Recipient, venue Venue, options ...any) (*AccessibleMessage, error)
+
+	// SendContact sends a contact's info to the provided recipient.
 	//
-	//// SendContact sends a contact's info to the provided recipient.
-	////
-	//// recipient is the chat to send the contact to.
-	//// contact is the contact info to send.
-	//// options contains additional send options like last_name.
-	////
-	//// Returns the sent AccessibleMessage and error on failure.
-	//SendContact(recipient Recipient, contact Contact, options ...any) (*AccessibleMessage, error)
+	// recipient is the chat to send the contact to.
+	// contact is the contact info to send.
+	// options contains additional send options like last_name.
+	//
+	// Returns the sent AccessibleMessage and error on failure.
+	SendContact(recipient Recipient, contact Contact, options ...any) (*AccessibleMessage, error)
 	//
 	//// SendPoll sends a poll to the provided recipient.
 	////

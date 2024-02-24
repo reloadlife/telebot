@@ -11,7 +11,7 @@ func Test_Online_SendDocument(t *testing.T) {
 	DocumentFileFromFile.fileName = "pdffile.pdf"
 
 	require.True(t, DocumentFileFromFile.OnDisk())
-	t.Run("Upload a file FROM URL ", func(t *testing.T) {
+	t.Run("Upload a file FROM URL", func(t *testing.T) {
 		markup := NewMarkup()
 		markup.Inline()
 		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
