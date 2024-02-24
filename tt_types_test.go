@@ -252,6 +252,7 @@ var (
 		"IFile",
 
 		"Sendable",
+		"DiceEmoji",
 	}
 )
 

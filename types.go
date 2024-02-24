@@ -75,12 +75,12 @@ type StickerEmoji string
 type DiceEmoji StickerEmoji
 
 const (
-	DiceEmojiDice    = "🎲"
-	DiceEmojiDart    = "🎯"
-	DiceEmojiBall    = "🏀"
-	DiceEmojiSoccer  = "⚽"
-	DiceEmojiBowling = "🎳"
-	DiceEmojiSlot    = "🎰"
+	DiceEmojiDice    DiceEmoji = "🎲"
+	DiceEmojiDart    DiceEmoji = "🎯"
+	DiceEmojiBall    DiceEmoji = "🏀"
+	DiceEmojiSoccer  DiceEmoji = "⚽"
+	DiceEmojiBowling DiceEmoji = "🎳"
+	DiceEmojiSlot    DiceEmoji = "🎰"
 )
 
 type Emoji StickerEmoji
