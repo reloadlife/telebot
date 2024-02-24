@@ -32,7 +32,7 @@ func TestBody(t *testing.T) {
 
 	require.Equal(t, "earth", data)
 
-	firstBody.Add("file", []byte("hello world"))
+	firstBody.Add("File", []byte("hello world"))
 
 	encoded, contentType = firstBody.Encode()
 

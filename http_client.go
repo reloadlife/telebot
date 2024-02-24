@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	httpc "go.mamad.dev/telebot/http"
+	"go.mamad.dev/telebot/log"
 	"io"
 	"net/http"
 	"reflect"
 	"strings"
 )
 
-func (b *bot) sendMethodRequest(method method, params any) ([]byte, error) {
+func (b *bot) sendMethodRequest(method method, params any, files ...httpc.File) ([]byte, error) {
 	if b.offlineMode {
 		return nil, nil
 	}
@@ -22,7 +24,7 @@ func (b *bot) sendMethodRequest(method method, params any) ([]byte, error) {
 		}
 	}
 
-	req, err := b.httpClient.TelegramCall(method.String(), b.token, structToMap(params))
+	req, err := b.httpClient.TelegramCall(method.String(), b.token, structToMap(params), files...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +55,6 @@ func structToMap(input any) map[string]any {
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		jsonTag := field.Tag.Get("json")
-		fileTag := field.Tag.Get("file")
 
 		if jsonTag == "" || jsonTag == "-" {
 			continue
@@ -67,23 +68,37 @@ func structToMap(input any) map[string]any {
 		}
 
 		jsonTag = strings.ReplaceAll(jsonTag, ",omitempty", "")
-		if fileTag != "" {
-			file, ok := v.(*File)
-			if ok {
-				if file.InCloud() {
-					result[jsonTag] = file.FileID
-					continue
-				}
 
-				if file.OnDisk() {
-					result[jsonTag] = file
-					continue
-				}
-
-				result[jsonTag] = file.GetFileURL()
+		switch vi := v.(type) {
+		case *File:
+			if vi.InCloud() {
+				result[jsonTag] = vi.FileID
 				continue
 			}
+
+			if vi.OnDisk() {
+				result[jsonTag] = vi
+				continue
+			}
+
+			result[jsonTag] = vi.GetFileURL()
+			continue
+
+		case []InputMedia:
+			medias := make([]map[string]any, 0)
+			for _, m := range vi {
+				media := structToMap(m)
+				media["type"] = m.MediaType
+				if m.Repr != "" {
+					media["media"] = m.FileRepresent()
+				}
+				medias = append(medias, media)
+				log.Infof("media: %v", media)
+			}
+			result[jsonTag] = medias
+			continue
 		}
+
 		result[jsonTag] = v
 	}
 

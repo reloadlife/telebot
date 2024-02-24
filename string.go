@@ -282,6 +282,9 @@ func (i *KeyboardButtonPollType) String() string {
 	return fmt.Sprintf("%s{ %s }", i.ReflectType(), i.Type())
 }
 func (f *File) String() string {
+	if f == nil {
+		return "File{nil}"
+	}
 	return fmt.Sprintf("%s{ID: %s, Size: %dMB}", f.ReflectType(), f.UniqueID, f.FileSize/1024/1024)
 }
 

@@ -15,16 +15,14 @@ func Test_Online_SendVideoNote(t *testing.T) {
 	t.Run("Upload an VideoNote file using a URL with all possible Tags", func(t *testing.T) {
 		markup := NewMarkup()
 		markup.Inline()
-		markup.AddRow(NewInlineKeyboardButton("test!", "hey"))
-		thumb := FromURL("https://raw.githubusercontent.com/reloadlife/telebot/master/.github/thumb.jpeg")
+		markup.AddRow(NewInlineKeyboardButton("video note test", "hey"))
 
 		msg, err := tg.SendVideoNote(whereTo, VideoNoteFromURL,
 			markup,
 			Silent,
 			Protected,
-			1*time.Second,
+			2*time.Second,
 			Width(400),
-			&thumb,
 		)
 		require.NoError(t, err)
 		require.NotNil(t, msg)

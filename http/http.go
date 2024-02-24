@@ -11,7 +11,7 @@ const DefaultTelegramAPIURL = "https://api.telegram.org"
 type Client interface {
 	Do(req *http.Request) (*http.Response, error)
 	Post(url string, headers http.Header, body Body) (*http.Response, error)
-	TelegramCall(method string, token string, params map[string]interface{}) (*http.Response, error)
+	TelegramCall(method string, token string, params map[string]interface{}, files ...File) (*http.Response, error)
 }
 
 type httpClient struct {

@@ -33,8 +33,12 @@ func (h *httpClient) Post(_url string, headers http.Header, body Body) (*http.Re
 	return h.Do(req)
 }
 
-func (h *httpClient) TelegramCall(method string, token string, params map[string]interface{}) (*http.Response, error) {
+func (h *httpClient) TelegramCall(method string, token string, params map[string]interface{}, files ...File) (*http.Response, error) {
 	headers := http.Header{}
 	headers.Set("Accept", "application/json")
-	return h.Post(fmt.Sprintf("/bot%s/%s", token, method), headers, NewBody(params))
+	b := NewBody(params)
+	for _, file := range files {
+		b.Add(file.Name, file)
+	}
+	return h.Post(fmt.Sprintf("/bot%s/%s", token, method), headers, b)
 }

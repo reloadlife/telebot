@@ -3,6 +3,9 @@ package telebot
 import (
 	"encoding/json"
 	"fmt"
+	httpc "go.mamad.dev/telebot/http"
+	"io"
+	"strconv"
 )
 
 func (b *bot) SendMediaGroup(to Recipient, media []InputMedia, options ...any) ([]*AccessibleMessage, error) {
@@ -10,14 +13,30 @@ func (b *bot) SendMediaGroup(to Recipient, media []InputMedia, options ...any) (
 		panic("telebot: to send media as a group, you have to provide at least 2 and upto 10 medias")
 	}
 
+	files := make([]httpc.File, 0)
+
 	var mediaType InputMediaType
-	for _, m := range media {
+	for i, m := range media {
 		if mediaType != "" {
 			if mediaType != m.MediaType {
 				panic("telebot: only one MediaType is able to be provided in SendMediaGroup")
 			}
 		}
 		mediaType = m.MediaType
+		switch {
+		case m.Media.GetFileReader() != nil:
+			m.Repr = "attach://" + strconv.Itoa(i)
+			r, _ := io.ReadAll(m.Media.GetFileReader())
+			files = append(files, httpc.File{
+				Name:     strconv.Itoa(i),
+				FileName: m.Media.GetFileName(),
+				DATA:     r,
+			})
+		case m.Media != nil:
+
+		default:
+			return nil, fmt.Errorf("telebot: album entry #%d does not exist", i)
+		}
 	}
 
 	params := sendMediaGroupRequest{
@@ -50,7 +69,7 @@ func (b *bot) SendMediaGroup(to Recipient, media []InputMedia, options ...any) (
 		Result []*AccessibleMessage
 	}
 
-	req, err := b.sendMethodRequest(methodSendMediaGroup, params)
+	req, err := b.sendMethodRequest(methodSendMediaGroup, params, files...)
 	if err != nil {
 		return nil, err
 	}

@@ -12,6 +12,10 @@ import (
 	"strings"
 )
 
+type FileeRepresenter interface {
+	FileRepresent() string
+}
+
 type Body interface {
 	MarshalJSON() ([]byte, error)
 	Add(key string, value any)
@@ -37,7 +41,7 @@ type body struct {
 	b map[string]any
 
 	hasFiles bool
-	files    []file
+	files    []File
 
 	buffer *bytes.Buffer // Use bytes.Buffer instead of io.Pipe
 
@@ -47,19 +51,19 @@ type body struct {
 }
 
 func NewBody(p map[string]any) Body {
-	files := make([]file, 0)
-	for k, v := range p {
-		v, ok := v.(Uploadable)
-		if ok {
+	files := make([]File, 0)
+	for k, l := range p {
+		switch v := l.(type) {
+		case Uploadable:
 			if v.GetFileReader() != nil {
 				_b, err := io.ReadAll(v.GetFileReader())
 				if err != nil {
-					panic("httpc: failed to read file")
+					panic("httpc: failed to read File")
 				}
-				files = append(files, file{
-					name:     k,
-					data:     _b,
-					fileName: v.GetFileName(),
+				files = append(files, File{
+					Name:     k,
+					DATA:     _b,
+					FileName: v.GetFileName(),
 				})
 				delete(p, k)
 				continue
@@ -75,10 +79,10 @@ func NewBody(p map[string]any) Body {
 	}
 }
 
-type file struct {
-	name     string
-	fileName string
-	data     []byte
+type File struct {
+	Name     string
+	FileName string
+	DATA     []byte
 }
 
 func (b *body) MarshalJSON() ([]byte, error) {
@@ -89,9 +93,9 @@ func (b *body) Add(key string, value any) {
 	switch v := value.(type) {
 	case []byte:
 		b.hasFiles = true
-		b.files = append(b.files, file{
-			name: key,
-			data: v,
+		b.files = append(b.files, File{
+			Name: key,
+			DATA: v,
 		})
 	case Uploadable:
 		switch {
@@ -100,28 +104,28 @@ func (b *body) Add(key string, value any) {
 		case v.OnDisk():
 			fileData, err := os.ReadFile(v.GetFileLocal())
 			if err != nil {
-				panic("httpc: failed to read file")
+				panic("httpc: failed to read File")
 			}
-			b.files = append(b.files, file{
-				name: key,
-				data: fileData,
+			b.files = append(b.files, File{
+				Name: key,
+				DATA: fileData,
 			})
 		case v.GetFileReader() != nil:
 			fileData, err := io.ReadAll(v.GetFileReader())
 			if err != nil {
-				panic("httpc: failed to read file")
+				panic("httpc: failed to read File")
 			}
 
-			b.files = append(b.files, file{
-				name: key,
-				data: fileData,
+			b.files = append(b.files, File{
+				Name: key,
+				DATA: fileData,
 			})
 
 		case v.GetFileURL() != "":
 			b.b[key] = v.GetFileURL()
 
 		default:
-			panic("httpc: file for field " + key + " doesn't exist")
+			panic("httpc: File for field " + key + " doesn't exist")
 		}
 
 	default:
@@ -146,15 +150,15 @@ func (b *body) Encode() (io.Reader, string) {
 		b.w = multipart.NewWriter(b.buffer)
 
 		for _, f := range b.files {
-			part, err := b.w.CreateFormFile(f.name, f.fileName)
+			part, err := b.w.CreateFormFile(f.Name, f.FileName)
 			if err != nil {
-				panic("httpc: failed to create form file")
+				panic("httpc: failed to create form File")
 			}
-			fileType := http.DetectContentType(f.data)
+			fileType := http.DetectContentType(f.DATA)
 			if !strings.Contains(fileType, "image") {
 				_, _ = part.Write([]byte(fmt.Sprintf("Content-Type: %s\r\n\r\n", fileType)))
 			}
-			_, _ = part.Write(f.data)
+			_, _ = part.Write(f.DATA)
 		}
 
 		for key, value := range b.b {
