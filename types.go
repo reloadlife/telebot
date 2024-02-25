@@ -4,6 +4,14 @@ package telebot
 
 const Unknown = "unknown"
 
+type StickerType string
+
+const (
+	StickerTypeRegular     StickerType = "regular"
+	StickerTypeMask        StickerType = "mask"
+	StickerTypeCustomEmoji StickerType = "custom_emoji"
+)
+
 type StickerFormat string
 
 const (
@@ -393,6 +401,8 @@ const (
 	AllowMultipleAnswers
 	IsClosedPoll
 	RevokeMessages
+
+	StickerNeedsRepainting
 )
 
 // markupType is the type of the markup.

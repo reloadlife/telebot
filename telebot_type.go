@@ -848,7 +848,23 @@ type Bot interface {
 	// Format is the image format like png, webp, etc.
 	//
 	// Returns the uploaded File and any error.
-	UploadStickerFile(user Userable, sticker File, Format string) (*File, error)
+	UploadStickerFile(user Userable, sticker File, format StickerFormat) (*File, error)
+
+	// CreateNewStickerSet creates a new sticker set owned by a user.
+	// Returns any error that occurred.
+	CreateNewStickerSet(user Userable, name, title string, stickers []InputSticker, format StickerFormat, options ...any) error
+
+	// AddStickerToSet adds a new sticker to an existing set.
+	// Returns any error that occurred.
+	AddStickerToSet(user Userable, name string, sticker InputSticker) error
+
+	// SetStickerPositionInSet moves a sticker to a new position.
+	// Returns any error that occurred.
+	SetStickerPositionInSet(sticker string, position int) error
+
+	// DeleteStickerFromSet removes a sticker from a set.
+	// Returns any error that occurred.
+	DeleteStickerFromSet(sticker string) error
 
 	// GetCustomEmojiStickers gets stickers for the given custom emoji.
 	//
@@ -856,54 +872,6 @@ type Bot interface {
 	//
 	// Returns the list of matching Stickers.
 	//GetCustomEmojiStickers(CustomEmojiIds ...CustomEmoji) ([]Sticker, error)
-
-	// CreateNewStickerSet creates a new sticker set owned by a user.
-	//
-	// userID is the owner user ID.
-	//
-	// name is the short name for the set.
-	//
-	// title is the sticker set title.
-	//
-	// sticker is the list of stickers to add.
-	//
-	// format is the upload sticker format.
-	//
-	// options can specify additional parameters.
-	//
-	// Returns any error that occurred.
-	//CreateNewStickerSet(userID int64, name, title string, sticker []InputSticker, format string, options ...any) error
-
-	// AddStickerToSet adds a new sticker to an existing set.
-	//
-	// userID is the owner user ID.
-	//
-	// name is the sticker set name.
-	//
-	// sticker is the new sticker to add.
-	//
-	// format is the upload sticker format.
-	//
-	// options can specify additional parameters.
-	//
-	// Returns any error that occurred.
-	//AddStickerToSet(userID int64, name string, sticker InputSticker, format string, options ...any) error
-
-	// SetStickerPositionInSet moves a sticker to a new position.
-	//
-	// sticker is the file ID of the sticker.
-	//
-	// position is the new 0-based position.
-	//
-	// Returns any error that occurred.
-	//SetStickerPositionInSet(sticker string, position int) error
-
-	// DeleteStickerFromSet removes a sticker from a set.
-	//
-	// sticker is the file ID of the sticker.
-	//
-	// Returns any error that occurred.
-	//DeleteStickerFromSet(sticker string)
 
 	// SetStickerEmojiList updates the emoji list for a sticker.
 	//
@@ -950,7 +918,7 @@ type Bot interface {
 	// thumbnail is the new thumbnail file.
 	//
 	// Returns any error that occurred.
-	//SetStickerSetThumbnail(name string, userId int64, thumbnail File) error
+	//SetStickerSetThumbnail(name string, userId Userable, thumbnail File) error
 
 	// SetCustomEmojiStickerSetThumbnail updates emoji set thumbnail.
 	//

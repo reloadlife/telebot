@@ -3,6 +3,9 @@ package telebot
 import (
 	"encoding/json"
 	"fmt"
+	httpc "go.mamad.dev/telebot/http"
+	"io"
+	"strconv"
 )
 
 func (b *bot) SendSticker(to Recipient, sticker File, options ...any) (*AccessibleMessage, error) {
@@ -74,11 +77,11 @@ func (b *bot) GetStickerSet(name string) (*StickerSet, error) {
 	return resp.Result, nil
 }
 
-func (b *bot) UploadStickerFile(user Userable, sticker File, Format string) (*File, error) {
+func (b *bot) UploadStickerFile(user Userable, sticker File, format StickerFormat) (*File, error) {
 	params := uploadStickerFileParams{
 		UserID:        user,
 		Sticker:       &sticker,
-		StickerFormat: StickerFormat(Format),
+		StickerFormat: format,
 	}
 
 	var resp struct {
@@ -95,4 +98,90 @@ func (b *bot) UploadStickerFile(user Userable, sticker File, Format string) (*Fi
 	}
 
 	return resp.Result, nil
+}
+
+// CreateNewStickerSet
+// todo: this function needs to be tests via uploading files (it works with URL and fileID)
+// if it didn't work, either provide a fix or Open an issue at https://github.com/reloadlife/telebot/issues/new
+func (b *bot) CreateNewStickerSet(user Userable, name, title string, stickers []InputSticker, format StickerFormat, options ...any) error {
+	if len(stickers) < 1 || len(stickers) > 50 {
+		panic("telebot: stickers count must be between 1 and 50")
+	}
+
+	files := make([]httpc.File, 0, len(stickers))
+
+	for i, s := range stickers {
+		switch {
+		case s.Sticker.GetFileReader() != nil:
+			s.Repr = "attach://" + strconv.Itoa(i)
+			r, _ := io.ReadAll(s.Sticker.GetFileReader())
+			files = append(files, httpc.File{
+				Name:     strconv.Itoa(i),
+				FileName: s.Sticker.GetFileName(),
+				DATA:     r,
+			})
+		}
+	}
+
+	params := createNewStickerSetParams{
+		UserID:        user,
+		Name:          name,
+		Title:         title,
+		Stickers:      stickers,
+		StickerFormat: format,
+	}
+
+	for _, option := range options {
+		switch v := option.(type) {
+		case StickerType:
+			params.StickerType = v
+
+		case Option:
+			switch v {
+			case StickerNeedsRepainting:
+				params.NeedsRepainting = true
+			}
+
+		default:
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in CreateNewStickerSet.")
+		}
+	}
+
+	_, err := b.sendMethodRequest(methodCreateNewStickerSet, params)
+	return err
+}
+
+func (b *bot) AddStickerToSet(user Userable, name string, sticker InputSticker) error {
+	params := addStickerToSetParams{
+		UserID:  user,
+		Name:    name,
+		Sticker: sticker,
+	}
+
+	_, err := b.sendMethodRequest(methodAddStickerToSet, params)
+	return err
+}
+
+func (b *bot) SetStickerPositionInSet(sticker string, position int) error {
+	params := struct {
+		Sticker  string `json:"sticker"`
+		Position int    `json:"position"`
+	}{
+		Sticker:  sticker,
+		Position: position,
+	}
+
+	_, err := b.sendMethodRequest(methodSetStickerPositionInSet, params)
+	return err
+}
+
+func (b *bot) DeleteStickerFromSet(sticker string) error {
+	params := struct {
+		Sticker string `json:"sticker"`
+	}{
+		Sticker: sticker,
+	}
+
+	_, err := b.sendMethodRequest(methodDeleteStickerFromSet, params)
+	return err
 }

@@ -99,7 +99,7 @@ func (c *EncryptedPassportElement) MarshalJSON() ([]byte, error)     { return js
 func (c *EncryptedCredentials) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
 func (c *PassportFile) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
 func (c *PassportElementError) MarshalJSON() ([]byte, error)         { return json.Marshal(*c) }
-func (c *InputSticker) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
+func (s *InputSticker) MarshalJSON() ([]byte, error)                 { return json.Marshal(*s) }
 func (c *InputInvoiceMessageContent) MarshalJSON() ([]byte, error)   { return json.Marshal(*c) }
 func (c *InputLocationMessageContent) MarshalJSON() ([]byte, error)  { return json.Marshal(*c) }
 func (c *InputVenueMessageContent) MarshalJSON() ([]byte, error)     { return json.Marshal(*c) }
@@ -768,12 +768,12 @@ func (c *PassportElementError) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (c *InputSticker) UnmarshalJSON(data []byte) error {
+func (s *InputSticker) UnmarshalJSON(data []byte) error {
 	type Alias InputSticker
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(c),
+		Alias: (*Alias)(s),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

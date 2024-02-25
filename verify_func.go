@@ -117,7 +117,7 @@ func (c *EncryptedPassportElement) Verify() error     { return verify(c) }
 func (c *EncryptedCredentials) Verify() error         { return verify(c) }
 func (c *PassportFile) Verify() error                 { return verify(c) }
 func (c *PassportElementError) Verify() error         { return verify(c) }
-func (c *InputSticker) Verify() error                 { return verify(c) }
+func (s *InputSticker) Verify() error                 { return verify(s) }
 func (c *InputInvoiceMessageContent) Verify() error   { return verify(c) }
 func (c *InputLocationMessageContent) Verify() error  { return verify(c) }
 func (c *InputVenueMessageContent) Verify() error     { return verify(c) }

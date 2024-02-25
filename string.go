@@ -13,6 +13,9 @@ type Stringer interface {
 	String() string
 }
 
+func (s *StickerType) String() string {
+	return fmt.Sprintf("%d", s)
+}
 func (s *StickerFormat) String() string {
 	return fmt.Sprintf("%d", s)
 }
@@ -552,8 +555,8 @@ func (f *InputInvoiceMessageContent) String() string {
 	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Title)
 }
 
-func (f *InputSticker) String() string {
-	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Sticker.String())
+func (s *InputSticker) String() string {
+	return fmt.Sprintf("%s{ %s }", s.ReflectType(), s.Sticker.String())
 }
 
 func (m *InputMedia) String() string {

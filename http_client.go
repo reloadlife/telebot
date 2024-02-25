@@ -104,6 +104,20 @@ func structToMap(input any) map[string]any {
 			}
 			result[jsonTag] = medias
 			continue
+		case []InputSticker:
+			stickers := make([]map[string]any, 0)
+			for _, s := range vi {
+				sticker := structToMap(s)
+				sticker["sticker"] = s.FileRepresent()
+				stickers = append(stickers, sticker)
+			}
+			result[jsonTag] = stickers
+			continue
+		case InputSticker:
+			sticker := structToMap(vi)
+			sticker["sticker"] = vi.FileRepresent()
+			result[jsonTag] = sticker
+			continue
 		}
 
 		result[jsonTag] = v

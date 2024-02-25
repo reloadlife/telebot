@@ -20,6 +20,22 @@ type uploadStickerFileParams struct {
 	StickerFormat StickerFormat `json:"sticker_format,omitempty"`
 }
 
+type createNewStickerSetParams struct {
+	UserID          any            `json:"user_id"`
+	Name            string         `json:"name"`
+	Title           string         `json:"title"`
+	Stickers        []InputSticker `json:"stickers"`
+	StickerFormat   StickerFormat  `json:"sticker_format,omitempty"`
+	StickerType     StickerType    `json:"sticker_type"`
+	NeedsRepainting bool           `json:"needs_repainting,omitempty"`
+}
+
+type addStickerToSetParams struct {
+	UserID  any          `json:"user_id"`
+	Name    string       `json:"name"`
+	Sticker InputSticker `json:"sticker"`
+}
+
 // StickerSet represents a sticker set.
 type StickerSet struct {
 	// Name represents the sticker set name.
@@ -48,11 +64,16 @@ func (c *StickerSet) ReflectType() string { return fmt.Sprintf("%T", c) }
 func (c *StickerSet) Type() string        { return "StickerSet" }
 
 type InputSticker struct {
-	Sticker      File           `json:"sticker"`
+	Sticker      File           `json:"sticker" file:"1"`
 	EmojiList    []StickerEmoji `json:"emoji_list,omitempty"`
 	MaskPosition *MaskPosition  `json:"mask_position,omitempty"`
 	Keywords     []string       `json:"keywords,omitempty"`
+	Repr         string         `json:"-"`
 }
 
-func (c *InputSticker) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *InputSticker) Type() string        { return "InputSticker" }
+func (s *InputSticker) FileRepresent() string {
+	return s.Repr
+}
+
+func (s *InputSticker) ReflectType() string { return fmt.Sprintf("%T", s) }
+func (s *InputSticker) Type() string        { return "InputSticker" }
