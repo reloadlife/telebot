@@ -22,6 +22,8 @@ const (
 // — MessageType() string: Returns the type of the message.
 type Message interface {
 	MessageType() string
+
+	MessageSig() (Recipient, int64)
 }
 
 func (u *AccessibleMessage) MessageType() string        { return AccessibleMessageType }
@@ -272,4 +274,12 @@ func (u *AccessibleMessage) Type() string {
 
 func (u *AccessibleMessage) ReflectType() string {
 	return fmt.Sprintf("%T", u)
+}
+
+func (u *AccessibleMessage) MessageSig() (Recipient, int64) {
+	return u.Chat, u.ID
+}
+
+func (u *InaccessibleMessage) MessageSig() (Recipient, int64) {
+	return u.Chat, u.ID
 }

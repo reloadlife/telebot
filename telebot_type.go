@@ -719,7 +719,7 @@ type Bot interface {
 	// options can specify additional editing options.
 	//
 	// Returns the edited AccessibleMessage and any error.
-	//EditMessageText(recipient Recipient, messageID int, text string, options ...any) (*AccessibleMessage, error)
+	EditMessageText(msg Message, text string, options ...any) (*AccessibleMessage, error)
 
 	// EditMessageTextInline edits text of an inline message.
 	//
@@ -730,7 +730,7 @@ type Bot interface {
 	// options can specify additional editing options.
 	//
 	// Returns any error that occurred.
-	//EditMessageTextInline(inlineMessageID string, text string, options ...any) error
+	EditMessageTextInline(inlineMessageID string, text string, options ...any) error
 
 	// EditMessageCaption edits the caption of a previously sent message.
 	//
@@ -743,7 +743,7 @@ type Bot interface {
 	// options can specify additional editing options.
 	//
 	// Returns the edited AccessibleMessage and any error.
-	//EditMessageCaption(recipient Recipient, messageID int, caption string, options ...any) (*AccessibleMessage, error)
+	EditMessageCaption(msg Message, caption string, options ...any) (*AccessibleMessage, error)
 
 	// EditMessageCaptionInline edits caption of an inline message.
 	//
@@ -754,7 +754,7 @@ type Bot interface {
 	// options can specify additional editing options.
 	//
 	// Returns any error that occurred.
-	//EditMessageCaptionInline(inlineMessageID string, caption string, options ...any) error
+	EditMessageCaptionInline(inlineMessageID string, caption string, options ...any) error
 
 	// EditMessageMedia edits the media content of a previously sent message.
 	//
@@ -767,7 +767,7 @@ type Bot interface {
 	// options can specify additional editing options.
 	//
 	// Returns the edited AccessibleMessage and any error.
-	//EditMessageMedia(recipient Recipient, messageID int, media InputMedia, options ...any) (*AccessibleMessage, error)
+	EditMessageMedia(msg Message, media InputMedia, options ...any) (*AccessibleMessage, error)
 
 	// EditMessageMediaInline edits media content of an inline message.
 	//
@@ -778,51 +778,23 @@ type Bot interface {
 	// options can specify additional editing options.
 	//
 	// Returns any error that occurred.
-	//EditMessageMediaInline(inlineMessageID string, media InputMedia, options ...any) error
+	EditMessageMediaInline(inlineMessageID string, media InputMedia, options ...any) error
 
 	// EditMessageLiveLocation edits live location in a previously sent message.
-	//
-	// recipient is the chat to edit the message in.
-	//
-	// messageID is the ID of the message to edit.
-	//
-	// latitude and longitude are the new location.
-	//
-	// options can specify additional editing options.
-	//
 	// Returns the edited AccessibleMessage and any error.
-	//EditMessageLiveLocation(recipient Recipient, messageID int, latitude float64, longitude float64, options ...any) (*AccessibleMessage, error)
+	EditMessageLiveLocation(msg Message, location Location, options ...any) (*AccessibleMessage, error)
 
 	// EditMessageLiveLocationInline edits live location in an inline message.
-	//
-	// inlineMessageID is the ID of the inline message to edit.
-	//
-	// latitude and longitude are the new location.
-	//
-	// options can specify additional editing options.
-	//
 	// Returns any error that occurred.
-	//EditMessageLiveLocationInline(inlineMessageID string, latitude float64, longitude float64, options ...any) error
+	EditMessageLiveLocationInline(inlineMessageID string, location Location, options ...any) error
 
 	// StopMessageLiveLocation stops updating live location in a message.
-	//
-	// recipient is the chat to edit the message in.
-	//
-	// messageID is the ID of the message to edit.
-	//
-	// options can specify additional editing options.
-	//
 	// Returns the edited AccessibleMessage and any error.
-	//StopMessageLiveLocation(recipient Recipient, messageID int, options ...any) (*AccessibleMessage, error)
+	StopMessageLiveLocation(msg Message, options ...any) (*AccessibleMessage, error)
 
 	// StopMessageLiveLocationInline stops live location in an inline message.
-	//
-	// inlineMessageID is the ID of the inline message to edit.
-	//
-	// options can specify additional editing options.
-	//
 	// Returns any error that occurred.
-	//StopMessageLiveLocationInline(inlineMessageID string, options ...any) error
+	StopMessageLiveLocationInline(inlineMessageID string, options ...any) error
 
 	// EditMessageReplyMarkup edits the inline keyboard markup of a message.
 	//
@@ -833,7 +805,7 @@ type Bot interface {
 	// markup is the new inline keyboard markup.
 	//
 	// Returns the edited AccessibleMessage and any error.
-	//EditMessageReplyMarkup(recipient Recipient, messageID int, markup *InlineKeyboardMarkup) (*AccessibleMessage, error)
+	EditMessageReplyMarkup(msg Message, markup ReplyMarkup) (*AccessibleMessage, error)
 
 	// EditMessageReplyMarkupInline edits reply markup of an inline message.
 	//
@@ -842,27 +814,15 @@ type Bot interface {
 	// markup is the new inline keyboard markup.
 	//
 	// Returns any error that occurred.
-	//EditMessageReplyMarkupInline(inlineMessageID string, markup *InlineKeyboardMarkup) error
+	EditMessageReplyMarkupInline(inlineMessageID string, markup ReplyMarkup) error
 
 	// StopPoll stops an active poll and updates the message.
-	//
-	// recipient is the chat containing the poll.
-	//
-	// messageID is the ID of the poll message.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns the stopped Poll and any error.
-	//StopPoll(recipient Recipient, messageID int, options ...any) (*Poll, error)
+	StopPoll(msg Message, options ...any) (*Poll, error)
 
 	// DeleteMessage deletes a previously sent message.
-	//
-	// recipient is the chat containing the message.
-	//
-	// messageIDs is a list of message IDs to delete.
-	//
 	// Returns any error that occurred.
-	//DeleteMessage(recipient Recipient, messageIds ...int) error
+	DeleteMessage(msg Message, messageIDs ...int64) error
 
 	// SendSticker sends a sticker to a chat.
 	// recipient is the chat to send the sticker to.
