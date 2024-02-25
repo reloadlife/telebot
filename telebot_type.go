@@ -919,30 +919,29 @@ type Bot interface {
 
 	// AnswerShippingQuery responds to shipping query with options.
 	// Returns any error that occurred.
-	//AnswerShippingQuery(queryID string, ok bool, errorMessage *string, shippingOptions ...any) error
+	AnswerShippingQuery(ID string, ok bool, options ...any) error
 
 	// AnswerPreCheckoutQuery responds to pre-checkout query.
 	// Returns any error that occurred.
-	//AnswerPreCheckoutQuery(queryID string, ok bool, errorMessage *string) error
+	AnswerPreCheckoutQuery(queryID string, ok bool, errorMessage *string) error
 
 	// SetPassportDataErrors informs a user of errors with Telegram Passport data.
 	// Returns any error that occurred.
-	//SetPassportDataErrors(userID int64, errors []PassportElementError) error
+	SetPassportDataErrors(userID Userable, errors []PassportElementError) error
 
 	// SendGame sends a game for the user to play.
 	// Returns the sent AccessibleMessage and any error.
-	//SendGame(recipient Recipient, gameShortName string, options ...any) (*AccessibleMessage, error)
+	SendGame(recipient Recipient, gameShortName string, options ...any) (*AccessibleMessage, error)
 
 	// SetGameScore sets a new high score for a game.
 	// Returns the updated AccessibleMessage and any error.
-	//SetGameScore(recipient Recipient, userID int64, score int, options ...any) (*AccessibleMessage, error)
+	SetGameScore(msg Message, userID Userable, score uint, options ...any) (*AccessibleMessage, error)
 
 	// SetGameScoreInline sets high score for an inline game message.
 	// Returns any error that occurred.
-	//SetGameScoreInline(inlineMessageID string, userID int64, score int, options ...any) error
+	SetGameScoreInline(inlineMessageID string, userID Userable, score uint, options ...any) error
 
 	// GetGameHighScores gets high score table for a game.
 	// Returns the high scores and any error.
-	//GetGameHighScores(recipient Recipient, userID int64, options ...any) ([]GameHighScore, error)
-
+	GetGameHighScores(user Userable, options ...any) ([]GameHighScore, error)
 }

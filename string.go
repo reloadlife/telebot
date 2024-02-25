@@ -106,9 +106,9 @@ func (c *Callback) String() string {
 	return fmt.Sprintf("%s{ID: %s, From: %s, data: %s (%s)}\n%s\n", c.ReflectType(), c.ID, c.Sender.String(), c.Data, c.Unique, indented)
 }
 
-func (c *ShippingQuery) String() string {
-	indented, _ := json.MarshalIndent(c, "", "  ")
-	return fmt.Sprintf("%s{ID: %s, From: %s}\n%s\n", c.ReflectType(), c.ID, c.From.String(), indented)
+func (sh *ShippingQuery) String() string {
+	indented, _ := json.MarshalIndent(sh, "", "  ")
+	return fmt.Sprintf("%s{ID: %s, From: %s}\n%s\n", sh.ReflectType(), sh.ID, sh.From.String(), indented)
 }
 
 func (c *PreCheckoutQuery) String() string {

@@ -102,7 +102,7 @@ func (c *ChatBoostAdded) Verify() error               { return verify(c) }
 func (c *ChatJoinRequest) Verify() error              { return verify(c) }
 func (p *Poll) Verify() error                         { return verify(p) }
 func (c *PollAnswer) Verify() error                   { return verify(c) }
-func (c *ShippingQuery) Verify() error                { return verify(c) }
+func (sh *ShippingQuery) Verify() error               { return verify(sh) }
 func (c *PreCheckoutQuery) Verify() error             { return verify(c) }
 func (c *Callback) Verify() error                     { return verify(c) }
 func (c *ChosenInlineResult) Verify() error           { return verify(c) }

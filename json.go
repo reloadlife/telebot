@@ -40,8 +40,8 @@ func (c *ChosenInlineResult) MarshalJSON() ([]byte, error) {
 func (c *Callback) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
 }
-func (c *ShippingQuery) MarshalJSON() ([]byte, error) {
-	return json.Marshal(*c)
+func (sh *ShippingQuery) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*sh)
 }
 func (c *PreCheckoutQuery) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
@@ -324,12 +324,12 @@ func (c *Callback) UnmarshalJSON(b []byte) error {
 	}
 	return nil
 }
-func (c *ShippingQuery) UnmarshalJSON(b []byte) error {
+func (sh *ShippingQuery) UnmarshalJSON(b []byte) error {
 	type Alias ShippingQuery
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(c),
+		Alias: (*Alias)(sh),
 	}
 	if err := json.Unmarshal(b, &aux); err != nil {
 		return err

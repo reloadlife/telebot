@@ -412,6 +412,9 @@ const (
 	InvoiceSendPhoneNumberToProvider
 	InvoiceSendEmailToProvider
 	InvoiceIsFlexible
+
+	ForceGameScoreUpdate
+	DisableGameEditMessage
 )
 
 // markupType is the type of the markup.

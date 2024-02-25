@@ -33,7 +33,11 @@ go get -u go.mamad.dev/telebot
 
 ## Todo
 
-- [ ] Full Telegram Methods and Types Support
+- [x] Full Telegram Methods and Types Support
+- [ ] Method Validation (validate types before sending to telegram)
+  - [x] partially done
+  - [ ] support for all methods
+- [ ] Context
 - [ ] Documentation
 - [ ] Di Injections
 - [ ] Gin Integration

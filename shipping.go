@@ -17,11 +17,11 @@ type ShippingQuery struct {
 	ShippingAddress ShippingAddress `json:"shipping_address"`
 }
 
-func (c *ShippingQuery) ReflectType() string {
-	return fmt.Sprintf("%T", c)
+func (sh *ShippingQuery) ReflectType() string {
+	return fmt.Sprintf("%T", sh)
 }
 
-func (c *ShippingQuery) Type() string {
+func (sh *ShippingQuery) Type() string {
 	return "ShippingQuery"
 }
 

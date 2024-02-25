@@ -2,6 +2,13 @@ package telebot
 
 import "fmt"
 
+type answerShippingQueryRequest struct {
+	ID              string           `json:"shipping_query_id"`
+	OK              bool             `json:"ok"`
+	ShippingOptions []ShippingOption `json:"shipping_options,omitempty"`
+	ErrorMessage    string           `json:"error_message,omitempty"`
+}
+
 // ShippingAddress represents a shipping address.
 type ShippingAddress struct {
 	// CountryCode is the two-letter ISO 3166-1 alpha-2 country code.
@@ -43,3 +50,9 @@ type OrderInfo struct {
 
 func (c *OrderInfo) ReflectType() string { return fmt.Sprintf("%T", c) }
 func (c *OrderInfo) Type() string        { return "OrderInfo" }
+
+type ShippingOption struct {
+	ID     string         `json:"id"`
+	Title  string         `json:"title"`
+	Prices []LabeledPrice `json:"prices"`
+}
