@@ -92,7 +92,7 @@ func (c *ChatBoostAdded) MarshalJSON() ([]byte, error)               { return js
 func (c *ShippingAddress) MarshalJSON() ([]byte, error)              { return json.Marshal(*c) }
 func (c *OrderInfo) MarshalJSON() ([]byte, error)                    { return json.Marshal(*c) }
 func (c *LabeledPrice) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
-func (c *Invoice) MarshalJSON() ([]byte, error)                      { return json.Marshal(*c) }
+func (i *Invoice) MarshalJSON() ([]byte, error)                      { return json.Marshal(*i) }
 func (c *SuccessfulPayment) MarshalJSON() ([]byte, error)            { return json.Marshal(*c) }
 func (c *PassportData) MarshalJSON() ([]byte, error)                 { return json.Marshal(*c) }
 func (c *EncryptedPassportElement) MarshalJSON() ([]byte, error)     { return json.Marshal(*c) }
@@ -150,15 +150,15 @@ func (f *VideoChatScheduled) MarshalJSON() ([]byte, error)           { return js
 func (f *VideoChatEnded) MarshalJSON() ([]byte, error)               { return json.Marshal(*f) }
 func (f *VideoChatParticipantsInvited) MarshalJSON() ([]byte, error) { return json.Marshal(*f) }
 func (f *VideoChatStarted) MarshalJSON() ([]byte, error)             { return json.Marshal(*f) }
-func (f *WebAppData) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
-func (f *WebAppInfo) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
+func (w *WebAppData) MarshalJSON() ([]byte, error)                   { return json.Marshal(*w) }
+func (w *WebAppInfo) MarshalJSON() ([]byte, error)                   { return json.Marshal(*w) }
 func (f *BotCommand) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
 func (f *BotCommandScope) MarshalJSON() ([]byte, error)              { return json.Marshal(*f) }
 func (u *UserProfilePhotos) MarshalJSON() ([]byte, error)            { return json.Marshal(*u) }
 func (f *UserChatBoosts) MarshalJSON() ([]byte, error)               { return json.Marshal(*f) }
-func (f *SentWebAppMessage) MarshalJSON() ([]byte, error)            { return json.Marshal(*f) }
+func (s *SentWebAppMessage) MarshalJSON() ([]byte, error)            { return json.Marshal(*s) }
 func (r *ReplyParameters) MarshalJSON() ([]byte, error)              { return json.Marshal(*r) }
-func (f *QueryResult) MarshalJSON() ([]byte, error)                  { return json.Marshal(*f) }
+func (q *QueryResult) MarshalJSON() ([]byte, error)                  { return json.Marshal(*q) }
 func (m *InputMedia) MarshalJSON() ([]byte, error)                   { return json.Marshal(*m) }
 
 func (u *MaybeInaccessibleMessage) MarshalJSON() ([]byte, error) {
@@ -684,12 +684,12 @@ func (c *LabeledPrice) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (c *Invoice) UnmarshalJSON(data []byte) error {
+func (i *Invoice) UnmarshalJSON(data []byte) error {
 	type Alias Invoice
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(c),
+		Alias: (*Alias)(i),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -1380,24 +1380,24 @@ func (f *VideoChatStarted) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *WebAppData) UnmarshalJSON(data []byte) error {
+func (w *WebAppData) UnmarshalJSON(data []byte) error {
 	type Alias WebAppData
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(w),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (f *WebAppInfo) UnmarshalJSON(data []byte) error {
+func (w *WebAppInfo) UnmarshalJSON(data []byte) error {
 	type Alias WebAppInfo
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(w),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -1452,12 +1452,12 @@ func (f *UserChatBoosts) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *SentWebAppMessage) UnmarshalJSON(data []byte) error {
+func (s *SentWebAppMessage) UnmarshalJSON(data []byte) error {
 	type Alias SentWebAppMessage
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(s),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
@@ -1476,12 +1476,12 @@ func (r *ReplyParameters) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *QueryResult) UnmarshalJSON(data []byte) error {
+func (q *QueryResult) UnmarshalJSON(data []byte) error {
 	type Alias QueryResult
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(q),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

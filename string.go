@@ -359,8 +359,8 @@ func (l *Location) String() string {
 	return fmt.Sprintf("%s{%f %f}", l.ReflectType(), l.Latitude, l.Longitude)
 }
 
-func (f *Invoice) String() string {
-	return fmt.Sprintf("%s{%s %s %s%d}", f.ReflectType(), f.Title, f.Description, f.Currency, f.TotalAmount)
+func (i *Invoice) String() string {
+	return fmt.Sprintf("%s{%s %s %s%d}", i.ReflectType(), i.Title, i.Description, i.Currency, i.TotalAmount)
 }
 
 func (f *SuccessfulPayment) String() string {
@@ -471,16 +471,16 @@ func (f *VideoChatParticipantsInvited) String() string {
 	return fmt.Sprintf("%s{}", f.ReflectType())
 }
 
-func (f *WebAppData) String() string {
-	return fmt.Sprintf("%s{}", f.ReflectType())
+func (w *WebAppData) String() string {
+	return fmt.Sprintf("%s{}", w.ReflectType())
 }
 
-func (f *SentWebAppMessage) String() string {
-	return fmt.Sprintf("%s{}", f.ReflectType())
+func (s *SentWebAppMessage) String() string {
+	return fmt.Sprintf("%s{}", s.ReflectType())
 }
 
-func (f *WebAppInfo) String() string {
-	return fmt.Sprintf("%s{%s}", f.ReflectType(), f.URL)
+func (w *WebAppInfo) String() string {
+	return fmt.Sprintf("%s{%s}", w.ReflectType(), w.URL)
 }
 
 func (f *BotCommand) String() string {
@@ -507,8 +507,8 @@ func (r *ReplyParameters) String() string {
 	return fmt.Sprintf("%s{ %d -> %s }", r.ReflectType(), r.MessageID, r.ChatID)
 }
 
-func (f *QueryResult) String() string {
-	return fmt.Sprintf("%s{ %s %s }", f.ReflectType(), f.Type(), f.ID)
+func (q *QueryResult) String() string {
+	return fmt.Sprintf("%s{ %s %s }", q.ReflectType(), q.Type(), q.ID)
 }
 
 func (f *PassportElementError) String() string {

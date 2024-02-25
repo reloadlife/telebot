@@ -110,7 +110,7 @@ func (c *InlineQuery) Verify() error                  { return verify(c) }
 func (c *ShippingAddress) Verify() error              { return verify(c) }
 func (c *OrderInfo) Verify() error                    { return verify(c) }
 func (c *LabeledPrice) Verify() error                 { return verify(c) }
-func (c *Invoice) Verify() error                      { return verify(c) }
+func (i *Invoice) Verify() error                      { return verify(i) }
 func (c *SuccessfulPayment) Verify() error            { return verify(c) }
 func (c *PassportData) Verify() error                 { return verify(c) }
 func (c *EncryptedPassportElement) Verify() error     { return verify(c) }
@@ -168,12 +168,12 @@ func (f *VideoChatScheduled) Verify() error           { return verify(f) }
 func (f *VideoChatEnded) Verify() error               { return verify(f) }
 func (f *VideoChatParticipantsInvited) Verify() error { return verify(f) }
 func (f *VideoChatStarted) Verify() error             { return verify(f) }
-func (f *WebAppData) Verify() error                   { return verify(f) }
-func (f *WebAppInfo) Verify() error                   { return verify(f) }
+func (w *WebAppData) Verify() error                   { return verify(w) }
+func (w *WebAppInfo) Verify() error                   { return verify(w) }
 func (f *BotCommand) Verify() error                   { return verify(f) }
 func (f *BotCommandScope) Verify() error              { return verify(f) }
 func (u *UserProfilePhotos) Verify() error            { return verify(u) }
 func (f *UserChatBoosts) Verify() error               { return verify(f) }
-func (f *SentWebAppMessage) Verify() error            { return verify(f) }
+func (s *SentWebAppMessage) Verify() error            { return verify(s) }
 func (r *ReplyParameters) Verify() error              { return verify(r) }
-func (f *QueryResult) Verify() error                  { return verify(f) }
+func (q *QueryResult) Verify() error                  { return verify(q) }

@@ -403,6 +403,15 @@ const (
 	RevokeMessages
 
 	StickerNeedsRepainting
+	InlineQueryIsPersonal
+
+	InvoiceNeedName
+	InvoiceNeedPhoneNumber
+	InvoiceNeedEmail
+	InvoiceNeedShippingAddress
+	InvoiceSendPhoneNumberToProvider
+	InvoiceSendEmailToProvider
+	InvoiceIsFlexible
 )
 
 // markupType is the type of the markup.

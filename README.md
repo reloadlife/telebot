@@ -14,7 +14,7 @@ go get -u go.mamad.dev/telebot
 
 ### Cli Tool:
 
-> TODO
+> (soon)
 
 ## Documentation
 
@@ -33,6 +33,7 @@ go get -u go.mamad.dev/telebot
 
 ## Todo
 
+- [ ] Full Telegram Methods and Types Support
 - [ ] Documentation
 - [ ] Di Injections
 - [ ] Gin Integration
@@ -43,5 +44,7 @@ go get -u go.mamad.dev/telebot
 - [ ] Better Test Cases and validation
 - [ ] Better Router
 - [ ] Telegram RateLimits (queue) (RateLimits)[https://limits.tginfo.me/en]
+- [ ] Full Telegram Passport Support
+- [ ] CLI Tools
 
 

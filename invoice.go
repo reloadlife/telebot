@@ -22,5 +22,5 @@ type Invoice struct {
 	TotalAmount int `json:"total_amount"`
 }
 
-func (c *Invoice) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Invoice) Type() string        { return "Invoice" }
+func (i *Invoice) ReflectType() string { return fmt.Sprintf("%T", i) }
+func (i *Invoice) Type() string        { return "Invoice" }

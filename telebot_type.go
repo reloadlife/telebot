@@ -902,123 +902,46 @@ type Bot interface {
 	DeleteStickerSet(name string) error
 
 	// AnswerInlineQuery sends results for an inline query.
-	//
-	// queryID is the ID of the inline query.
-	//
-	// results are the result rows to show.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns any error that occurred.
-	//AnswerInlineQuery(queryID string, results QueryResults, options ...any) error
+	AnswerInlineQuery(queryID string, results QueryResults, options ...any) error
 
 	// AnswerWebAppQuery sends result for a Web App query.
-	//
-	// webAppQueryID is the ID of the query.
-	//
-	// result is the result to show.
-	//
 	// Returns the sent message info and any error.
-	//AnswerWebAppQuery(webAppQueryID string, result QueryResult) (*SentWebAppMessage, error)
+	AnswerWebAppQuery(webAppQueryID string, result QueryResult) (*SentWebAppMessage, error)
 
 	// SendInvoice sends an invoice requesting payment.
-	//
-	// recipient is the chat to send the invoice to.
-	//
-	// invoice contains invoice details.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns the sent AccessibleMessage and any error.
-	//SendInvoice(recipient Recipient, invoice Invoice, options ...any) (*AccessibleMessage, error)
+	SendInvoice(to Recipient, title, description, payload, providerToken, currency string, prices []LabeledPrice, options ...any) (*AccessibleMessage, error)
 
 	// CreateInvoiceLink generates a link for an invoice.
-	//
-	// invoice contains the invoice details.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns the generated URL as string and any error.
-	//CreateInvoiceLink(invoice Invoice, options ...any) (*string, error)
+	CreateInvoiceLink(title, description, payload, providerToken, currency string, prices []LabeledPrice, options ...any) (*string, error)
 
 	// AnswerShippingQuery responds to shipping query with options.
-	//
-	// queryID is the ID of the shipping query.
-	//
-	// ok indicates if shipping to the chosen address is possible.
-	//
-	// errorMessage optionally contains an error message.
-	//
-	// shippingOptions lists available shipping options.
-	//
 	// Returns any error that occurred.
 	//AnswerShippingQuery(queryID string, ok bool, errorMessage *string, shippingOptions ...any) error
 
 	// AnswerPreCheckoutQuery responds to pre-checkout query.
-	//
-	// queryID is the ID of the pre-checkout query.
-	//
-	// ok indicates if checkout can continue.
-	//
-	// errorMessage optionally contains error message.
-	//
 	// Returns any error that occurred.
 	//AnswerPreCheckoutQuery(queryID string, ok bool, errorMessage *string) error
 
 	// SetPassportDataErrors informs a user of errors with Telegram Passport data.
-	//
-	// userID is the ID of the user.
-	//
-	// errors lists the errors that occurred.
-	//
 	// Returns any error that occurred.
 	//SetPassportDataErrors(userID int64, errors []PassportElementError) error
 
 	// SendGame sends a game for the user to play.
-	//
-	// recipient is the chat to send the game to.
-	//
-	// gameShortName is the short name of the game.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns the sent AccessibleMessage and any error.
 	//SendGame(recipient Recipient, gameShortName string, options ...any) (*AccessibleMessage, error)
 
 	// SetGameScore sets a new high score for a game.
-	//
-	// recipient is the chat containing the message with the game.
-	//
-	// userID is the ID of the user who achieved the high score.
-	//
-	// score is the new high score value.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns the updated AccessibleMessage and any error.
 	//SetGameScore(recipient Recipient, userID int64, score int, options ...any) (*AccessibleMessage, error)
 
 	// SetGameScoreInline sets high score for an inline game message.
-	//
-	// inlineMessageID is the ID of the inline message.
-	//
-	// userID is the ID of the user who achieved the high score.
-	//
-	// score is the new high score value.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns any error that occurred.
 	//SetGameScoreInline(inlineMessageID string, userID int64, score int, options ...any) error
 
 	// GetGameHighScores gets high score table for a game.
-	//
-	// recipient is the chat containing the game.
-	//
-	// userID is the ID of the target user.
-	//
-	// options can specify additional parameters.
-	//
 	// Returns the high scores and any error.
 	//GetGameHighScores(recipient Recipient, userID int64, options ...any) ([]GameHighScore, error)
 

@@ -39,11 +39,17 @@ type QueryResult struct {
 	ThumbnailHeight *int `json:"thumbnail_height,omitempty"`
 }
 
-func (c *QueryResult) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *QueryResult) Type() string {
-	if c.QueryType == "" {
+func (q *QueryResult) ReflectType() string { return fmt.Sprintf("%T", q) }
+func (q *QueryResult) Type() string {
+	if q.QueryType == "" {
 		return Unknown
 	}
 
-	return string(c.QueryType)
+	return string(q.QueryType)
+}
+
+type InlineQueryButton struct {
+	Text       string      `json:"text"`
+	WebApp     *WebAppInfo `json:"url,omitempty"`
+	StartParam *string     `json:"start_parameter,omitempty"`
 }

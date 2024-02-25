@@ -12,8 +12,8 @@ type WebAppData struct {
 	ButtonText string `json:"button_text"`
 }
 
-func (c *WebAppData) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *WebAppData) Type() string        { return "WebAppData" }
+func (w *WebAppData) ReflectType() string { return fmt.Sprintf("%T", w) }
+func (w *WebAppData) Type() string        { return "WebAppData" }
 
 // WebAppInfo describes a Web App.
 type WebAppInfo struct {
@@ -21,12 +21,12 @@ type WebAppInfo struct {
 	URL string `json:"url"`
 }
 
-func (c *WebAppInfo) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *WebAppInfo) Type() string        { return "WebAppInfo" }
+func (w *WebAppInfo) ReflectType() string { return fmt.Sprintf("%T", w) }
+func (w *WebAppInfo) Type() string        { return "WebAppInfo" }
 
 type SentWebAppMessage struct {
 	InlineMessageID *string `json:"inline_message_id,omitempty"`
 }
 
-func (c *SentWebAppMessage) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *SentWebAppMessage) Type() string        { return "SentWebAppMessage" }
+func (s *SentWebAppMessage) ReflectType() string { return fmt.Sprintf("%T", s) }
+func (s *SentWebAppMessage) Type() string        { return "SentWebAppMessage" }
