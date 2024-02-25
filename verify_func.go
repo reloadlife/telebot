@@ -123,8 +123,8 @@ func (c *InputLocationMessageContent) Verify() error  { return verify(c) }
 func (c *InputVenueMessageContent) Verify() error     { return verify(c) }
 func (c *InputContactMessageContent) Verify() error   { return verify(c) }
 func (c *InputTextMessageContent) Verify() error      { return verify(c) }
-func (c *ChatBoostSource) Verify() error              { return verify(c) }
-func (c *ChatBoost) Verify() error                    { return verify(c) }
+func (bs *ChatBoostSource) Verify() error             { return verify(bs) }
+func (cb *ChatBoost) Verify() error                   { return verify(cb) }
 func (f *File) Verify() error                         { return verify(f) }
 func (p *PhotoSize) Verify() error                    { return verify(p) }
 func (a *Audio) Verify() error                        { return verify(a) }
@@ -173,7 +173,7 @@ func (w *WebAppInfo) Verify() error                   { return verify(w) }
 func (f *BotCommand) Verify() error                   { return verify(f) }
 func (f *BotCommandScope) Verify() error              { return verify(f) }
 func (u *UserProfilePhotos) Verify() error            { return verify(u) }
-func (f *UserChatBoosts) Verify() error               { return verify(f) }
+func (boost *UserChatBoosts) Verify() error           { return verify(boost) }
 func (s *SentWebAppMessage) Verify() error            { return verify(s) }
 func (r *ReplyParameters) Verify() error              { return verify(r) }
 func (q *QueryResult) Verify() error                  { return verify(q) }

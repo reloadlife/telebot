@@ -32,6 +32,7 @@ type BoostRemoved struct {
 	BoostID string `json:"boost_id"`
 
 	// RemoveDate is the point in time (Unix timestamp) when the boost was removed.
+	// todo: #6: change to time.Time
 	RemoveDate int64 `json:"remove_date"`
 
 	// Source is the source of the removed boost.

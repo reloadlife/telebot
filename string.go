@@ -495,8 +495,8 @@ func (u *UserProfilePhotos) String() string {
 	return fmt.Sprintf("%s{ %d %d }", u.ReflectType(), u.TotalCount, len(u.Photos))
 }
 
-func (f *UserChatBoosts) String() string {
-	return fmt.Sprintf("%s{ %d }", f.ReflectType(), len(f.Boosts))
+func (boost *UserChatBoosts) String() string {
+	return fmt.Sprintf("%s{ %d }", boost.ReflectType(), len(boost.Boosts))
 }
 
 func (f *StickerSet) String() string {
@@ -527,12 +527,12 @@ func (f *ForumTopic) String() string {
 	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Name)
 }
 
-func (f *ChatBoost) String() string {
-	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.BoostID)
+func (cb *ChatBoost) String() string {
+	return fmt.Sprintf("%s{ %s }", cb.ReflectType(), cb.ID)
 }
 
-func (f *ChatBoostSource) String() string {
-	return fmt.Sprintf("%s{ %s }", f.ReflectType(), f.Source)
+func (bs *ChatBoostSource) String() string {
+	return fmt.Sprintf("%s{ %s }", bs.ReflectType(), bs.Source)
 }
 
 func (f *InputContactMessageContent) String() string {
