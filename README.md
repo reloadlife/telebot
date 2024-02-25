@@ -37,6 +37,7 @@ go get -u go.mamad.dev/telebot
 - [ ] Method Validation (validate types before sending to telegram)
   - [x] partially done
   - [ ] support for all methods
+- [ ] Write `option` parser for Methods (with validation)
 - [ ] Context
 - [ ] Documentation
 - [ ] Di Injections

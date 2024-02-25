@@ -3,6 +3,7 @@ package telebot
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	httpc "go.mamad.dev/telebot/http"
 	"go.mamad.dev/telebot/log"
@@ -183,4 +184,15 @@ func extractOk(data []byte) error {
 	}
 
 	return err
+}
+
+func (b *bot) resAsMessage(data []byte, errs ...error) (*AccessibleMessage, error) {
+	var m struct {
+		Result AccessibleMessage `json:"result"`
+	}
+	err := json.Unmarshal(data, &m)
+	if err != nil {
+		return nil, errors.Join(append(errs, err)...)
+	}
+	return &m.Result, errors.Join(errs...)
 }

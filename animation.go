@@ -3,6 +3,8 @@ package telebot
 import "fmt"
 
 // Animation represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
+// <a href="https://core.telegram.org/bots/api#animation">/bots/api#animation</a>
+// Wiki: <a href="https://github.com/reloadlife/telebot/wiki/Animation">/wiki/Animation</a>
 type Animation struct {
 	// FileID is the identifier for this file, which can be used to download or reuse the file.
 	FileID string `json:"file_id"`
@@ -34,17 +36,26 @@ type Animation struct {
 	FileSize int64 `json:"file_size,omitempty"`
 }
 
+// ReflectType returns the type of this object
 func (a *Animation) ReflectType() string { return fmt.Sprintf("%T", a) }
-func (a *Animation) Type() string        { return "Animation" }
 
+// Type returns the type of this object
+func (a *Animation) Type() string { return "Animation" }
+
+// File returns a pointer to File
 func (a *Animation) File() *File {
 	f := FromFileID(a.FileID)
 	f.UniqueID = a.FileUniqueID
 	f.FileSize = a.FileSize
+	if a.FileName == "" {
+		a.FileName = fmt.Sprintf("animation_%s.mp4", a.FileID)
+	}
 	f.fileName = a.FileName
 	return &f
 }
 
+// Send sends an animation to the recipient with Options.
+// for available Options please refer to <a href="https://">Available Animation Options</a>
 func (a *Animation) Send(b Bot, to Recipient, options ...any) (Message, error) {
 	return b.SendAnimation(to, *a.File(), options...)
 }

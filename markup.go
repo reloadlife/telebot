@@ -15,6 +15,7 @@ type ReplyMarkup interface {
 	UnmarshalJSON(data []byte) error
 
 	deepEqual(other any) bool
+	typeOf() markupType
 }
 
 func NewMarkup() ReplyMarkup {
@@ -29,6 +30,10 @@ type baseMarkUp struct {
 	keyboard   *ReplyKeyboardMarkup
 	remove     *ReplyKeyboardRemove
 	forceReply *ForceReplyMarkup
+}
+
+func (b *baseMarkUp) typeOf() markupType {
+	return b.markupType
 }
 
 func (b *baseMarkUp) Remove(opts ...any) {

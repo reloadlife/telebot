@@ -66,6 +66,10 @@ func NewError(code int, msgs ...string) *Error {
 	return err
 }
 
+var (
+	GeneralBadInputError = "telebot: unknown option type %T in %s"
+)
+
 // General errors
 var (
 	ErrTooLarge     = NewError(400, "Request Entity Too Large")

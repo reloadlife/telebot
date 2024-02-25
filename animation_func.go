@@ -1,14 +1,14 @@
 package telebot
 
 import (
-	"encoding/json"
 	"fmt"
+	"go.mamad.dev/telebot/validation"
 	"time"
 )
 
 func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*AccessibleMessage, error) {
 	params := sendAnimationRequest{
-		ChatID:    to.Recipient(),
+		ChatID:    to,
 		Animation: &animation,
 	}
 
@@ -16,12 +16,22 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Acce
 		switch v := option.(type) {
 		case *MessageThreadID:
 			params.ThreadID = v
+
 		case string:
+			err := validation.ValidateCaptionLength(v)
+			if err != nil {
+				panic("telebot: Bad Caption: " + err.Error())
+			}
 			params.Caption = &v
+
 		case ParseMode:
-			params.ParseMode = &v
+			params.ParseMode = v
+
 		case []Entity:
-			params.Entities = v
+			params.Entities = append(params.Entities, v...)
+		case Entity:
+			params.Entities = append(params.Entities, v)
+
 		case ReplyMarkup:
 			params.ReplyMarkup = v
 		case *ReplyParameters:
@@ -49,22 +59,10 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Acce
 			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendAnimation.")
+			panic(fmt.Errorf(GeneralBadInputError, v, methodSendAnimation))
 		}
 	}
 
-	var resp struct {
-		Result *AccessibleMessage
-	}
-
 	req, err := b.sendMethodRequest(methodSendAnimation, params)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = json.Unmarshal(req, &resp); err != nil {
-		return nil, err
-	}
-
-	return resp.Result, nil
+	return b.resAsMessage(req, err)
 }
