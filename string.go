@@ -131,12 +131,12 @@ func (c *ChatJoinRequest) String() string {
 	return fmt.Sprintf("%s{}\n%s\n", c.ReflectType(), indented)
 }
 
-func (c *ChatBoostUpdated) String() string {
-	indented, _ := json.MarshalIndent(c, "", "  ")
-	return fmt.Sprintf("%s{}\n%s\n", c.ReflectType(), indented)
+func (b *BoostUpdated) String() string {
+	indented, _ := json.MarshalIndent(b, "", "  ")
+	return fmt.Sprintf("%s{}\n%s\n", b.ReflectType(), indented)
 }
 
-func (c *ChatBoostRemoved) String() string {
+func (c *BoostRemoved) String() string {
 	indented, _ := json.MarshalIndent(c, "", "  ")
 	return fmt.Sprintf("%s{}\n%s\n", c.ReflectType(), indented)
 }

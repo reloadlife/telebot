@@ -30,8 +30,8 @@ var (
 		&PollAnswer{},
 		&ChatMemberUpdated{},
 		&ChatJoinRequest{},
-		&ChatBoostUpdated{},
-		&ChatBoostRemoved{},
+		&BoostUpdated{},
+		&BoostRemoved{},
 	}
 	// TTType ✅
 

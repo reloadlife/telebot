@@ -64,10 +64,10 @@ type Update struct {
 	ChatJoinRequest *ChatJoinRequest `json:"chat_join_request,omitempty"`
 
 	// ChatBoost is a chat boost added or changed (optional, the bot must be an administrator in the chat to receive these updates).
-	ChatBoost *ChatBoostUpdated `json:"chat_boost,omitempty"`
+	ChatBoost *BoostUpdated `json:"chat_boost,omitempty"`
 
 	// RemovedChatBoost is a boost removed from a chat (optional, the bot must be an administrator in the chat to receive these updates).
-	RemovedChatBoost *ChatBoostRemoved `json:"removed_chat_boost,omitempty"`
+	RemovedChatBoost *BoostRemoved `json:"removed_chat_boost,omitempty"`
 }
 
 func (u *Update) Type() string {

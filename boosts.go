@@ -2,8 +2,9 @@ package telebot
 
 import "fmt"
 
-// ChatBoostUpdated represents a boost added to a chat or changed.
-type ChatBoostUpdated struct {
+// BoostUpdated represents a boost added to a chat or changed.
+// <a href="https://core.telegram.org/bots/api#chatboostupdated">/bots/api#chatboostupdated</a>
+type BoostUpdated struct {
 	// Chat is the chat which was boosted.
 	Chat Chat `json:"chat"`
 
@@ -11,15 +12,19 @@ type ChatBoostUpdated struct {
 	Boost ChatBoost `json:"boost"`
 }
 
-func (c *ChatBoostUpdated) ReflectType() string {
-	return fmt.Sprintf("%T", c)
-}
-func (c *ChatBoostUpdated) Type() string {
-	return "ChatBoostUpdated"
+// ReflectType returns the type of the struct.
+func (b *BoostUpdated) ReflectType() string {
+	return fmt.Sprintf("%T", b)
 }
 
-// ChatBoostRemoved represents a boost removed from a chat.
-type ChatBoostRemoved struct {
+// Type returns the type of the struct.
+func (b *BoostUpdated) Type() string {
+	return "BoostUpdated"
+}
+
+// BoostRemoved represents a boost removed from a chat.
+// <a href="https://core.telegram.org/bots/api#chatboostremoved">/bots/api#chatboostremoved</a>
+type BoostRemoved struct {
 	// Chat is the chat which was boosted.
 	Chat Chat `json:"chat"`
 
@@ -33,9 +38,12 @@ type ChatBoostRemoved struct {
 	Source ChatBoostSource `json:"source"`
 }
 
-func (c *ChatBoostRemoved) ReflectType() string {
+// ReflectType returns the type of the struct.
+func (c *BoostRemoved) ReflectType() string {
 	return fmt.Sprintf("%T", c)
 }
-func (c *ChatBoostRemoved) Type() string {
-	return "ChatBoostRemoved"
+
+// Type returns the type of the struct.
+func (c *BoostRemoved) Type() string {
+	return "BoostRemoved"
 }

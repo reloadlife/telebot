@@ -33,22 +33,13 @@ go get -u go.mamad.dev/telebot
 
 ## Todo
 
-- [x] Full Telegram Methods and Types Support
-- [ ] Method Validation (validate types before sending to telegram)
-  - [x] partially done
-  - [ ] support for all methods
-- [ ] Write `option` parser for Methods (with validation)
-- [ ] Context
+- moved some to [issues](https://github.com/reloadlife/telebot/issues)
+
 - [ ] Documentation
-- [ ] Di Injections
-- [ ] Gin Integration
-- [ ] webhook mode (gin support)
-- [ ] Regex Route Support
 - [ ] Code Cleanup and Refactoring
-- [ ] 100% Test Coverage
+- [ ] almost-100% Test Coverage
 - [ ] Better Test Cases and validation
 - [ ] Better Router
-- [ ] Telegram RateLimits (queue) (RateLimits)[https://limits.tginfo.me/en]
 - [ ] Full Telegram Passport Support
 - [ ] CLI Tools
 

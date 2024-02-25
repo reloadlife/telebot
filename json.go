@@ -58,10 +58,10 @@ func (c *ChatMemberUpdated) MarshalJSON() ([]byte, error) {
 func (c *ChatJoinRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
 }
-func (c *ChatBoostUpdated) MarshalJSON() ([]byte, error) {
-	return json.Marshal(*c)
+func (b *BoostUpdated) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*b)
 }
-func (c *ChatBoostRemoved) MarshalJSON() ([]byte, error) {
+func (c *BoostRemoved) MarshalJSON() ([]byte, error) {
 	return json.Marshal(*c)
 }
 func (i *InlineKeyboardButton) MarshalJSON() ([]byte, error) { return json.Marshal(*i) }
@@ -396,20 +396,20 @@ func (c *ChatJoinRequest) UnmarshalJSON(b []byte) error {
 	}
 	return nil
 }
-func (c *ChatBoostUpdated) UnmarshalJSON(b []byte) error {
-	type Alias ChatBoostUpdated
+func (b *BoostUpdated) UnmarshalJSON(b []byte) error {
+	type Alias BoostUpdated
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(c),
+		Alias: (*Alias)(b),
 	}
 	if err := json.Unmarshal(b, &aux); err != nil {
 		return err
 	}
 	return nil
 }
-func (c *ChatBoostRemoved) UnmarshalJSON(b []byte) error {
-	type Alias ChatBoostRemoved
+func (c *BoostRemoved) UnmarshalJSON(b []byte) error {
+	type Alias BoostRemoved
 	aux := &struct {
 		*Alias
 	}{
