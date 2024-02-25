@@ -839,6 +839,13 @@ type Bot interface {
 	// Returns the StickerSet and any error.
 	GetStickerSet(name string) (*StickerSet, error)
 
+	// GetCustomEmojiStickers gets stickers for the given custom emoji.
+	//
+	// CustomEmojiIds is a list of custom emoji identifiers.
+	//
+	// Returns the list of matching Stickers.
+	GetCustomEmojiStickers(customEmojiIDs ...CustomEmoji) ([]Sticker, error)
+
 	// UploadStickerFile uploads a sticker image to be used in a set.
 	//
 	// Owner is the user ID of the sticker set owner.
@@ -866,75 +873,33 @@ type Bot interface {
 	// Returns any error that occurred.
 	DeleteStickerFromSet(sticker string) error
 
-	// GetCustomEmojiStickers gets stickers for the given custom emoji.
-	//
-	// CustomEmojiIds is a list of custom emoji identifiers.
-	//
-	// Returns the list of matching Stickers.
-	//GetCustomEmojiStickers(CustomEmojiIds ...CustomEmoji) ([]Sticker, error)
-
 	// SetStickerEmojiList updates the emoji list for a sticker.
-	//
-	// sticker is the file ID of the sticker.
-	//
-	// EmojiList is the new list of emoji.
-	//
 	// Returns any error that occurred.
-	//SetStickerEmojiList(sticker string, EmojiList []Emoji) error
+	SetStickerEmojiList(sticker string, EmojiList []StickerEmoji) error
 
 	// SetStickerKeywords updates the search keywords for a sticker.
-	//
-	// sticker is the file ID of the sticker.
-	//
-	// Keywords is the new list of keywords.
-	//
 	// Returns any error that occurred.
-	//SetStickerKeywords(sticker string, Keywords []string) error
+	SetStickerKeywords(sticker string, Keywords []string) error
 
 	// SetStickerMaskPosition updates the mask position for a mask sticker.
-	//
-	// sticker is the file ID of the sticker.
-	//
-	// maskPosition is the new mask position.
-	//
 	// Returns any error that occurred.
-	//SetStickerMaskPosition(sticker string, maskPosition MaskPosition) error
+	SetStickerMaskPosition(sticker string, maskPosition ...MaskPosition) error
 
 	// SetStickerSetTitle updates the title of a sticker.
-	//
-	// sticker is the file ID of the sticker.
-	//
-	// title is the new title.
-	//
 	// Returns any error that occurred.
-	//SetStickerSetTitle(sticker string, title string) error
+	SetStickerSetTitle(sticker string, title string) error
 
 	// SetStickerSetThumbnail updates the thumbnail for a set.
-	//
-	// name is the sticker set name.
-	//
-	// userId is the owner user ID.
-	//
-	// thumbnail is the new thumbnail file.
-	//
 	// Returns any error that occurred.
-	//SetStickerSetThumbnail(name string, userId Userable, thumbnail File) error
+	SetStickerSetThumbnail(name string, user Userable, thumbnail File) error
 
 	// SetCustomEmojiStickerSetThumbnail updates emoji set thumbnail.
-	//
-	// name is the sticker set name.
-	//
-	// CustomEmojiID is the new custom emoji ID.
-	//
 	// Returns any error that occurred.
-	//SetCustomEmojiStickerSetThumbnail(name string, CustomEmojiID *string) error
+	SetCustomEmojiStickerSetThumbnail(name string, CustomEmojiID ...string) error
 
 	// DeleteStickerSet removes a sticker set.
-	//
-	// name is the sticker set name.
-	//
 	// Returns any error that occurred.
-	//DeleteStickerSet(name string) error
+	DeleteStickerSet(name string) error
 
 	// AnswerInlineQuery sends results for an inline query.
 	//

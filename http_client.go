@@ -118,6 +118,14 @@ func structToMap(input any) map[string]any {
 			sticker["sticker"] = vi.FileRepresent()
 			result[jsonTag] = sticker
 			continue
+
+		case []StickerEmoji:
+			var list []string
+			for _, s := range vi {
+				list = append(list, s.String())
+			}
+			result[jsonTag] = list
+			continue
 		}
 
 		result[jsonTag] = v

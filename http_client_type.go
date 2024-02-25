@@ -107,9 +107,10 @@ const (
 	methodDeleteStickerFromSet
 	methodSetStickerEmojiList
 	methodSetStickerKeywords
+	methodSetStickerMaskPosition
 	methodSetStickerSetTitle
 	methodSetStickerSetThumbnail
-	methodSetCustomEmojiStickerThumbnail
+	methodSetCustomEmojiStickerSetThumbnail
 	methodDeleteStickerSet
 	methodAnswerInlineQuery
 	methodAnswerWebAppQuery
@@ -332,8 +333,6 @@ func (m method) String() string {
 		return "setStickerSetTitle"
 	case methodSetStickerSetThumbnail:
 		return "setStickerSetThumbnail"
-	case methodSetCustomEmojiStickerThumbnail:
-		return "setCustomEmojiStickerThumbnail"
 	case methodDeleteStickerSet:
 		return "deleteStickerSet"
 	case methodAnswerInlineQuery:
@@ -358,6 +357,10 @@ func (m method) String() string {
 		return "setGameScore"
 	case methodGetGameHighScores:
 		return "getGameHighScores"
+	case methodSetStickerMaskPosition:
+		return "setStickerMaskPosition"
+	case methodSetCustomEmojiStickerSetThumbnail:
+		return "setCustomEmojiStickerSetThumbnail"
 	default:
 		panic("telebot: unknown method")
 	}

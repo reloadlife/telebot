@@ -185,3 +185,132 @@ func (b *bot) DeleteStickerFromSet(sticker string) error {
 	_, err := b.sendMethodRequest(methodDeleteStickerFromSet, params)
 	return err
 }
+
+func (b *bot) GetCustomEmojiStickers(customEmojiIDs ...CustomEmoji) ([]Sticker, error) {
+	params := struct {
+		CustomEmojiIDs []CustomEmoji `json:"custom_emoji_ids"`
+	}{
+		CustomEmojiIDs: customEmojiIDs,
+	}
+
+	var resp struct {
+		Result []Sticker
+	}
+
+	req, err := b.sendMethodRequest(methodGetCustomEmojiStickers, params)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(req, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Result, nil
+}
+
+func (b *bot) SetStickerEmojiList(sticker string, emojiList []StickerEmoji) error {
+	if len(emojiList) < 1 || len(emojiList) > 20 {
+		panic("telebot: emojis count must be between 1 and 50")
+	}
+
+	params := struct {
+		Sticker string         `json:"sticker"`
+		Emojis  []StickerEmoji `json:"emojis"`
+	}{
+		Sticker: sticker,
+		Emojis:  emojiList,
+	}
+
+	_, err := b.sendMethodRequest(methodSetStickerEmojiList, params)
+	return err
+}
+
+func (b *bot) SetStickerKeywords(sticker string, keywords []string) error {
+	if len(keywords) < 1 || len(keywords) > 20 {
+		panic("telebot: keywords count must be between 1 and 50")
+	}
+
+	params := struct {
+		Sticker  string   `json:"sticker"`
+		Keywords []string `json:"keywords"`
+	}{
+		Sticker:  sticker,
+		Keywords: keywords,
+	}
+
+	_, err := b.sendMethodRequest(methodSetStickerKeywords, params)
+	return err
+}
+
+func (b *bot) SetStickerMaskPosition(sticker string, maskPosition ...MaskPosition) error {
+	params := struct {
+		Sticker      string       `json:"sticker"`
+		MaskPosition MaskPosition `json:"mask_position,omitempty"`
+	}{
+		Sticker: sticker,
+	}
+
+	if len(maskPosition) > 0 {
+		params.MaskPosition = maskPosition[0]
+	}
+
+	_, err := b.sendMethodRequest(methodSetStickerMaskPosition, params)
+	return err
+}
+
+func (b *bot) SetStickerSetTitle(sticker, title string) error {
+	params := struct {
+		Sticker string `json:"sticker"`
+		Title   string `json:"title"`
+	}{
+		Sticker: sticker,
+		Title:   title,
+	}
+
+	_, err := b.sendMethodRequest(methodSetStickerSetTitle, params)
+	return err
+}
+
+func (b *bot) SetStickerSetThumbnail(name string, user Userable, thumbnail File) error {
+	params := struct {
+		Name      string `json:"name"`
+		UserID    any    `json:"user_id"`
+		Thumbnail *File  `json:"thumbnail"`
+	}{
+		Name:      name,
+		UserID:    user,
+		Thumbnail: &thumbnail,
+	}
+
+	_, err := b.sendMethodRequest(methodSetStickerSetThumbnail, params)
+	return err
+}
+
+func (b *bot) SetCustomEmojiStickerSetThumbnail(name string, CustomEmojiID ...string) error {
+	params := struct {
+		Name          string `json:"name"`
+		CustomEmojiID string `json:"custom_emoji_id"`
+	}{
+		Name: name,
+	}
+
+	if len(CustomEmojiID) > 0 {
+		params.CustomEmojiID = CustomEmojiID[0]
+	}
+
+	_, err := b.sendMethodRequest(methodSetCustomEmojiStickerSetThumbnail, params)
+	return err
+}
+
+func (b *bot) DeleteStickerSet(name string) error {
+	params := struct {
+		Name string `json:"name"`
+	}{
+		Name: name,
+	}
+
+	_, err := b.sendMethodRequest(methodDeleteStickerSet, params)
+	return err
+}
