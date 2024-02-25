@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+type Userable interface {
+	User() int64
+}
+
 // User represents a Telegram user or bot.
 type User struct {
 	// ID is the unique identifier for this user or bot.
@@ -52,4 +56,8 @@ func (u *User) Type() string {
 }
 func (u *User) ReflectType() string {
 	return fmt.Sprintf("%T", u)
+}
+
+func (u *User) User() int64 {
+	return u.ID
 }

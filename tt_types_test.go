@@ -253,6 +253,7 @@ var (
 
 		"Sendable",
 		"DiceEmoji",
+		"Userable",
 	}
 )
 

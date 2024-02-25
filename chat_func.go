@@ -7,56 +7,72 @@ import (
 	"time"
 )
 
-func (b *bot) Ban(chatID Recipient, userID int64, untilDate *int64, revokeMessages *bool) error {
+func (b *bot) Ban(chatID Recipient, userID int64, options ...any) error {
 	params := banChatMemberRequest{
 		ChatID: chatID,
 		UserID: userID,
 	}
 
-	if untilDate != nil {
-		params.UntilDate = untilDate
-	}
+	for _, option := range options {
+		switch v := option.(type) {
+		case time.Duration:
+			params.UntilDate = toPtr(time.Now().Add(v).Unix())
 
-	if revokeMessages != nil {
-		params.RevokeMessages = revokeMessages
+		case Option:
+			switch v {
+			case RevokeMessages:
+				params.RevokeMessages = toPtr(true)
+			}
+
+		default:
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in Ban.")
+		}
 	}
 
 	_, err := b.sendMethodRequest(methodBanChatMember, params)
 	return err
 }
 
-func (b *bot) Unban(chatID Recipient, userID int64, onlyIfBanned *bool) error {
+func (b *bot) Unban(chatID Recipient, userID int64, options ...any) error {
 	params := unbanChatMemberRequest{
 		ChatID:       chatID,
 		UserID:       userID,
 		OnlyIfBanned: true, // to prevent users getting kicked when UnBan function is called on user that is not already banned.
 	}
 
-	if onlyIfBanned != nil {
-		params.OnlyIfBanned = *onlyIfBanned
+	for _, option := range options {
+		switch v := option.(type) {
+		case bool:
+			params.OnlyIfBanned = v
+
+		default:
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in UnBan.")
+		}
 	}
 
 	_, err := b.sendMethodRequest(methodUnbanChatMember, params)
 	return err
 }
 
-func (b *bot) Restrict(chatID Recipient, userID int64, permissions ChatPermissions, useIndependentChatPermissions *bool, untilDate *time.Duration) error {
+func (b *bot) Restrict(chatID Recipient, userID int64, permissions ChatPermissions, options ...any) error {
 	params := restrictChatMemberRequest{
-		ChatID:                        chatID,
-		UserID:                        userID,
-		Permissions:                   permissions,
-		UseIndependentChatPermissions: false,
-		UntilDate:                     0,
+		ChatID:      chatID,
+		UserID:      userID,
+		Permissions: permissions,
 	}
 
-	if useIndependentChatPermissions != nil {
-		params.UseIndependentChatPermissions = *useIndependentChatPermissions
-	}
+	for _, option := range options {
+		switch v := option.(type) {
+		case bool:
+			params.UseIndependentChatPermissions = v
 
-	if untilDate != nil {
-		params.UntilDate = time.Now().Add(*untilDate).Unix()
-	}
+		case time.Duration:
+			params.UntilDate = time.Now().Add(v).Unix()
 
+		default:
+			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in Restrict.")
+		}
+	}
 	_, err := b.sendMethodRequest(methodRestrictChatMember, params)
 	return err
 }

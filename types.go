@@ -384,6 +384,7 @@ const (
 	IsAnonymousPoll
 	AllowMultipleAnswers
 	IsClosedPoll
+	RevokeMessages
 )
 
 // markupType is the type of the markup.

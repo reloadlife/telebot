@@ -70,6 +70,13 @@ func structToMap(input any) map[string]any {
 		jsonTag = strings.ReplaceAll(jsonTag, ",omitempty", "")
 
 		switch vi := v.(type) {
+		case Recipient:
+			result[jsonTag] = vi.Recipient()
+			continue
+
+		case Userable:
+			result[jsonTag] = vi.User()
+
 		case *File:
 			if vi.InCloud() {
 				result[jsonTag] = vi.FileID
