@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 )
 
 func (b *bot) sendMethodRequest(method method, params any, files ...httpc.File) ([]byte, error) {
@@ -71,6 +72,10 @@ func structToMap(input any) map[string]any {
 		jsonTag = strings.ReplaceAll(jsonTag, ",omitempty", "")
 
 		switch vi := v.(type) {
+		case time.Duration:
+			result[jsonTag] = int(vi.Seconds())
+			continue
+
 		case Recipient:
 			result[jsonTag] = vi.Recipient()
 			continue

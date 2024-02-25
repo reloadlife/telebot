@@ -22,18 +22,17 @@ type Animation struct {
 	// Duration is the duration of the video in seconds as defined by the sender.
 	Duration int `json:"duration"`
 
-	// Thumbnail is the animation thumbnail as defined by the sender (optional).
+	// Thumbnail is the animation thumbnail as defined by the sender.
 	Thumbnail *PhotoSize `json:"thumbnail,omitempty"`
 
-	// FileName is the original animation filename as defined by the sender (optional).
+	// FileName is the original animation filename as defined by the sender.
 	FileName string `json:"file_name,omitempty"`
 
-	// MimeType is the MIME type of the file as defined by the sender (optional).
-	MimeType string `json:"mime_type,omitempty"`
+	// MIME is the MIME type of the file as defined by the sender.
+	MIME string `json:"mime_type,omitempty"`
 
-	// FileSize is the file size in bytes. It can be bigger than 2^31, and some programming languages may have difficulty/silent defects in interpreting it.
-	// But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value (optional).
-	FileSize int64 `json:"file_size,omitempty"`
+	// Size is the file size in bytes.
+	Size int64 `json:"file_size,omitempty"`
 }
 
 // ReflectType returns the type of this object
@@ -46,7 +45,7 @@ func (a *Animation) Type() string { return "Animation" }
 func (a *Animation) File() *File {
 	f := FromFileID(a.FileID)
 	f.UniqueID = a.FileUniqueID
-	f.FileSize = a.FileSize
+	f.FileSize = a.Size
 	if a.FileName == "" {
 		a.FileName = fmt.Sprintf("animation_%s.mp4", a.FileID)
 	}

@@ -1,5 +1,7 @@
 package telebot
 
+import "time"
+
 type Width int
 type Height int
 
@@ -17,8 +19,8 @@ type sendAnimationRequest struct {
 	ReplyParameters     *ReplyParameters `json:"reply_parameters,omitempty"`
 	ReplyMarkup         ReplyMarkup      `json:"reply_markup,omitempty"`
 
-	Duration  *int  `json:"duration,omitempty"`
-	Width     *int  `json:"width,omitempty"`
-	Height    *int  `json:"height,omitempty"`
-	Thumbnail *File `json:"thumbnail,omitempty" file:"1"`
+	Duration  time.Duration `json:"duration,omitempty"`
+	Width     *int          `json:"width,omitempty"`
+	Height    *int          `json:"height,omitempty"`
+	Thumbnail *File         `json:"thumbnail,omitempty" file:"1"`
 }
