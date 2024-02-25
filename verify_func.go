@@ -139,7 +139,7 @@ func (v *Venue) Verify() error                        { return verify(v) }
 func (p *PollOption) Verify() error                   { return verify(p) }
 func (d *Dice) Verify() error                         { return verify(d) }
 func (f *Game) Verify() error                         { return verify(f) }
-func (f *Sticker) Verify() error                      { return verify(f) }
+func (s *Sticker) Verify() error                      { return verify(s) }
 func (f *StickerSet) Verify() error                   { return verify(f) }
 func (f *MaskPosition) Verify() error                 { return verify(f) }
 func (f *ForumTopic) Verify() error                   { return verify(f) }

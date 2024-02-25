@@ -13,6 +13,10 @@ type Stringer interface {
 	String() string
 }
 
+func (s *StickerFormat) String() string {
+	return fmt.Sprintf("%d", s)
+}
+
 func (d *MessageThreadID) String() string {
 	return fmt.Sprintf("%d", d)
 }
@@ -315,7 +319,7 @@ func (a *Animation) String() string          { return fmt.Sprintf("%s{%s}", a.Re
 func (a *Audio) String() string              { return fmt.Sprintf("%s{%s}", a.ReflectType(), a.File()) }
 func (d *Document) String() string           { return fmt.Sprintf("%s{%s}", d.ReflectType(), d.File()) }
 func (p *PhotoSize) String() string          { return fmt.Sprintf("%s{%s}", p.ReflectType(), p.File()) }
-func (f *Sticker) String() string            { return fmt.Sprintf("%s{%s}", f.ReflectType(), f.File()) }
+func (s *Sticker) String() string            { return fmt.Sprintf("%s{%s}", s.ReflectType(), s.File()) }
 func (v *Video) String() string              { return fmt.Sprintf("%s{%s}", v.ReflectType(), v.File()) }
 func (v *Voice) String() string              { return fmt.Sprintf("%s{%s}", v.ReflectType(), v.File()) }
 func (v *VideoNote) String() string          { return fmt.Sprintf("%s{%s}", v.ReflectType(), v.File()) }

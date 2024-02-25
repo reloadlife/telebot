@@ -4,6 +4,14 @@ package telebot
 
 const Unknown = "unknown"
 
+type StickerFormat string
+
+const (
+	StickerFormatStatic   StickerFormat = "static"
+	StickerFormatAnimated StickerFormat = "animated"
+	StickerFormatVideo    StickerFormat = "video"
+)
+
 type InputMediaType string
 
 const (

@@ -45,6 +45,7 @@ type Bot interface {
 	StartInWebhook()
 
 	// Stop Gracefully stops the Bot.
+	// Stops the Bot.
 	Stop()
 
 	// Handle
@@ -829,21 +830,14 @@ type Bot interface {
 	// sticker is the sticker file to send.
 	// options can specify additional send options.
 	// Returns the sent AccessibleMessage and any error.
-	//SendSticker(recipient Recipient, sticker File, options ...any) (*AccessibleMessage, error)
+	SendSticker(recipient Recipient, sticker File, options ...any) (*AccessibleMessage, error)
 
 	// GetStickerSet gets info about a sticker set by name.
 	//
 	// name is the short name of the sticker set.
 	//
 	// Returns the StickerSet and any error.
-	//GetStickerSet(name string) (*StickerSet, error)
-
-	// GetCustomEmojiStickers gets stickers for the given custom emoji.
-	//
-	// CustomEmojiIds is a list of custom emoji identifiers.
-	//
-	// Returns the list of matching Stickers.
-	//GetCustomEmojiStickers(CustomEmojiIds ...CustomEmoji) ([]Sticker, error)
+	GetStickerSet(name string) (*StickerSet, error)
 
 	// UploadStickerFile uploads a sticker image to be used in a set.
 	//
@@ -854,7 +848,14 @@ type Bot interface {
 	// Format is the image format like png, webp, etc.
 	//
 	// Returns the uploaded File and any error.
-	//UploadStickerFile(Owner int64, sticker File, Format string) (*File, error)
+	UploadStickerFile(user Userable, sticker File, Format string) (*File, error)
+
+	// GetCustomEmojiStickers gets stickers for the given custom emoji.
+	//
+	// CustomEmojiIds is a list of custom emoji identifiers.
+	//
+	// Returns the list of matching Stickers.
+	//GetCustomEmojiStickers(CustomEmojiIds ...CustomEmoji) ([]Sticker, error)
 
 	// CreateNewStickerSet creates a new sticker set owned by a user.
 	//

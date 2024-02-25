@@ -2,6 +2,24 @@ package telebot
 
 import "fmt"
 
+type sendStickerRequest struct {
+	ChatID  any    `json:"chat_id"`
+	Sticker *File  `json:"sticker" file:"1"`
+	Emoji   string `json:"emoji,omitempty"`
+
+	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
+	DisableNotification *bool            `json:"disable_notification,omitempty"`
+	Protected           *bool            `json:"protect_content,omitempty"`
+	ReplyParameters     *ReplyParameters `json:"reply_parameters,omitempty"`
+	ReplyMarkup         ReplyMarkup      `json:"reply_markup,omitempty"`
+}
+
+type uploadStickerFileParams struct {
+	UserID        any           `json:"user_id"`
+	Sticker       *File         `json:"sticker" file:"1"`
+	StickerFormat StickerFormat `json:"sticker_format,omitempty"`
+}
+
 // StickerSet represents a sticker set.
 type StickerSet struct {
 	// Name represents the sticker set name.

@@ -23,14 +23,14 @@ type Sticker struct {
 	FileSize         int64         `json:"file_size,omitempty"`
 }
 
-func (c *Sticker) ReflectType() string { return fmt.Sprintf("%T", c) }
-func (c *Sticker) Type() string        { return "Sticker" }
+func (s *Sticker) ReflectType() string { return fmt.Sprintf("%T", s) }
+func (s *Sticker) Type() string        { return "Sticker" }
 
-func (c *Sticker) File() *File {
-	f := FromFileID(c.FileID)
-	f.fileName = fmt.Sprintf("sticker_%s_%s.webp", strings.ReplaceAll(" ", "_", c.SetName), c.FileUniqueID)
-	f.FileSize = c.FileSize
-	f.UniqueID = c.FileUniqueID
+func (s *Sticker) File() *File {
+	f := FromFileID(s.FileID)
+	f.fileName = fmt.Sprintf("sticker_%s_%s.webp", strings.ReplaceAll(" ", "_", s.SetName), s.FileUniqueID)
+	f.FileSize = s.FileSize
+	f.UniqueID = s.FileUniqueID
 	return &f
 }
 
