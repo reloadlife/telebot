@@ -153,7 +153,7 @@ func (f *TextQuote) Verify() error                    { return verify(f) }
 func (f *Entity) Verify() error                       { return verify(f) }
 func (f *LinkPreviewOptions) Verify() error           { return verify(f) }
 func (f *Story) Verify() error                        { return verify(f) }
-func (f *AutoDeleteTimerChanged) Verify() error       { return verify(f) }
+func (a *AutoDeleteTimerChanged) Verify() error       { return verify(a) }
 func (f *ProximityAlertTriggered) Verify() error      { return verify(f) }
 func (f *UsersShared) Verify() error                  { return verify(f) }
 func (f *ChatShared) Verify() error                   { return verify(f) }

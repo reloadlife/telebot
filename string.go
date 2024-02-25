@@ -391,8 +391,8 @@ func (f *ChatShared) String() string {
 	return fmt.Sprintf("%s{%d %d}", f.ReflectType(), f.ChatID, f.RequestID)
 }
 
-func (f *AutoDeleteTimerChanged) String() string {
-	return fmt.Sprintf("%s{%d}", f.ReflectType(), f.AutoDeleteTime)
+func (a *AutoDeleteTimerChanged) String() string {
+	return fmt.Sprintf("%s{%d}", a.ReflectType(), a.AutoDeleteTime)
 }
 
 func (f *PassportData) String() string {

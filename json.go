@@ -135,7 +135,7 @@ func (f *TextQuote) MarshalJSON() ([]byte, error)                    { return js
 func (f *Entity) MarshalJSON() ([]byte, error)                       { return json.Marshal(*f) }
 func (f *LinkPreviewOptions) MarshalJSON() ([]byte, error)           { return json.Marshal(*f) }
 func (f *Story) MarshalJSON() ([]byte, error)                        { return json.Marshal(*f) }
-func (f *AutoDeleteTimerChanged) MarshalJSON() ([]byte, error)       { return json.Marshal(*f) }
+func (a *AutoDeleteTimerChanged) MarshalJSON() ([]byte, error)       { return json.Marshal(*a) }
 func (f *ProximityAlertTriggered) MarshalJSON() ([]byte, error)      { return json.Marshal(*f) }
 func (f *UsersShared) MarshalJSON() ([]byte, error)                  { return json.Marshal(*f) }
 func (f *ChatShared) MarshalJSON() ([]byte, error)                   { return json.Marshal(*f) }
@@ -1200,12 +1200,12 @@ func (f *Story) UnmarshalJSON(data []byte) error {
 	}
 	return nil
 }
-func (f *AutoDeleteTimerChanged) UnmarshalJSON(data []byte) error {
+func (a *AutoDeleteTimerChanged) UnmarshalJSON(data []byte) error {
 	type Alias AutoDeleteTimerChanged
 	aux := &struct {
 		*Alias
 	}{
-		Alias: (*Alias)(f),
+		Alias: (*Alias)(a),
 	}
 	if err := json.Unmarshal(data, &aux); err != nil {
 		return err

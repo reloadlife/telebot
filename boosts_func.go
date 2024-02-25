@@ -2,10 +2,10 @@ package telebot
 
 import "encoding/json"
 
-func (b *bot) GetUserChatBoosts(chatId Recipient, userId Recipient) (*UserChatBoosts, error) {
+func (b *bot) GetUserChatBoosts(chatID Recipient, userID Userable) (*UserChatBoosts, error) {
 	params := getUserChatBoosts{
-		ChatId: chatId.Recipient(),
-		UserId: userId.Recipient(),
+		ChatId: chatID,
+		UserId: userID,
 	}
 
 	req, err := b.sendMethodRequest(methodGetUserChatBoosts, params)

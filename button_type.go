@@ -2,7 +2,6 @@ package telebot
 
 import (
 	"fmt"
-	"net/url"
 )
 
 // SwitchInlineQueryChosenChat represents an inline button that switches the current user to inline mode
@@ -112,47 +111,6 @@ type InlineKeyboardButton struct {
 	Pay *bool `json:"pay,omitempty"`
 }
 
-func NewInlineKeyboardButton(text string, options ...any) Button {
-	btn := &InlineKeyboardButton{
-		Text: text,
-	}
-
-	for _, option := range options {
-		switch value := option.(type) {
-		case string:
-			btn.CallbackData = &value
-		case *string:
-			btn.CallbackData = value
-
-		case *url.URL:
-			btn.URL = toPtr(value.String())
-
-		case *WebAppInfo:
-			btn.WebApp = value
-
-		case *LoginURL:
-			btn.LoginURL = value
-
-		case *SwitchInlineQueryStringType:
-			btn.SwitchInlineQuery = toPtr(string(*value))
-
-		case *SwitchInlineQueryChosenChatStringType:
-			btn.SwitchInlineQueryCurrentChat = toPtr(string(*value))
-
-		case *SwitchInlineQueryChosenChat:
-			btn.SwitchInlineQueryChosenChat = value
-
-		case *CallbackGame:
-			btn.CallbackGame = value
-
-		case *bool:
-			btn.Pay = value
-		}
-	}
-
-	return btn
-}
-
 // KeyboardButton represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text.
 // The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
 type KeyboardButton struct {
@@ -187,41 +145,10 @@ type KeyboardButton struct {
 	WebApp *WebAppInfo `json:"web_app,omitempty"`
 }
 
-func NewKeyboardButton(text string, options ...any) Button {
-	btn := &KeyboardButton{
-		Text: text,
-	}
-
-	for _, option := range options {
-		switch value := option.(type) {
-		case *KeyboardButtonRequestUsers:
-			btn.RequestUsers = value
-
-		case *KeyboardButtonRequestChat:
-			btn.RequestChat = value
-
-		case *RequestContact:
-			btn.RequestContact = toPtr(bool(*value))
-
-		case *RequestLocation:
-			btn.RequestLocation = toPtr(bool(*value))
-
-		case *KeyboardButtonPollType:
-			btn.RequestPoll = value
-
-		case *WebAppInfo:
-			btn.WebApp = value
-		}
-	}
-
-	return btn
-}
-
-func (i *InlineKeyboardButton) Type() string        { return "InlineKeyboardButton" }
-func (i *InlineKeyboardButton) ReflectType() string { return fmt.Sprintf("%T", i) }
-func (i *KeyboardButton) Type() string              { return "KeyboardButton" }
-func (i *KeyboardButton) ReflectType() string       { return fmt.Sprintf("%T", i) }
-
+func (i *InlineKeyboardButton) Type() string               { return "InlineKeyboardButton" }
+func (i *InlineKeyboardButton) ReflectType() string        { return fmt.Sprintf("%T", i) }
+func (i *KeyboardButton) Type() string                     { return "KeyboardButton" }
+func (i *KeyboardButton) ReflectType() string              { return fmt.Sprintf("%T", i) }
 func (i *SwitchInlineQueryChosenChat) Type() string        { return "SwitchInlineQueryChosenChat" }
 func (i *SwitchInlineQueryChosenChat) ReflectType() string { return fmt.Sprintf("%T", i) }
 func (i *KeyboardButtonRequestChat) Type() string          { return "KeyboardButtonRequestChat" }

@@ -2,9 +2,6 @@ package telebot
 
 import "time"
 
-type Width int
-type Height int
-
 type sendAnimationRequest struct {
 	ChatID    any   `json:"chat_id"`
 	Animation *File `json:"animation" file:"1"`

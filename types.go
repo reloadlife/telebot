@@ -4,6 +4,9 @@ package telebot
 
 const Unknown = "unknown"
 
+type Width int
+type Height int
+
 type StickerType string
 
 const (
