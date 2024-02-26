@@ -12,6 +12,7 @@ func NewInlineKeyboardButton(text string, options ...any) Button {
 		switch value := option.(type) {
 		case string:
 			btn.CallbackData = &value
+
 		case *string:
 			btn.CallbackData = value
 
@@ -39,6 +40,10 @@ func NewInlineKeyboardButton(text string, options ...any) Button {
 		case *bool:
 			btn.Pay = value
 		}
+	}
+
+	if len(options) == 0 {
+		panic("telebot: NewInlineKeyboardButton: no options provided")
 	}
 
 	return btn

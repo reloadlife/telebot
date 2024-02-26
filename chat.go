@@ -158,21 +158,8 @@ func (c *Chat) ReflectType() string {
 }
 
 func (c *Chat) Type() string {
-	switch c.ChatType {
-	case ChatPrivate:
-		return "private"
-	case ChatGroup:
-		return "group"
-	case ChatSuperGroup:
-		return "supergroup"
-	case ChatChannel:
-		return "channel"
-	case ChatChannelPrivate:
-		return "channelprivate"
-	case ChatTypeSender:
-		return "sender"
-
-	default:
-		return "unknown"
+	if c.ChatType == "" {
+		return Unknown
 	}
+	return string(c.ChatType)
 }

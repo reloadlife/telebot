@@ -1,5 +1,7 @@
 package telebot
 
+// todo: better documentation and file naming.
+
 import (
 	"fmt"
 )
@@ -157,7 +159,7 @@ func (i *KeyboardButtonRequestUsers) Type() string         { return "KeyboardBut
 func (i *KeyboardButtonRequestUsers) ReflectType() string  { return fmt.Sprintf("%T", i) }
 func (i *KeyboardButtonPollType) Type() string {
 	if i.PollType == "" {
-		return "unknown"
+		return Unknown
 	}
 	return string(i.PollType)
 }

@@ -2,6 +2,10 @@ package telebot
 
 import "fmt"
 
+type CallbackEndpoint interface {
+	CallbackUnique() string
+}
+
 type Callback struct {
 	ID            string                    `json:"id"`
 	Sender        *User                     `json:"from"`
@@ -16,10 +20,6 @@ type Callback struct {
 
 func (c *Callback) IsInline() bool {
 	return c.MessageID != ""
-}
-
-type CallbackEndpoint interface {
-	CallbackUnique() string
 }
 
 func (c *Callback) ReflectType() string {
