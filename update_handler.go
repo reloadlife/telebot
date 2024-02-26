@@ -69,8 +69,9 @@ func (b *bot) handleMessageEvents(m *AccessibleMessage, c Context) bool {
 		return b.handle(OnPinnedMessage, c)
 	}
 
-	if m.Text != nil && *m.Text != "" { // change to HasText()
-		match := commandRegex.FindAllStringSubmatch(*m.Text, -1) // Change to GetText
+	if m.Text != nil {
+		text := *m.Text
+		match := commandRegex.FindAllStringSubmatch(text, -1)
 		if match != nil {
 			command, botName := match[0][1], match[0][3]
 			if botName != "" && !strings.EqualFold(*b.self.Username, botName) {
@@ -85,7 +86,7 @@ func (b *bot) handleMessageEvents(m *AccessibleMessage, c Context) bool {
 			}
 		}
 
-		if b.handle(onMatch, c, m.Text) || b.handle(OnText, c) {
+		if b.handle(onMatch, c, text) || b.handle(OnText, c) {
 			return true
 		}
 	}

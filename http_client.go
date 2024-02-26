@@ -72,6 +72,10 @@ func structToMap(input any) map[string]any {
 		jsonTag = strings.ReplaceAll(jsonTag, ",omitempty", "")
 
 		switch vi := v.(type) {
+		case *ReplyParameters:
+			result[jsonTag] = structToMap(*vi)
+			continue
+
 		case time.Duration:
 			result[jsonTag] = int(vi.Seconds())
 			continue

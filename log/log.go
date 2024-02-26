@@ -47,7 +47,7 @@ func init() {
 			SetLevel(LevelWarn)
 
 		default:
-			SetLevel(LevelDebug) // defaults to warning
+			SetLevel(LevelWarn) // defaults to warning
 		}
 	}
 }

@@ -3,6 +3,7 @@ package telebot
 import (
 	"errors"
 	httpc "go.mamad.dev/telebot/http"
+	"go.mamad.dev/telebot/log"
 	"time"
 )
 
@@ -67,6 +68,7 @@ func New(s BotSettings) Bot {
 			if s.OfflineMode {
 				panic(err)
 			}
+			log.Errorf("%v", err)
 		},
 		poller: s.Poller,
 
@@ -122,7 +124,6 @@ func (b *bot) Start() {
 
 	for {
 		select {
-
 		case upd := <-b.updates:
 			b.ProcessUpdate(upd)
 

@@ -7,7 +7,7 @@ import (
 
 func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*AccessibleMessage, error) {
 	params := sendMessageParams{
-		ChatID: recipient.Recipient(),
+		ChatID: recipient,
 		Text:   text,
 	}
 
