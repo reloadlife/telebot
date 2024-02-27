@@ -12,27 +12,13 @@ func (b *bot) SendDice(to Recipient, options ...any) (*AccessibleMessage, error)
 
 	for _, option := range options {
 		switch v := option.(type) {
-		case *MessageThreadID:
-			params.ThreadID = v
-
 		case DiceEmoji:
 			params.Emoji = v
 
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-		case *ReplyParameters:
-			params.ReplyParameters = v
-
-		case Option:
-			switch v {
-			case Silent:
-				params.DisableNotification = toPtr(true)
-			case Protected:
-				params.Protected = toPtr(true)
-			}
-
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendDice.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendDice))
+			}
 		}
 	}
 

@@ -31,7 +31,8 @@ type bot struct {
 
 	httpClient httpc.Client
 
-	offlineMode bool
+	offlineMode      bool
+	defaultParseMode ParseMode
 }
 
 type BotSettings struct {
@@ -46,7 +47,8 @@ type BotSettings struct {
 
 	Poller Poller
 
-	AllowedUpdates []UpdateType
+	AllowedUpdates   []UpdateType
+	DefaultParseMode ParseMode
 }
 
 // New creates a new bot instance.
@@ -85,7 +87,8 @@ func New(s BotSettings) Bot {
 		synchronous: s.Synchronous,
 		httpClient:  httpc.NewHTTPClient(s.URL, time.Minute),
 
-		group: new(Group),
+		group:            new(Group),
+		defaultParseMode: s.DefaultParseMode,
 	}
 
 	telegramSecretToken = s.Token

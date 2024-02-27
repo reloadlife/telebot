@@ -10,10 +10,10 @@ func (b *bot) SendChatAction(recipient Recipient, action ChatAction, options ...
 
 	for _, option := range options {
 		switch v := option.(type) {
-		case *MessageThreadID:
-			params.ThreadID = v
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendChatAction.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendChatAction))
+			}
 		}
 	}
 

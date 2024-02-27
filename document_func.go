@@ -3,6 +3,7 @@ package telebot
 import (
 	"encoding/json"
 	"fmt"
+	"go.mamad.dev/telebot/validation"
 )
 
 func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleMessage, error) {
@@ -13,35 +14,19 @@ func (b *bot) SendDocument(to Recipient, doc File, options ...any) (*AccessibleM
 
 	for _, option := range options {
 		switch v := option.(type) {
-		case *MessageThreadID:
-			params.ThreadID = v
 		case string:
+			err := validation.ValidateCaptionLength(v)
+			if err != nil {
+				panic("telebot: Bad Caption: " + err.Error())
+			}
 			params.Caption = &v
-
-		case ParseMode:
-			params.ParseMode = v
-		case []Entity:
-			params.Entities = v
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-		case *ReplyParameters:
-			params.ReplyParameters = v
-
 		case *File:
 			params.Thumbnail = v
 
-		case Option:
-			switch v {
-			case Silent:
-				params.DisableNotification = toPtr(true)
-			case Protected:
-				params.Protected = toPtr(true)
-			case DisableContentTypeDetection:
-				params.DisableContentTypeDetection = toPtr(true)
-			}
-
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendDocument.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendDocument))
+			}
 		}
 	}
 

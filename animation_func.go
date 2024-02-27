@@ -24,7 +24,7 @@ func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*Acce
 			params.Thumbnail = v
 
 		default:
-			if !format(&params, options...) {
+			if !b.format(&params, options...) {
 				panic(fmt.Errorf(GeneralBadInputError, v, methodSendAnimation))
 			}
 		}

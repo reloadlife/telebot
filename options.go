@@ -54,7 +54,7 @@ func appendSliceFieldByName(obj any, fieldName string, values ...any) error {
 	return nil
 }
 
-func format(params any, options ...any) bool {
+func (b *bot) format(params any, options ...any) bool {
 	param := reflect.TypeOf(params)
 	if param.Kind() != reflect.Ptr {
 		panic("telebot: first argument must be a pointer")
@@ -122,6 +122,8 @@ func format(params any, options ...any) bool {
 			err = setFieldByName(params, "Width", toPtr(int(v)))
 		case Height:
 			err = setFieldByName(params, "Height", toPtr(int(v)))
+		case *LinkPreviewOptions:
+			err = setFieldByName(params, "LinkPreviewOptions", v)
 
 		case Option:
 			switch v {
@@ -140,11 +142,18 @@ func format(params any, options ...any) bool {
 				if err == nil {
 					hasAnythingChanged = true
 				}
+			case DisableContentTypeDetection:
+				err = setFieldByName(params, "DisableContentTypeDetection", toPtr(true))
 			}
 		}
 		if err != nil {
 			panic("telebot: " + err.Error())
 		}
+	}
+
+	if b.defaultParseMode != ParseModeDefault {
+		_ = setFieldByName(params, "ParseMode", b.defaultParseMode)
+		hasAnythingChanged = true
 	}
 
 	return hasAnythingChanged

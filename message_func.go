@@ -5,52 +5,24 @@ import (
 	"fmt"
 )
 
-func (b *bot) SendMessage(recipient Recipient, text string, option ...any) (*AccessibleMessage, error) {
+func (b *bot) SendMessage(recipient Recipient, text string, options ...any) (*AccessibleMessage, error) {
 	params := sendMessageParams{
 		ChatID: recipient,
 		Text:   text,
 	}
 
-	for _, opt := range option {
+	for _, opt := range options {
 		switch v := opt.(type) {
-		case *MessageThreadID:
-			params.MessageThreadID = v
-
-		case ParseMode:
-			params.ParseMode = &v
-
-		case []Entity:
-			params.Entities = v
-
-		case *LinkPreviewOptions:
-			params.LinkPreviewOptions = v
-
-		case *ReplyParameters:
-			params.ReplyParameters = v
-
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-
-		case Option:
-			switch v {
-			case Silent:
-				params.DisableNotification = toPtr(true)
-			case Protected:
-				params.ProtectContent = toPtr(true)
-			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPhoto.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendMessage))
+			}
 		}
 	}
 
 	var resp struct {
 		Result *AccessibleMessage
-	}
-
-	if b.offlineMode {
-
-		return resp.Result, nil
 	}
 
 	req, err := b.sendMethodRequest(methodSendMessage, params)

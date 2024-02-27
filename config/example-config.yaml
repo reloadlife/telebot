@@ -3,6 +3,7 @@ settings:
   localesDir: "locales"
   TOKEN: "env:TELEGRAM_SECRET"
   URL: "https://api.telegram.org/"
+  defaultParseMode: "HTML"
   allowed_updates:
     - message
     - edited_message

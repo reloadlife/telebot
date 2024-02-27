@@ -19,23 +19,11 @@ func (b *bot) SendContact(to Recipient, contact Contact, options ...any) (*Acces
 
 	for _, option := range options {
 		switch v := option.(type) {
-		case *MessageThreadID:
-			params.ThreadID = v
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-		case *ReplyParameters:
-			params.ReplyParameters = v
-
-		case Option:
-			switch v {
-			case Silent:
-				params.DisableNotification = toPtr(true)
-			case Protected:
-				params.Protected = toPtr(true)
-			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendContact.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendContact))
+			}
 		}
 	}
 

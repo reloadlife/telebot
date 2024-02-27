@@ -19,7 +19,7 @@ func (b *bot) SendAudio(to Recipient, audio File, options ...any) (*AccessibleMe
 			params.Thumbnail = v
 
 		default:
-			if !format(&params, options...) {
+			if !b.format(&params, options...) {
 				panic(fmt.Errorf(GeneralBadInputError, v, methodSendAnimation))
 			}
 		}
