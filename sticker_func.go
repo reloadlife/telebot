@@ -3,7 +3,7 @@ package telebot
 import (
 	"encoding/json"
 	"fmt"
-	httpc "go.mamad.dev/telebot/http"
+	httpc "go.mamad.dev/gtb/http"
 	"io"
 	"strconv"
 )

@@ -93,7 +93,7 @@ Telegram Bots.
 ## Installation
 
 ```bash
-go get -u go.mamad.dev/telebot
+go get -u go.mamad.dev/gtb
 ```
 
 ### CLI Tool:

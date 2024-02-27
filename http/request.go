@@ -2,7 +2,7 @@ package httpc
 
 import (
 	"fmt"
-	"go.mamad.dev/telebot/log"
+	"go.mamad.dev/gtb/log"
 	"net/http"
 	"net/url"
 )

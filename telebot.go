@@ -2,8 +2,8 @@ package telebot
 
 import (
 	"errors"
-	httpc "go.mamad.dev/telebot/http"
-	"go.mamad.dev/telebot/log"
+	httpc "go.mamad.dev/gtb/http"
+	"go.mamad.dev/gtb/log"
 	"time"
 )
 

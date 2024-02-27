@@ -1,6 +1,6 @@
 package telebot
 
-import "go.mamad.dev/telebot/log"
+import "go.mamad.dev/gtb/log"
 
 func (b *bot) Close() error {
 	if b.offlineMode {

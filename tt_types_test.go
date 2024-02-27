@@ -331,7 +331,7 @@ func init() {
 	listOfTypes = append(listOfTypes, messageTypes...)
 }
 func Test_All_Types_Covered(t *testing.T) {
-	packageName := "go.mamad.dev/telebot"
+	packageName := "go.mamad.dev/gtb"
 	allTypes, err := getAllTypes(packageName)
 	allTypes = removeDuplicates(allTypes)
 
@@ -349,13 +349,13 @@ func Test_All_Types_Covered(t *testing.T) {
 	}
 
 	for _, not := range notStructTypes {
-		listOfStringTypes = append(listOfStringTypes, "go.mamad.dev/telebot."+not)
+		listOfStringTypes = append(listOfStringTypes, "go.mamad.dev/gtb."+not)
 	}
 
 	for _, typ := range allTypes {
 		typName := fmt.Sprintf("TestTypes/%s", typ)
 		if strings.Contains(typName, "func") ||
-			typName == "TestTypes/*go.mamad.dev/telebot.Error" { // a duplicate type, "Error" is already covered.
+			typName == "TestTypes/*go.mamad.dev/gtb.Error" { // a duplicate type, "Error" is already covered.
 			continue
 		}
 		_ = t.Run(typName, func(t *testing.T) {

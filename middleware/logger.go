@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 
-	tele "go.mamad.dev/telebot"
+	tele "go.mamad.dev/gtb"
 )
 
 // Logger returns a middleware that logs incoming updates.

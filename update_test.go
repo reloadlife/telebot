@@ -3,7 +3,7 @@ package telebot_test
 import (
 	"encoding/json"
 	"github.com/stretchr/testify/require"
-	"go.mamad.dev/telebot"
+	"go.mamad.dev/gtb"
 	"testing"
 )
 

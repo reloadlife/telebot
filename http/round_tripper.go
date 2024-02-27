@@ -1,7 +1,7 @@
 package httpc
 
 import (
-	"go.mamad.dev/telebot/log"
+	"go.mamad.dev/gtb/log"
 	"net/http"
 	"net/http/httputil"
 )

@@ -1,6 +1,6 @@
 package config
 
-import tele "go.mamad.dev/telebot"
+import tele "go.mamad.dev/gtb"
 
 type Config interface {
 	l(locale, key string) string

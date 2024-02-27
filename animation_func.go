@@ -2,7 +2,7 @@ package telebot
 
 import (
 	"fmt"
-	"go.mamad.dev/telebot/validation"
+	"go.mamad.dev/gtb/validation"
 )
 
 func (b *bot) SendAnimation(to Recipient, animation File, options ...any) (*AccessibleMessage, error) {

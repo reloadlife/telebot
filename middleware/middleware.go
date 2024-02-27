@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"errors"
-	tele "go.mamad.dev/telebot"
+	tele "go.mamad.dev/gtb"
 )
 
 // Recover returns a middleware that recovers a panic happened in

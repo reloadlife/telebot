@@ -1,7 +1,7 @@
 package main
 
 import (
-	tele "go.mamad.dev/telebot"
+	tele "go.mamad.dev/gtb"
 	"os"
 )
 
