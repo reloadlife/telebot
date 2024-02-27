@@ -16,9 +16,10 @@ func botService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 			conf := config.NewConfigFromFile(configFilePath)
 			settings := conf.GetSettings()
 			bot := tele.New(tele.BotSettings{
-				Token:          settings.GetToken(),
-				URL:            settings.GetURL(),
-				AllowedUpdates: settings.GetAllowedUpdates(),
+				Token:            settings.GetToken(),
+				URL:              settings.GetURL(),
+				AllowedUpdates:   settings.GetAllowedUpdates(),
+				DefaultParseMode: settings.GetDefaultParseMode(),
 			})
 
 			botConf := conf.GetBot()

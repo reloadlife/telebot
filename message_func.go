@@ -12,12 +12,8 @@ func (b *bot) SendMessage(recipient Recipient, text string, options ...any) (*Ac
 	}
 
 	for _, opt := range options {
-		switch v := opt.(type) {
-
-		default:
-			if !b.format(&params, options...) {
-				panic(fmt.Errorf(GeneralBadInputError, v, methodSendMessage))
-			}
+		if !b.format(&params, options...) {
+			panic(fmt.Errorf(GeneralBadInputError, opt, methodSendMessage))
 		}
 	}
 

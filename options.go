@@ -6,6 +6,21 @@ import (
 	"time"
 )
 
+func readFieldByName(obj any, fieldName string) (any, error) {
+	v := reflect.ValueOf(obj)
+	if v.Kind() != reflect.Ptr {
+		return nil, fmt.Errorf("obj must be a pointer")
+	}
+	structValue := v.Elem()
+	field := structValue.FieldByName(fieldName)
+
+	if !field.IsValid() {
+		return nil, fmt.Errorf("field '%s' not found in struct", fieldName)
+	}
+
+	return field.Interface(), nil
+}
+
 func setFieldByName(obj any, fieldName string, value any) error {
 	structValue := reflect.ValueOf(obj).Elem()
 	field := structValue.FieldByName(fieldName)
@@ -61,6 +76,11 @@ func (b *bot) format(params any, options ...any) bool {
 	}
 
 	hasAnythingChanged := false
+
+	if b.defaultParseMode != ParseModeDefault {
+		_ = setFieldByName(params, "ParseMode", b.defaultParseMode)
+		hasAnythingChanged = true
+	}
 
 	for _, option := range options {
 		var err error
@@ -149,11 +169,6 @@ func (b *bot) format(params any, options ...any) bool {
 		if err != nil {
 			panic("telebot: " + err.Error())
 		}
-	}
-
-	if b.defaultParseMode != ParseModeDefault {
-		_ = setFieldByName(params, "ParseMode", b.defaultParseMode)
-		hasAnythingChanged = true
 	}
 
 	return hasAnythingChanged

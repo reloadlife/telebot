@@ -19,6 +19,17 @@ func (b *bot) sendMethodRequest(method method, params any, files ...httpc.File) 
 		return nil, nil
 	}
 
+	if params != nil {
+		if b.defaultParseMode != "" {
+			r, err := readFieldByName(params, "ParseMode")
+			if err == nil {
+				if r.(string) == string(ParseModeDefault) {
+					_ = setFieldByName(params, "ParseMode", b.defaultParseMode)
+				}
+			}
+		}
+	}
+
 	v, ok := params.(Verifiable)
 	if ok {
 		if err := v.Verify(); err != nil {
