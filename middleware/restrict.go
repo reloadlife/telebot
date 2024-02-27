@@ -1,6 +1,6 @@
 package middleware
 
-import tele "go.mamad.dev/gtb"
+import tele "go.mamad.dev/telebot"
 
 type RestrictConfig struct {
 	Chats []int64

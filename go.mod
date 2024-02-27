@@ -1,4 +1,4 @@
-module go.mamad.dev/gtb
+module go.mamad.dev/telebot
 
 go 1.20
 

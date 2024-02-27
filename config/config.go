@@ -1,8 +1,8 @@
 package config
 
 import (
-	tele "go.mamad.dev/gtb"
-	"go.mamad.dev/gtb/log"
+	tele "go.mamad.dev/telebot"
+	"go.mamad.dev/telebot/log"
 	"gopkg.in/yaml.v3"
 	"os"
 	"strings"

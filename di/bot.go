@@ -2,9 +2,9 @@ package di
 
 import (
 	"github.com/sarulabs/di"
-	tele "go.mamad.dev/gtb"
-	"go.mamad.dev/gtb/config"
-	"go.mamad.dev/gtb/log"
+	tele "go.mamad.dev/telebot"
+	"go.mamad.dev/telebot/config"
+	"go.mamad.dev/telebot/log"
 )
 
 type RouteRegisterFunc func(bot tele.Bot) error

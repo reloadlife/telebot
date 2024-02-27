@@ -1,7 +1,7 @@
 package config
 
 import (
-	tele "go.mamad.dev/gtb"
+	tele "go.mamad.dev/telebot"
 	"strings"
 )
 
