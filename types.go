@@ -338,29 +338,29 @@ const (
 )
 
 // UpdateType represents the type of update.
-type UpdateType int
+type UpdateType string
 
 // Update types.
 const (
-	UpdateTypeMessage UpdateType = iota
-	UpdateTypeEditedMessage
-	UpdateTypeChannelPost
-	UpdateTypeEditedChannelPost
-	UpdateTypeMessageReaction
-	UpdateTypeMessageReactionCount
-	UpdateTypeInlineQuery
-	UpdateTypeChosenInlineResult
-	UpdateTypeCallbackQuery
-	UpdateTypeShippingQuery
-	UpdateTypePreCheckoutQuery
-	UpdateTypePoll
-	UpdateTypePollAnswer
-	UpdateTypeMyChatMember
-	UpdateTypeChatMember
-	UpdateTypeChatJoinRequest
-	UpdateTypeChatBoost
-	UpdateTypeChatBoostRemoved
-	UpdateTypeUnknown
+	UpdateTypeMessage              UpdateType = "message"
+	UpdateTypeEditedMessage        UpdateType = "edited_message"
+	UpdateTypeChannelPost          UpdateType = "channel_post"
+	UpdateTypeEditedChannelPost    UpdateType = "edited_channel_post"
+	UpdateTypeMessageReaction      UpdateType = "message_reaction"
+	UpdateTypeMessageReactionCount UpdateType = "message_reaction_count"
+	UpdateTypeInlineQuery          UpdateType = "inline_query"
+	UpdateTypeChosenInlineResult   UpdateType = "chosen_inline_result"
+	UpdateTypeCallbackQuery        UpdateType = "callback_query"
+	UpdateTypeShippingQuery        UpdateType = "shipping_query"
+	UpdateTypePreCheckoutQuery     UpdateType = "pre_checkout_query"
+	UpdateTypePoll                 UpdateType = "poll"
+	UpdateTypePollAnswer           UpdateType = "poll_answer"
+	UpdateTypeMyChatMember         UpdateType = "my_chat_member"
+	UpdateTypeChatMember           UpdateType = "chat_member"
+	UpdateTypeChatJoinRequest      UpdateType = "chat_join_request"
+	UpdateTypeChatBoost            UpdateType = "chat_boost"
+	UpdateTypeChatBoostRemoved     UpdateType = "chat_boost_removed"
+	UpdateTypeUnknown              UpdateType = "unknown"
 )
 
 type MenuButtonType string

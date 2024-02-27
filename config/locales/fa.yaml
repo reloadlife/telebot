@@ -1,0 +1,19 @@
+start_text: "به ربات خوش آمدید"
+
+default_menu_placeholder: "لطفا یکی از گزینه ها را انتخاب کنید"
+
+button1: "گزینه 1"
+
+botName: "نام ربات"
+
+botShortDescription: "ربات ساده ای است"
+
+botLongDescription: "ربات ساده ای است که به شما کمک می کند تا یک ربات تلگرامی ساده راه اندازی کنید"
+
+commandStart: "شروع"
+
+commandHelp: "راهنما"
+
+commandSettings: "تنظیمات"
+
+commandAbout: "درباره"

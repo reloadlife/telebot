@@ -1,0 +1,189 @@
+settings:
+  rootDir: "./"
+  localesDir: "locales"
+  TOKEN: "env:TELEGRAM_SECRET"
+  URL: "https://api.telegram.org/"
+  allowed_updates:
+    - message
+    - edited_message
+    - channel_post
+    - edited_channel_post
+    - inline_query
+    - chosen_inline_result
+    - callback_query
+    - poll
+    - poll_answer
+    - shipping_query
+    - pre_checkout_query
+    - my_chat_member
+    - chat_member
+    - chat_join_request
+    - chat_boost
+    - chat_boost_removed
+
+locales:
+  - "fa" # this would be the default locale (fallback)
+  - "en"
+  - "fr"
+
+bot:
+  name: "locale:botName"
+  ShortDescription: "locale:botShortDescription"
+  LongDescription: "locale:botLongDescription"
+  commands:
+    start: "locale:commandStart"
+    help: "locale:commandHelp"
+    settings: "locale:commandSettings"
+    about: "locale:commandAbout"
+  defaultAdminRights:
+    channels:
+      - can_manage_chat
+      - can_delete_messages
+      - can_manage_video_chats
+      - can_restrict_members
+      - can_promote_members
+      - can_change_info
+      - can_invite_users
+      - can_post_messages
+      - can_edit_messages
+      - can_pin_messages
+      - can_post_stories
+      - can_edit_stories
+      - can_delete_stories
+      - can_manage_topics
+    groups:
+      - can_manage_chat
+      - can_delete_messages
+      - can_manage_video_chats
+      - can_restrict_members
+      - can_promote_members
+      - can_change_info
+      - can_invite_users
+      - can_post_messages
+      - can_edit_messages
+      - can_pin_messages
+      - can_post_stories
+      - can_edit_stories
+      - can_delete_stories
+      - can_manage_topics
+
+# anything can be provided here and be used later on via Context.Config
+config:
+  foo: bar
+  baz:
+    - qux
+    - quux
+    - corge
+
+# locales should be located at root directory as
+#"$locale.yaml|yml|json" files or you have to specify root directory in the config
+
+handles:
+  - cmd: /start
+    handlerResponse:
+      text: "locale:start_text"
+      keyboard: default_menu
+
+buttons:
+  button_1:
+    # this would be a KeyboardButtonText
+    type: "keyboardButton" # default is keyboardButton if no other option is provided other than text.
+    text: "locale:button1"
+
+  button_2:
+    type: "keyboardButton"
+    text: "locale:button1"
+    request_contact: true
+
+  button_3:
+    type: "keyboardButton"
+    text: "locale:button1"
+    request_location: true
+
+  button_poll:
+    type: "keyboardButton"
+    text: "locale:button1"
+    poll_request: "quiz"
+
+  button_4:
+    type: "keyboardButton"
+    text: "locale:button1"
+    request_users:
+      request_id: 1
+      user_is_bot: false
+      user_is_premium: false
+      max_quantity: 1
+
+  button_5:
+    type: "keyboardButton"
+    text: "locale:button1"
+    request_chat:
+      request_id: 2
+      chat_is_channel: false
+      chat_is_forum: false
+      chat_has_username: false
+      chat_is_created: false
+      user_administrator_rights:
+        can_manage_chat: true
+        can_delete_messages: true
+        can_manage_video_chats: true
+        can_restrict_members: true
+        can_promote_members: true
+        can_change_info: true
+        can_invite_users: true
+        can_post_messages: true
+        can_edit_messages: true
+        can_pin_messages: true
+        can_post_stories: true
+        can_edit_stories: true
+        can_delete_stories: true
+        can_manage_topics: true
+      bot_administrator_rights:
+        can_manage_chat: true
+        can_delete_messages: true
+        can_manage_video_chats: true
+        can_restrict_members: true
+        can_promote_members: true
+        can_change_info: true
+        can_invite_users: true
+        can_post_messages: true
+        can_edit_messages: true
+        can_pin_messages: true
+        can_post_stories: true
+        can_edit_stories: true
+        can_delete_stories: true
+        can_manage_topics: true
+      bot_is_member: false
+
+  button_inline_1:
+    # this would be a inlineKeyboardButton
+    type: "inlineKeyboardButton"
+    text: "locale:button1"
+    url: "https://example.com"
+
+  button_inline_2:
+    # this would be a inlineKeyboardButton
+    type: "inlineKeyboardButton"
+    text: "locale:button1"
+    callback_data: "https://example.com"
+
+
+keyboards:
+  default_menu:
+    type: "keyboard" # the default is keyboard if no other option is provided
+    placeholder: "locale:default_menu_placeholder"
+    one_time: true
+    persistent: true
+    resize: true
+    selective: true
+    keyboard:
+      - [ button_1, button_2 ]
+
+  inline_sample:
+    type: "inline"
+    keyboard:
+      - [ button_inline_1, button_inline_2 ]
+
+results:
+
+templates:

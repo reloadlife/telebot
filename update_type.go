@@ -2,46 +2,10 @@ package telebot
 
 // String returns the string representation of the UpdateType.
 func (ut UpdateType) String() string {
-	switch ut {
-	case UpdateTypeMessage:
-		return "message"
-	case UpdateTypeEditedMessage:
-		return "edited_message"
-	case UpdateTypeChannelPost:
-		return "channel_post"
-	case UpdateTypeEditedChannelPost:
-		return "edited_channel_post"
-	case UpdateTypeMessageReaction:
-		return "message_reaction"
-	case UpdateTypeMessageReactionCount:
-		return "message_reaction_count"
-	case UpdateTypeInlineQuery:
-		return "inline_query"
-	case UpdateTypeChosenInlineResult:
-		return "chosen_inline_result"
-	case UpdateTypeCallbackQuery:
-		return "callback_query"
-	case UpdateTypeShippingQuery:
-		return "shipping_query"
-	case UpdateTypePreCheckoutQuery:
-		return "pre_checkout_query"
-	case UpdateTypePoll:
-		return "poll"
-	case UpdateTypePollAnswer:
-		return "poll_answer"
-	case UpdateTypeMyChatMember:
-		return "my_chat_member"
-	case UpdateTypeChatMember:
-		return "chat_member"
-	case UpdateTypeChatJoinRequest:
-		return "chat_join_request"
-	case UpdateTypeChatBoost:
-		return "chat_boost"
-	case UpdateTypeChatBoostRemoved:
-		return "removed_chat_boost"
-	default:
-		return "unknown"
+	if ut == "" {
+		return Unknown
 	}
+	return string(ut)
 }
 
 // UpdateType returns the type of the Update.
@@ -104,4 +68,25 @@ func (u *Update) UpdateType() UpdateType {
 	default:
 		return UpdateTypeUnknown
 	}
+}
+
+func (ut UpdateType) IsValid() bool {
+	return ut == UpdateTypeMessage ||
+		ut == UpdateTypeEditedMessage ||
+		ut == UpdateTypeChannelPost ||
+		ut == UpdateTypeEditedChannelPost ||
+		ut == UpdateTypeMessageReaction ||
+		ut == UpdateTypeMessageReactionCount ||
+		ut == UpdateTypeInlineQuery ||
+		ut == UpdateTypeChosenInlineResult ||
+		ut == UpdateTypeCallbackQuery ||
+		ut == UpdateTypeShippingQuery ||
+		ut == UpdateTypePreCheckoutQuery ||
+		ut == UpdateTypePoll ||
+		ut == UpdateTypePollAnswer ||
+		ut == UpdateTypeMyChatMember ||
+		ut == UpdateTypeChatMember ||
+		ut == UpdateTypeChatJoinRequest ||
+		ut == UpdateTypeChatBoost ||
+		ut == UpdateTypeChatBoostRemoved
 }

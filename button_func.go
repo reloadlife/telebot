@@ -37,8 +37,8 @@ func NewInlineKeyboardButton(text string, options ...any) Button {
 		case *CallbackGame:
 			btn.CallbackGame = value
 
-		case *bool:
-			btn.Pay = value
+		case bool:
+			btn.Pay = &value
 		}
 	}
 

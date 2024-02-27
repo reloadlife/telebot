@@ -45,9 +45,6 @@ func init() {
 			SetLevel(LevelDebug)
 		case "PROD":
 			SetLevel(LevelWarn)
-
-		default:
-			SetLevel(LevelWarn) // defaults to warning
 		}
 	}
 }

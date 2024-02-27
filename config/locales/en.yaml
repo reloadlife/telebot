@@ -1,0 +1,19 @@
+start_text: "Welcome to the bot!"
+
+default_menu_placeholder: "Choose an option"
+
+button1: "Button 1"
+
+botName: "My Bot"
+
+botShortDescription: "A simple bot"
+
+botLongDescription: "This is a simple bot"
+
+commandStart: "Start"
+
+commandHelp: "Help"
+
+commandSettings: "Settings"
+
+commandAbout: "About"

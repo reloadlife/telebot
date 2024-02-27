@@ -9,20 +9,20 @@ type LoginURL struct {
 	// URL is an HTTPS URL to be opened with user authorization data added to the query string when the button is pressed.
 	// If the user refuses to provide authorization data, the original URL without information about the user will be opened.
 	// The data added is the same as described in Receiving authorization data.
-	URL string `json:"url"`
+	URL string `json:"url" yaml:"url"`
 
 	// ForwardText is the new text of the button in forwarded messages.
-	ForwardText string `json:"forward_text,omitempty"`
+	ForwardText string `json:"forward_text,omitempty" yaml:"forward_text"`
 
 	// BotUsername is the username of a bot, which will be used for user authorization.
 	// See Setting up a bot for more details.
 	// If not specified, the current bot's username will be assumed.
 	// The URL's domain must be the same as the domain linked with the bot.
 	// See Linking your domain to the bot for more details.
-	BotUsername string `json:"bot_username,omitempty"`
+	BotUsername string `json:"bot_username,omitempty" yaml:"bot_username"`
 
 	// RequestWriteAccess, if true, passes True to request the permission for your bot to send messages to the user.
-	RequestWriteAccess bool `json:"request_write_access,omitempty"`
+	RequestWriteAccess bool `json:"request_write_access,omitempty" yaml:"request_write_access"`
 }
 
 func (c *LoginURL) Type() string        { return "login_url" }

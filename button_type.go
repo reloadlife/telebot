@@ -11,51 +11,51 @@ import (
 type SwitchInlineQueryChosenChat struct {
 	// Query is the default inline query to be inserted in the input field.
 	// If left empty, only the bot's username will be inserted.
-	Query *string `json:"query,omitempty"`
+	Query *string `json:"query,omitempty" yaml:"query,omitempty"`
 
 	// AllowUserChats, if true, allows private chats with users to be chosen.
-	AllowUserChats *bool `json:"allow_user_chats,omitempty"`
+	AllowUserChats *bool `json:"allow_user_chats,omitempty" yaml:"allow_user_chats,omitempty"`
 
 	// AllowBotChats, if true, allows private chats with bots to be chosen.
-	AllowBotChats *bool `json:"allow_bot_chats,omitempty"`
+	AllowBotChats *bool `json:"allow_bot_chats,omitempty" yaml:"allow_bot_chats,omitempty"`
 
 	// AllowGroupChats, if true, allows group and supergroup chats to be chosen.
-	AllowGroupChats *bool `json:"allow_group_chats,omitempty"`
+	AllowGroupChats *bool `json:"allow_group_chats,omitempty" yaml:"allow_group_chats,omitempty"`
 
 	// AllowChannelChats, if true, allows channel chats to be chosen.
-	AllowChannelChats *bool `json:"allow_channel_chats,omitempty"`
+	AllowChannelChats *bool `json:"allow_channel_chats,omitempty" yaml:"allow_channel_chats,omitempty"`
 }
 
 // KeyboardButtonRequestChat defines the criteria used to request a suitable chat.
 type KeyboardButtonRequestChat struct {
 	// RequestID Signed 32-bit identifier of the request
-	RequestID int32 `json:"request_id"`
+	RequestID int32 `json:"request_id" yaml:"request_id"`
 	// ChatIsChannel Pass true to request a channel chat, pass false to request a group or a supergroup chat
-	ChatIsChannel bool `json:"chat_is_channel"`
+	ChatIsChannel bool `json:"chat_is_channel" yaml:"chat_is_channel"`
 	// ChatIsForum  Optional. Pass true to request a forum supergroup, pass false to request a non-forum chat
-	ChatIsForum bool `json:"chat_is_forum,omitempty"`
+	ChatIsForum bool `json:"chat_is_forum,omitempty" yaml:"chat_is_forum,omitempty"`
 	// ChatHasUsernameOptional. Pass true to request a supergroup or a channel with a username, pass false to request a chat without a username
-	ChatHasUsername bool `json:"chat_has_username,omitempty"`
+	ChatHasUsername bool `json:"chat_has_username,omitempty" yaml:"chat_has_username,omitempty"`
 	// ChatIsCreated Optional. Pass true to request a chat owned by the user. Otherwise, no additional restrictions are applied
-	ChatIsCreated bool `json:"chat_is_created,omitempty"`
+	ChatIsCreated bool `json:"chat_is_created,omitempty" yaml:"chat_is_created,omitempty"`
 	// UserRights Optional. Administrator rights required for the user in the chat
-	UserRights Rights `json:"user_administrator_rights,omitempty"`
+	UserRights Rights `json:"user_administrator_rights,omitempty" yaml:"user_rights,omitempty"`
 	// BotRights  Optional. Administrator rights required for the bot in the chat
-	BotRights Rights `json:"bot_administrator_rights,omitempty"`
+	BotRights Rights `json:"bot_administrator_rights,omitempty" yaml:"bot_rights,omitempty"`
 	// BotIsMember Optional. Pass true to request a chat with the bot as a member. Otherwise, no additional restrictions are applied
-	BotIsMember bool `json:"bot_is_member,omitempty"`
+	BotIsMember bool `json:"bot_is_member,omitempty" yaml:"bot_is_member,omitempty"`
 }
 
 // KeyboardButtonRequestUsers defines the criteria used to request suitable users.
 type KeyboardButtonRequestUsers struct {
 	// RequestID  Signed 32-bit identifier of the request
-	RequestID int32 `json:"request_id"`
+	RequestID int32 `json:"request_id" yaml:"request_id"`
 	// UserIsBot. Request bots if true, regular users if false
-	UserIsBot *bool `json:"user_is_bot,omitempty"`
+	UserIsBot *bool `json:"user_is_bot,omitempty" yaml:"user_is_bot,omitempty"`
 	// UserIsPremium. Request premium users if true, non-premium users if false
-	UserIsPremium *bool `json:"user_is_premium,omitempty"`
+	UserIsPremium *bool `json:"user_is_premium,omitempty" yaml:"user_is_premium,omitempty"`
 	// MaxQuantity. Maximum number of users to be selected; 1-10. Defaults to 1.
-	MaxQuantity *int `json:"max_quantity,omitempty"`
+	MaxQuantity *int `json:"max_quantity,omitempty" yaml:"max_quantity,omitempty"`
 }
 
 // KeyboardButtonPollType represents the type of a poll, which is allowed to be created and sent when the corresponding button is pressed.

@@ -18,7 +18,7 @@ func (w *WebAppData) Type() string        { return "WebAppData" }
 // WebAppInfo describes a Web App.
 type WebAppInfo struct {
 	// URL is an HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps.
-	URL string `json:"url"`
+	URL string `json:"url" yaml:"url"`
 }
 
 func (w *WebAppInfo) ReflectType() string { return fmt.Sprintf("%T", w) }

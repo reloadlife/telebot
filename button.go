@@ -15,6 +15,9 @@ type Button interface {
 	UnmarshalJSON(data []byte) error
 
 	deepEqual(other any) bool // private for internal use
+
+	GetText() string
+	SetText(string)
 }
 
 // Button is here so InlineKeyboardButton implements Button
@@ -22,3 +25,8 @@ func (*InlineKeyboardButton) Button() {}
 
 // Button is here so InlineKeyboardButton implements Button
 func (*KeyboardButton) Button() {}
+
+func (i *InlineKeyboardButton) GetText() string  { return i.Text }
+func (i *InlineKeyboardButton) SetText(t string) { i.Text = t }
+func (i *KeyboardButton) GetText() string        { return i.Text }
+func (i *KeyboardButton) SetText(t string)       { i.Text = t }
