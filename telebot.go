@@ -116,6 +116,9 @@ func (b *bot) Start() {
 	if b.stopClient != nil {
 		return
 	}
+
+	log.Infof("telebot: bot started and logged in As %s", b.self)
+
 	b.stopClient = make(chan struct{})
 
 	stop := make(chan struct{})

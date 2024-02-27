@@ -9,7 +9,7 @@ import (
 
 type RouteRegisterFunc func(bot tele.Bot) error
 
-func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) *di.Def {
+func botService(configFilePath string, registerRouteFunction RouteRegisterFunc) *di.Def {
 	return &di.Def{
 		Name: "botService",
 		Build: func(c di.Container) (interface{}, error) {
@@ -128,6 +128,12 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 			return bot, err
 		},
 	}
+}
+
+func Init(configFilePath string, registerRouteFunction RouteRegisterFunc) {
+	setupServices(
+		botService(configFilePath, registerRouteFunction),
+	)
 }
 
 func GetBot() tele.Bot {

@@ -23,8 +23,6 @@ func setupServices(services ...*di.Def) {
 			fmt.Printf("Failed to load service: %v, Err: %v\n", service.Name, err.Error())
 		}
 	}
-
-	fmt.Printf("Loaded %v services\n", len(Container.Definitions()))
 }
 
 func getService[T interface{}](name string) T {

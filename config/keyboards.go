@@ -1,6 +1,9 @@
 package config
 
-import tele "go.mamad.dev/telebot"
+import (
+	tele "go.mamad.dev/telebot"
+	"strings"
+)
 
 type keyboardMap struct {
 	Type string `yaml:"type" json:"type"`
@@ -76,7 +79,12 @@ func (c *config) GetKeyboards() Keyboards {
 				}
 
 				if v.Placeholder != "" {
-					opts = append(opts, v.Placeholder)
+					plHolder := v.Placeholder
+					if strings.HasPrefix(plHolder, "locale:") {
+						pl := strings.TrimPrefix(plHolder, "locale:")
+						plHolder = c.l(_l, pl)
+					}
+					opts = append(opts, plHolder)
 				}
 
 				markup.Keyboard(opts...)
