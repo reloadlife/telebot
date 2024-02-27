@@ -11,7 +11,7 @@ type BotConfig interface {
 	GetLongDescription(l ...string) string
 	GetCommands(l ...string) map[string]string
 
-	GetDefaultAdminRights(forChannels bool) tele.Rights
+	GetDefaultAdminRights(forChannels bool) *tele.Rights
 }
 
 type botConfig struct {
@@ -28,6 +28,9 @@ type botConfig struct {
 }
 
 func (b *botConfig) GetName(l ...string) string {
+	if b.Name == "" {
+		return ""
+	}
 	locale := b.conf.GetDefaultLocale()
 	if len(l) > 0 {
 		locale = l[0]
@@ -42,6 +45,9 @@ func (b *botConfig) GetName(l ...string) string {
 }
 
 func (b *botConfig) GetShortDescription(l ...string) string {
+	if b.ShortDescription == "" {
+		return ""
+	}
 	locale := b.conf.GetDefaultLocale()
 	if len(l) > 0 {
 		locale = l[0]
@@ -56,6 +62,9 @@ func (b *botConfig) GetShortDescription(l ...string) string {
 }
 
 func (b *botConfig) GetLongDescription(l ...string) string {
+	if b.LongDescription == "" {
+		return ""
+	}
 	locale := b.conf.GetDefaultLocale()
 	if len(l) > 0 {
 		locale = l[0]
@@ -70,6 +79,9 @@ func (b *botConfig) GetLongDescription(l ...string) string {
 }
 
 func (b *botConfig) GetCommands(l ...string) map[string]string {
+	if len(b.Commands) == 0 {
+		return nil
+	}
 	commands := make(map[string]string)
 
 	locale := b.conf.GetDefaultLocale()
@@ -89,7 +101,16 @@ func (b *botConfig) GetCommands(l ...string) map[string]string {
 	return commands
 }
 
-func (b *botConfig) GetDefaultAdminRights(forChannels bool) tele.Rights {
+func (b *botConfig) GetDefaultAdminRights(forChannels bool) *tele.Rights {
+	if forChannels {
+		if len(b.DefaultAdminRights.Channels) == 0 {
+			return nil
+		}
+	}
+	if len(b.DefaultAdminRights.Groups) == 0 {
+		return nil
+	}
+
 	t := tele.Rights{}
 	rights := b.DefaultAdminRights.Groups
 	if forChannels {
@@ -147,7 +168,7 @@ func (b *botConfig) GetDefaultAdminRights(forChannels bool) tele.Rights {
 		}
 	}
 
-	return t
+	return &t
 }
 
 func (c *config) GetBot() BotConfig {

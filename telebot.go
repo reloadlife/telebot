@@ -45,6 +45,8 @@ type BotSettings struct {
 	UpdatesCount int
 
 	Poller Poller
+
+	AllowedUpdates []UpdateType
 }
 
 // New creates a new bot instance.
@@ -58,7 +60,9 @@ func New(s BotSettings) Bot {
 	}
 
 	if s.Poller == nil {
-		s.Poller = &LongPoller{}
+		s.Poller = &LongPoller{
+			AllowedUpdates: s.AllowedUpdates,
+		}
 	}
 
 	b := &bot{

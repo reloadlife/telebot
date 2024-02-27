@@ -48,6 +48,12 @@ type Bot interface {
 	// Stops the Bot.
 	Stop()
 
+	// Group creates a *Group
+	Group() *Group
+
+	// Use adds middleware to the global middleware chain.
+	Use(middleware ...MiddlewareFunc)
+
 	// Handle
 	// adds new Handler
 	Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc)

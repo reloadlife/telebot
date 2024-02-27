@@ -4,8 +4,10 @@ go 1.20
 
 require (
 	github.com/fatih/color v1.13.0
+	github.com/sarulabs/di v2.0.0+incompatible
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/tools v0.6.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -17,5 +19,4 @@ require (
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

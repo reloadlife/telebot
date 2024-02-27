@@ -2,6 +2,15 @@ package telebot
 
 import "regexp"
 
+func (b *bot) Group() *Group {
+	return &Group{b: b}
+}
+
+// Use adds middleware to the global bot chain.
+func (b *bot) Use(middleware ...MiddlewareFunc) {
+	b.group.Use(middleware...)
+}
+
 func (b *bot) Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc) {
 	if len(b.group.middleware) > 0 {
 		m = append(b.group.middleware, m...)
