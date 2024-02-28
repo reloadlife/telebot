@@ -1,6 +1,9 @@
 package telebot
 
-import "regexp"
+import (
+	"reflect"
+	"regexp"
+)
 
 func (b *bot) Group() *Group {
 	return &Group{b: b}
@@ -12,6 +15,12 @@ func (b *bot) Use(middleware ...MiddlewareFunc) {
 }
 
 func (b *bot) Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc) {
+	if reflect.TypeOf(endpoint).Kind() == reflect.Slice {
+		for _, e := range endpoint.([]any) {
+			b.Handle(e, h, m...)
+		}
+		return
+	}
 	if len(b.group.middleware) > 0 {
 		m = append(b.group.middleware, m...)
 	}
