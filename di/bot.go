@@ -7,11 +7,13 @@ import (
 	"go.mamad.dev/telebot/log"
 )
 
+var BotServiceName = "botService"
+
 type RouteRegisterFunc func(bot tele.Bot) error
 
-func botService(configFilePath string, registerRouteFunction RouteRegisterFunc) *di.Def {
+func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) *di.Def {
 	return &di.Def{
-		Name: "botService",
+		Name: BotServiceName,
 		Build: func(c di.Container) (interface{}, error) {
 			conf := config.NewConfigFromFile(configFilePath)
 			settings := conf.GetSettings()
@@ -133,12 +135,12 @@ func botService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 
 func Init(configFilePath string, registerRouteFunction RouteRegisterFunc) {
 	setupServices(
-		botService(configFilePath, registerRouteFunction),
+		BotService(configFilePath, registerRouteFunction),
 	)
 }
 
 func GetBot() tele.Bot {
-	bot, err := getServiceSafe[tele.Bot]("botService")
+	bot, err := getServiceSafe[tele.Bot](BotServiceName)
 	if err != nil {
 		panic(err)
 	}
