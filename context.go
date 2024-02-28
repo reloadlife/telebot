@@ -15,6 +15,33 @@ type nativeContext struct {
 	store map[string]any
 }
 
+func (c *nativeContext) Sender() *User {
+	switch {
+	case c.u.CallbackQuery != nil:
+		return c.u.CallbackQuery.Sender
+	case c.Message() != nil:
+		return c.Message().From
+	case c.u.Query != nil:
+		return &c.u.Query.From
+	case c.u.InlineResult != nil:
+		return &c.u.InlineResult.From
+	case c.u.ShippingQuery != nil:
+		return &c.u.ShippingQuery.From
+	case c.u.PreCheckoutQuery != nil:
+		return &c.u.PreCheckoutQuery.From
+	case c.u.PollAnswer != nil:
+		return c.u.PollAnswer.User
+	case c.u.MyChatMember != nil:
+		return &c.u.MyChatMember.From
+	case c.u.ChatMember != nil:
+		return &c.u.ChatMember.From
+	case c.u.ChatJoinRequest != nil:
+		return &c.u.ChatJoinRequest.From
+	default:
+		return nil
+	}
+}
+
 func (c *nativeContext) Bot() Bot {
 	return c.b
 }

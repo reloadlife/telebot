@@ -29,4 +29,6 @@ type Context interface {
 	Send(s any, options ...any) (Message, error)
 
 	Text() string
+
+	Sender() *User
 }
