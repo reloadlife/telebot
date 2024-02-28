@@ -82,7 +82,7 @@ func (c *config) GetKeyboards() Keyboards {
 					plHolder := v.Placeholder
 					if strings.HasPrefix(plHolder, "locale:") {
 						pl := strings.TrimPrefix(plHolder, "locale:")
-						plHolder = c.l(_l, pl)
+						plHolder = c.L(_l, pl)
 					}
 					opts = append(opts, plHolder)
 				}

@@ -38,7 +38,7 @@ func (b *botConfig) GetName(l ...string) string {
 
 	if locale != "" {
 		lKey := strings.TrimPrefix(b.Name, "locale:")
-		return b.conf.l(locale, lKey)
+		return b.conf.L(locale, lKey)
 	}
 
 	return b.Name
@@ -55,7 +55,7 @@ func (b *botConfig) GetShortDescription(l ...string) string {
 
 	if locale != "" {
 		lKey := strings.TrimPrefix(b.ShortDescription, "locale:")
-		return b.conf.l(locale, lKey)
+		return b.conf.L(locale, lKey)
 	}
 
 	return b.ShortDescription
@@ -72,7 +72,7 @@ func (b *botConfig) GetLongDescription(l ...string) string {
 
 	if locale != "" {
 		lKey := strings.TrimPrefix(b.LongDescription, "locale:")
-		return b.conf.l(locale, lKey)
+		return b.conf.L(locale, lKey)
 	}
 
 	return b.LongDescription
@@ -92,7 +92,7 @@ func (b *botConfig) GetCommands(l ...string) map[string]string {
 	for k, v := range b.Commands {
 		if locale != "" {
 			lKey := strings.TrimPrefix(v, "locale:")
-			commands[k] = b.conf.l(locale, lKey)
+			commands[k] = b.conf.L(locale, lKey)
 		} else {
 			commands[k] = v
 		}

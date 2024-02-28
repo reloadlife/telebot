@@ -8,7 +8,7 @@ func (c *config) GetLocales() []string {
 	return c.conf.Locales
 }
 
-func (c *config) l(locale, key string) string {
+func (c *config) L(locale, key string) string {
 	lMap, ok := c.locales[localeKey(locale)]
 	if !ok {
 		lMap = c.locales[c.defaultLocale]

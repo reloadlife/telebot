@@ -160,7 +160,7 @@ func (b *buttons) GetButton(name string, l ...string) tele.Button {
 		}
 
 		lKey := strings.TrimPrefix(text, "locale:")
-		btn.SetText(b.conf.l(locale, lKey))
+		btn.SetText(b.conf.L(locale, lKey))
 	}
 	return btn
 }

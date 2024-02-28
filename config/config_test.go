@@ -34,10 +34,10 @@ func TestNewConfigFromFile(t *testing.T) {
 	require.Equal(t, "fa", c.GetDefaultLocale())
 
 	require.Panics(t, func() {
-		c.l("fa", "hellloasidojoausbdyfigosdyuf")
+		c.L("fa", "hellloasidojoausbdyfigosdyuf")
 	})
 
-	require.Equal(t, c.l("en", "commandStart"), "Start")
+	require.Equal(t, c.L("en", "commandStart"), "Start")
 
 	require.NotPanics(t, func() {
 		c.GetBot().GetDefaultAdminRights(true)

@@ -55,7 +55,7 @@ func (h *handler) GetText(l ...string) string {
 
 	if locale != "" {
 		lKey := strings.TrimPrefix(h.Text, "locale:")
-		return h.conf.l(locale, lKey)
+		return h.conf.L(locale, lKey)
 	}
 	return h.Text
 }

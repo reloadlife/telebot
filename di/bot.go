@@ -9,6 +9,9 @@ import (
 
 var BotServiceName = "botService"
 
+var ctx = &context{}
+var Context Ctx = ctx
+
 type RouteRegisterFunc func(bot tele.Bot) error
 
 func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) *di.Def {
@@ -25,6 +28,8 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 			})
 
 			botConf := conf.GetBot()
+			ctx.conf = conf
+			ctx.locales = conf.GetLocales()
 
 			for _, locale := range conf.GetLocales() {
 				localedName := botConf.GetName(locale)
@@ -126,6 +131,8 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 					return err
 				})
 			}
+
+			Context = ctx
 
 			err := registerRouteFunction(bot)
 			return bot, err
