@@ -1,6 +1,9 @@
 package telebot
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
 
 // NewInlineKeyboardButton creates a new inline keyboard button with the given text and options.
 func NewInlineKeyboardButton(text string, options ...any) Button {
@@ -11,10 +14,10 @@ func NewInlineKeyboardButton(text string, options ...any) Button {
 	for _, option := range options {
 		switch value := option.(type) {
 		case string:
-			btn.CallbackData = &value
+			btn.CallbackData = toPtr(fmt.Sprintf("\f%s", value))
 
 		case *string:
-			btn.CallbackData = value
+			btn.CallbackData = toPtr(fmt.Sprintf("\f%s", *value))
 
 		case *url.URL:
 			btn.URL = toPtr(value.String())
