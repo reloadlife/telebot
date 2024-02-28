@@ -9,12 +9,6 @@ import (
 
 var telegramSecretToken string
 
-type handler struct {
-	f HandlerFunc
-	e UpdateHandlerOn
-	t any
-}
-
 type bot struct {
 	self    *User
 	token   string
@@ -23,7 +17,7 @@ type bot struct {
 	onError func(error, Context)
 
 	group    *Group
-	handlers []handler
+	handlers *handlers
 
 	synchronous bool
 	stop        chan chan struct{}
@@ -74,14 +68,14 @@ func New(s BotSettings) Bot {
 			if s.OfflineMode {
 				panic(err)
 			}
-			log.Errorf("%v", err)
+			log.Errorf("telebot[error]: %v", err)
 		},
 		poller: s.Poller,
 
 		offlineMode: s.OfflineMode,
 
 		updates:  make(chan Update, s.UpdatesCount),
-		handlers: []handler{},
+		handlers: newHandlers(),
 		stop:     make(chan chan struct{}),
 
 		synchronous: s.Synchronous,
@@ -108,6 +102,15 @@ func New(s BotSettings) Bot {
 	}
 
 	return b
+}
+
+func (b *bot) Group() *Group {
+	return &Group{b: b}
+}
+
+// Use adds middleware to the global bot chain.
+func (b *bot) Use(middleware ...MiddlewareFunc) {
+	b.group.Use(middleware...)
 }
 
 // Start brings bot into motion by consuming incoming updates (see bot.updates channel).

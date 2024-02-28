@@ -123,6 +123,8 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 				}
 			})
 
+			err := registerRouteFunction(bot)
+
 			for _, handle := range handles {
 				bot.Handle(handle.GetCommand(), func(c tele.Context) error {
 					h := handle.GetHandler()
@@ -133,8 +135,6 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 			}
 
 			Context = ctx
-
-			err := registerRouteFunction(bot)
 			return bot, err
 		},
 	}

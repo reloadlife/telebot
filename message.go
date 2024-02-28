@@ -189,45 +189,57 @@ type AccessibleMessage struct {
 
 	// Telegram Types.
 
-	ID                           int64                         `json:"message_id"`
-	ThreadID                     *int64                        `json:"message_thread_id,omitempty"`
-	From                         *User                         `json:"from,omitempty"`
-	SenderChat                   *Chat                         `json:"sender_chat,omitempty"`
-	Date                         int64                         `json:"date"`
-	Chat                         *Chat                         `json:"chat"`
-	ForwardOrigin                *MessageOrigin                `json:"forward_origin,omitempty"`
-	IsTopic                      *bool                         `json:"is_topic_message,omitempty"`
-	IsAutomaticForward           *bool                         `json:"is_automatic_forward,omitempty"`
-	ReplyTo                      *AccessibleMessage            `json:"reply_to_message,omitempty"`
-	ReplyToStory                 *Story                        `json:"reply_to_story,omitempty"`
-	ExternalReply                *ExternalReplyInfo            `json:"external_reply,omitempty"`
-	Quote                        *TextQuote                    `json:"quote,omitempty"`
-	ViaBot                       *User                         `json:"via_bot,omitempty"`
-	EditDate                     *int64                        `json:"edit_date,omitempty"`
-	HasProtectedContent          *bool                         `json:"has_protected_content,omitempty"`
-	MediaGroupID                 *string                       `json:"media_group_id,omitempty"`
-	AuthorSignature              *string                       `json:"author_signature,omitempty"`
-	Text                         *string                       `json:"text,omitempty"`
-	Entities                     []Entity                      `json:"entities,omitempty"`
-	LinkPreviewOptions           *LinkPreviewOptions           `json:"link_preview_options,omitempty"`
-	Animation                    *Animation                    `json:"animation,omitempty"`
-	Audio                        *Audio                        `json:"audio,omitempty"`
-	Document                     *Document                     `json:"document,omitempty"`
-	Photo                        PhotoSizes                    `json:"photo,omitempty"`
-	Sticker                      *Sticker                      `json:"sticker,omitempty"`
-	Story                        *Story                        `json:"story,omitempty"`
-	Video                        *Video                        `json:"video,omitempty"`
-	VideoNote                    *VideoNote                    `json:"video_note,omitempty"`
-	Voice                        *Voice                        `json:"voice,omitempty"`
-	Caption                      *string                       `json:"caption,omitempty"`
-	CaptionEntities              []Entity                      `json:"caption_entities,omitempty"`
-	HasMediaSpoiler              *bool                         `json:"has_media_spoiler,omitempty"`
-	Contact                      *Contact                      `json:"contact,omitempty"`
-	Dice                         *Dice                         `json:"dice,omitempty"`
-	Game                         *Game                         `json:"game,omitempty"`
-	Poll                         *Poll                         `json:"poll,omitempty"`
-	Venue                        *Venue                        `json:"venue,omitempty"`
-	Location                     *Location                     `json:"location,omitempty"`
+	ID         int64  `json:"message_id"`
+	ThreadID   *int64 `json:"message_thread_id,omitempty"`
+	From       *User  `json:"from,omitempty"`
+	SenderChat *Chat  `json:"sender_chat,omitempty"`
+	Date       int64  `json:"date"`
+	Chat       *Chat  `json:"chat"`
+
+	ForwardOrigin      *MessageOrigin `json:"forward_origin,omitempty"`
+	IsTopic            *bool          `json:"is_topic_message,omitempty"`
+	IsAutomaticForward *bool          `json:"is_automatic_forward,omitempty"`
+
+	ReplyTo      *AccessibleMessage `json:"reply_to_message,omitempty"`
+	ReplyToStory *Story             `json:"reply_to_story,omitempty"`
+
+	ExternalReply *ExternalReplyInfo `json:"external_reply,omitempty"`
+
+	Quote *TextQuote `json:"quote,omitempty"`
+
+	ViaBot              *User  `json:"via_bot,omitempty"`
+	EditDate            *int64 `json:"edit_date,omitempty"`
+	HasProtectedContent *bool  `json:"has_protected_content,omitempty"`
+
+	MediaGroupID    *string `json:"media_group_id,omitempty"`
+	AuthorSignature *string `json:"author_signature,omitempty"`
+
+	Entities           []Entity            `json:"entities,omitempty"`
+	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
+
+	Caption         *string  `json:"caption,omitempty"`
+	CaptionEntities []Entity `json:"caption_entities,omitempty"`
+	HasMediaSpoiler *bool    `json:"has_media_spoiler,omitempty"`
+
+	Text *string `json:"text,omitempty"`
+
+	Animation *Animation `json:"animation,omitempty"`
+	Audio     *Audio     `json:"audio,omitempty"`
+	Document  *Document  `json:"document,omitempty"`
+	Photo     PhotoSizes `json:"photo,omitempty"`
+	Sticker   *Sticker   `json:"sticker,omitempty"`
+	Story     *Story     `json:"story,omitempty"`
+	Video     *Video     `json:"video,omitempty"`
+	VideoNote *VideoNote `json:"video_note,omitempty"`
+	Voice     *Voice     `json:"voice,omitempty"`
+
+	Contact  *Contact  `json:"contact,omitempty"`
+	Dice     *Dice     `json:"dice,omitempty"`
+	Game     *Game     `json:"game,omitempty"`
+	Poll     *Poll     `json:"poll,omitempty"`
+	Venue    *Venue    `json:"venue,omitempty"`
+	Location *Location `json:"location,omitempty"`
+
 	NewChatMembers               []User                        `json:"new_chat_members,omitempty"`
 	LeftChatMember               *User                         `json:"left_chat_member,omitempty"`
 	NewChatTitle                 *string                       `json:"new_chat_title,omitempty"`
@@ -282,4 +294,17 @@ func (u *AccessibleMessage) MessageSig() (Recipient, int64) {
 
 func (u *InaccessibleMessage) MessageSig() (Recipient, int64) {
 	return u.Chat, u.ID
+}
+
+func (u *AccessibleMessage) IsService() bool {
+	switch {
+	case u.NewChatMembers != nil,
+		u.LeftChatMember != nil,
+		u.NewChatTitle != nil,
+		u.NewChatPhoto != nil,
+		u.DeleteChatPhoto != nil:
+		return true
+	}
+
+	return false
 }

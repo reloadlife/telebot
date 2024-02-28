@@ -5,87 +5,21 @@ import (
 	"regexp"
 )
 
-func (b *bot) Group() *Group {
-	return &Group{b: b}
+type handlers struct {
+	handlers map[any]HandlerFunc
 }
 
-// Use adds middleware to the global bot chain.
-func (b *bot) Use(middleware ...MiddlewareFunc) {
-	b.group.Use(middleware...)
+func (h *handlers) add(endpoint any, handler HandlerFunc) {
+	h.handlers[endpoint] = handler
 }
 
-func (b *bot) Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc) {
-	if reflect.TypeOf(endpoint).Kind() == reflect.Slice {
-		for _, e := range endpoint.([]any) {
-			b.Handle(e, h, m...)
-		}
-		return
-	}
-	if len(b.group.middleware) > 0 {
-		m = append(b.group.middleware, m...)
-	}
-
-	handle := func(c Context) error {
-		return applyMiddleware(h, m...)(c)
-	}
-
-	switch end := endpoint.(type) {
-	case string:
-		b.handlers = append(b.handlers, handler{
-			e: onMatch,
-			f: handle,
-			t: end,
-		})
-	case CallbackEndpoint:
-		b.handlers = append(b.handlers, handler{
-			t: end.CallbackUnique(),
-			e: OnCallback,
-			f: handle,
-		})
-	case *regexp.Regexp:
-		b.handlers = append(b.handlers, handler{
-			e: OnCommand,
-			f: handle,
-			t: end,
-		})
-	case UpdateHandlerOn:
-		b.handlers = append(b.handlers, handler{
-			e: end,
-			f: handle,
-			t: nil,
-		})
-
-	default:
-		panic("telebot: unsupported endpoint")
+func newHandlers() *handlers {
+	return &handlers{
+		handlers: make(map[any]HandlerFunc),
 	}
 }
 
-func (b *bot) handle(event UpdateHandlerOn, c Context, i ...any) bool {
-	for _, h := range b.handlers {
-		if h.e != event {
-			continue
-		}
-		if h.f == nil {
-			continue
-		}
-
-		if len(i) > 0 {
-			switch i[0].(type) {
-			case string:
-				if h.t == i[0] {
-					b.runHandler(h.f, c)
-					return true
-				}
-			}
-			return false
-		}
-
-		b.runHandler(h.f, c)
-	}
-
-	return false
-}
-
+// runHandler runs the handler function with Context.
 func (b *bot) runHandler(h HandlerFunc, c Context) {
 	f := func() {
 		if err := h(c); err != nil {
@@ -97,4 +31,45 @@ func (b *bot) runHandler(h HandlerFunc, c Context) {
 	} else {
 		go f()
 	}
+}
+
+// Handle registers a handler (HandlerFunc) for the given endpoint, with optional middlewares (MiddlewareFunc).
+func (b *bot) Handle(endpoint any, h HandlerFunc, m ...MiddlewareFunc) {
+	if reflect.TypeOf(endpoint).Kind() == reflect.Slice {
+		for _, e := range endpoint.([]any) {
+			b.Handle(e, h, m...)
+		}
+		return
+	}
+	if len(b.group.middleware) > 0 {
+		m = append(b.group.middleware, m...)
+	}
+
+	// handle is a middleware wrapped handler.
+	handle := func(c Context) error {
+		return applyMiddleware(h, m...)(c)
+	}
+
+	// Register the handler.
+	switch end := endpoint.(type) {
+	case string:
+		b.handlers.add(end, handle)
+	case CallbackEndpoint:
+		b.handlers.add(end.CallbackUnique(), handle)
+	case *regexp.Regexp:
+		b.handlers.add(end, handle)
+	case UpdateHandlerOn:
+		b.handlers.add(end, handle)
+	default:
+		panic("telebot: unsupported endpoint type, only string, *regexp.Regexp, callback, and UpdateHandlerOn are supported.")
+	}
+
+}
+
+func (b *bot) handle(event any, c Context) bool {
+	if h, ok := b.handlers.handlers[event]; ok {
+		b.runHandler(h, c)
+		return true
+	}
+	return false
 }

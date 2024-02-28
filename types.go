@@ -286,19 +286,25 @@ type UpdateHandlerOn int
 const (
 	OnMessage UpdateHandlerOn = iota
 
-	OnCommand
-	onMatch
-
 	OnText
+
+	OnPinnedMessage
+	OnForwardedMessage
+
+	OnServiceMessage
 
 	OnPhoto
 	OnVideo
 	OnVoice
 	OnAudio
 	OnDocument
-	OnSticker
+	OnStory
 	OnAnimation
 	OnVideoNote
+
+	OnMedia
+
+	OnSticker
 
 	OnLocation
 	OnVenue
@@ -323,10 +329,6 @@ const (
 	OnMyChatMember
 	OnChatMember
 	OnChatJoinRequest
-
-	OnMedia
-
-	OnPinnedMessage
 
 	OnChatBoost
 	OnChatBoostRemoved
