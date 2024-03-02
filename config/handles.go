@@ -34,7 +34,7 @@ func (h *handle) GetCommand(l ...string) []any {
 		locale = l[0]
 	}
 
-	commands := make([]string, 0)
+	commands := make([]any, 0)
 	switch hc := h.Command.(type) {
 	case string:
 		if strings.HasPrefix(hc, "locale:") {
