@@ -18,7 +18,7 @@ type QueryResult struct {
 	MessageContent InputMessageContent `json:"input_message_content,omitempty"`
 
 	// ReplyMarkup Optional. Inline keyboard attached to the message.
-	ReplyMarkup *ReplyMarkup `json:"reply_markup,omitempty"`
+	ReplyMarkup ReplyMarkup `json:"reply_markup,omitempty"`
 
 	// URL of the result
 	URL *string `json:"url,omitempty"`

@@ -8,10 +8,10 @@ type editMessageParams struct {
 }
 
 type editMessageTextParams struct {
-	ChatID          any    `json:"chat_id"`
-	MessageID       int64  `json:"message_id"`
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-	ReplyMarkup     ReplyMarkup
+	ChatID          any         `json:"chat_id"`
+	MessageID       int64       `json:"message_id"`
+	InlineMessageID string      `json:"inline_message_id,omitempty"`
+	ReplyMarkup     ReplyMarkup `json:"reply_markup,omitempty"`
 
 	Text               string              `json:"text" validate:"required,max=4096"`
 	ParseMode          ParseMode           `json:"parse_mode,omitempty"`
@@ -20,10 +20,10 @@ type editMessageTextParams struct {
 }
 
 type editMessageCaptionParams struct {
-	ChatID          any    `json:"chat_id"`
-	MessageID       int64  `json:"message_id"`
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-	ReplyMarkup     ReplyMarkup
+	ChatID          any         `json:"chat_id"`
+	MessageID       int64       `json:"message_id"`
+	InlineMessageID string      `json:"inline_message_id,omitempty"`
+	ReplyMarkup     ReplyMarkup `json:"reply_markup,omitempty"`
 
 	Caption   string    `json:"text" validate:"required,max=4096"`
 	ParseMode ParseMode `json:"parse_mode,omitempty"`
@@ -31,19 +31,19 @@ type editMessageCaptionParams struct {
 }
 
 type editMessageMediaParams struct {
-	ChatID          any    `json:"chat_id"`
-	MessageID       int64  `json:"message_id"`
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-	ReplyMarkup     ReplyMarkup
+	ChatID          any         `json:"chat_id"`
+	MessageID       int64       `json:"message_id"`
+	InlineMessageID string      `json:"inline_message_id,omitempty"`
+	ReplyMarkup     ReplyMarkup `json:"reply_markup,omitempty"`
 
 	Media InputMedia `json:"media"`
 }
 
 type editMessageLiveLocationParams struct {
-	ChatID          any    `json:"chat_id"`
-	MessageID       int64  `json:"message_id"`
-	InlineMessageID string `json:"inline_message_id,omitempty"`
-	ReplyMarkup     ReplyMarkup
+	ChatID          any         `json:"chat_id"`
+	MessageID       int64       `json:"message_id"`
+	InlineMessageID string      `json:"inline_message_id,omitempty"`
+	ReplyMarkup     ReplyMarkup `json:"reply_markup,omitempty"`
 
 	Latitude  float64 `json:"latitude" validate:"required"`
 	Longitude float64 `json:"longitude" validate:"required"`
