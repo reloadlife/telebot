@@ -86,14 +86,14 @@ handles:
       keyboard: default_menu
   - cmd:
       - /help
-      - /help_2
+      - "locale:button1"
     handlerResponse:
       text: "locale:help_text"
       keyboard: default_menu
 
   - cmd:
       - /about
-      - /about_2
+      - "locale:button1"
     handlerResponse:
       text: "locale:about_text"
       keyboard: default_menu

@@ -48,6 +48,7 @@ func (c *config) GetKeyboards() Keyboards {
 		if _, ok := k.keyboards[_l]; !ok {
 			k.keyboards[_l] = make(map[string]tele.ReplyMarkup)
 		}
+
 		for i, v := range keys {
 			markup := tele.NewMarkup()
 			switch v.Type {

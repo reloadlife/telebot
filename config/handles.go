@@ -30,38 +30,26 @@ type handler struct {
 }
 
 func (h *handle) GetCommand(l ...string) []any {
-	locale := h.conf.GetDefaultLocale()
-	if len(l) > 0 {
-		locale = l[0]
-	}
-
 	commands := make([]any, 0)
 	switch hc := h.Command.(type) {
 	case string:
 		if strings.HasPrefix(hc, "locale:") {
 			lKey := strings.TrimPrefix(hc, "locale:")
-			commands = append(commands, h.conf.L(locale, lKey))
+			for _, locale := range l {
+				commands = append(commands, h.conf.L(locale, lKey))
+			}
 		} else {
 			commands = append(commands, hc)
 		}
-	case []string:
-		for _, c := range hc {
-			if locale != "" {
-				if strings.HasPrefix(c, "locale:") {
-					lKey := strings.TrimPrefix(c, "locale:")
-					commands = append(commands, h.conf.L(locale, lKey))
-				} else {
-					commands = append(commands, c)
-				}
-			}
-		}
 	case []any:
 		for _, c := range hc {
-			switch c := c.(type) {
+			switch cc := c.(type) {
 			case string:
-				if strings.HasPrefix(c, "locale:") {
-					lKey := strings.TrimPrefix(c, "locale:")
-					commands = append(commands, h.conf.L(locale, lKey))
+				if strings.HasPrefix(cc, "locale:") {
+					lKey := strings.TrimPrefix(cc, "locale:")
+					for _, locale := range l {
+						commands = append(commands, h.conf.L(locale, lKey))
+					}
 				} else {
 					commands = append(commands, c)
 				}

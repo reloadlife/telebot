@@ -141,26 +141,25 @@ func (c *config) GetButtons() Buttons {
 				extraOptions...,
 			)
 		}
-
 	}
-
 	return &but
 }
 
 func (b *buttons) GetButton(name string, l ...string) tele.Button {
+	locale := b.conf.GetDefaultLocale()
+	if len(l) > 0 {
+		locale = l[0]
+	}
+
 	btn, ok := b.buttons[name]
 	if !ok {
 		panic("telebot-config: button not found")
 	}
 	text := btn.GetText()
+	but := btn.Clone()
 	if strings.HasPrefix(text, "locale:") {
-		locale := b.conf.GetDefaultLocale()
-		if len(l) > 0 {
-			locale = l[0]
-		}
-
 		lKey := strings.TrimPrefix(text, "locale:")
-		btn.SetText(b.conf.L(locale, lKey))
+		but.SetText(b.conf.L(locale, lKey))
 	}
-	return btn
+	return but
 }

@@ -57,13 +57,15 @@ func TestNewConfigFromFile(t *testing.T) {
 
 	handles := c.GetHandles()
 
+	t.Logf("locales: %v", c.GetLocales())
+
 	for _, h := range handles {
-		require.NotEmpty(t, h.GetCommand())
+		require.NotEmpty(t, h.GetCommand(c.GetLocales()...))
 		han := h.GetHandler()
 		key := han.GetKeyboard("en")
 		require.False(t, strings.HasPrefix(han.GetText("en"), "locale:"))
 		j, _ := key.MarshalJSON()
-		t.Logf("Commands: %v, Keyboard: %s, Text: %s", h.GetCommand(), j, han.GetText("en"))
+		t.Logf("Commands: %v, Keyboard: %s, Text: %s", h.GetCommand(c.GetLocales()...), j, han.GetText("en"))
 	}
 
 }
