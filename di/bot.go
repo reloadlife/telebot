@@ -126,12 +126,14 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 			err := registerRouteFunction(bot)
 
 			for _, handle := range handles {
-				bot.Handle(handle.GetCommand(), func(c tele.Context) error {
-					h := handle.GetHandler()
-					locale := c.Get("locale").(string)
-					_, err := c.Reply(h.GetText(locale), h.GetKeyboard(locale))
-					return err
-				})
+				for _, l := range conf.GetLocales() {
+					bot.Handle(handle.GetCommand(l), func(c tele.Context) error {
+						h := handle.GetHandler()
+						locale := c.Get("locale").(string)
+						_, err := c.Reply(h.GetText(locale), h.GetKeyboard(locale))
+						return err
+					})
+				}
 			}
 
 			Context = ctx
