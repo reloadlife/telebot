@@ -1,6 +1,8 @@
 package telebot
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type CallbackEndpoint interface {
 	CallbackUnique() string
@@ -28,4 +30,14 @@ func (c *Callback) ReflectType() string {
 
 func (c *Callback) Type() string {
 	return "Callback"
+}
+
+func (c *Callback) CallbackUnique() string {
+	return c.Unique
+}
+
+func NewCallbackEndpoint(unique string) CallbackEndpoint {
+	return &Callback{
+		Unique: unique,
+	}
 }
