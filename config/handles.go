@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	tele "go.mamad.dev/telebot"
 	"strings"
 )
@@ -55,7 +56,7 @@ func (h *handle) GetCommand(l ...string) []any {
 			}
 		}
 	default:
-		panic("`cmd` should be either string or array of strings.")
+		panic(fmt.Errorf("`cmd` should be either string or array of strings, but got %T", hc))
 	}
 	return commands
 }
