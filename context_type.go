@@ -33,4 +33,5 @@ type Context interface {
 	Text() string
 
 	Sender() *User
+	Args() []string
 }
