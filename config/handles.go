@@ -11,13 +11,13 @@ type Handler interface {
 }
 
 type Handle interface {
-	GetCommand(l ...string) string
+	GetCommand(l ...string) []string
 	GetHandler() Handler
 }
 
 type handle struct {
 	conf    *config
-	Command string  `yaml:"cmd" json:"cmd"`
+	Command any     `yaml:"cmd" json:"cmd"`
 	Handler handler `yaml:"handlerResponse" json:"handler"`
 }
 
@@ -28,17 +28,27 @@ type handler struct {
 	Text     string `yaml:"text" json:"text"`
 }
 
-func (h *handle) GetCommand(l ...string) string {
+func (h *handle) GetCommand(l ...string) []string {
 	locale := h.conf.GetDefaultLocale()
 	if len(l) > 0 {
 		locale = l[0]
 	}
 
-	if locale != "" {
-		lKey := strings.TrimPrefix(h.Command, "locale:")
-		return h.conf.L(locale, lKey)
+	commands := make([]string, 0)
+	switch hc := h.Command.(type) {
+	case string:
+		commands = append(commands, h.conf.L(locale, hc))
+	case []string:
+		for _, c := range hc {
+			if locale != "" {
+				lKey := strings.TrimPrefix(c, "locale:")
+				commands = append(commands, h.conf.L(locale, lKey))
+			}
+		}
+	default:
+		panic("`cmd` should be either string or array of strings.")
 	}
-	return h.Command
+	return commands
 }
 
 func (h *handle) GetHandler() Handler {
