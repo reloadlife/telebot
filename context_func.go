@@ -49,7 +49,7 @@ func (c *nativeContext) Edit(text string, options ...any) (Message, error) {
 }
 
 func (c *nativeContext) EditOrReply(text string, options ...any) (Message, error) {
-	if c.Query() == nil {
+	if c.Callback() == nil {
 		return c.Reply(text, options...)
 	}
 	return c.Edit(text, options...)
@@ -60,11 +60,15 @@ func (c *nativeContext) Args() []string {
 
 	if c.Callback() != nil {
 		args = append(args, strings.Split(c.Callback().Data, "|")...)
+
+		return args
 	}
 
 	if c.Message() != nil {
 		args = append(args, c.Message().Payload)
-		args = append(args, strings.ReplaceAll(c.Text(), c.Message().Command+" "+c.Message().Payload, " "))
+		args = append(args, strings.Split(strings.ReplaceAll(c.Text(), c.Message().Command+" "+c.Message().Payload, " "), " ")...)
+
+		return args
 	}
 
 	return args
