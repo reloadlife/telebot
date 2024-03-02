@@ -14,7 +14,7 @@ type editMessageTextParams struct {
 	ReplyMarkup     ReplyMarkup
 
 	Text               string              `json:"text" validate:"required,max=4096"`
-	ParseMode          *ParseMode          `json:"parse_mode,omitempty"`
+	ParseMode          ParseMode           `json:"parse_mode,omitempty"`
 	Entities           []Entity            `json:"entities,omitempty"`
 	LinkPreviewOptions *LinkPreviewOptions `json:"link_preview_options,omitempty"`
 }
@@ -25,9 +25,9 @@ type editMessageCaptionParams struct {
 	InlineMessageID string `json:"inline_message_id,omitempty"`
 	ReplyMarkup     ReplyMarkup
 
-	Caption   string     `json:"text" validate:"required,max=4096"`
-	ParseMode *ParseMode `json:"parse_mode,omitempty"`
-	Entities  []Entity   `json:"caption_entities,omitempty"`
+	Caption   string    `json:"text" validate:"required,max=4096"`
+	ParseMode ParseMode `json:"parse_mode,omitempty"`
+	Entities  []Entity  `json:"caption_entities,omitempty"`
 }
 
 type editMessageMediaParams struct {

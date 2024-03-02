@@ -6,7 +6,7 @@ type sendPhotoRequest struct {
 
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
-	ParseMode           *ParseMode       `json:"parse_mode,omitempty"`
+	ParseMode           ParseMode        `json:"parse_mode,omitempty"`
 	Entities            []Entity         `json:"caption_entities,omitempty"`
 	HasSpoiler          *bool            `json:"has_spoiler,omitempty"`
 	DisableNotification *bool            `json:"disable_notification,omitempty"`

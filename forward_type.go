@@ -21,7 +21,7 @@ type copyMessageRequest struct {
 
 	Caption             *string          `json:"caption,omitempty"`
 	RemoveCaption       *bool            `json:"remove_caption,omitempty"`
-	ParseMode           *ParseMode       `json:"parse_mode,omitempty"`
+	ParseMode           ParseMode        `json:"parse_mode,omitempty"`
 	CaptionEntities     []Entity         `json:"caption_entities,omitempty"`
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protect             *bool            `json:"protect_content,omitempty"`

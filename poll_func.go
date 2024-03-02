@@ -23,12 +23,6 @@ func (b *bot) SendPoll(to Recipient, question string, answerOptions []string, op
 
 	for _, option := range options {
 		switch v := option.(type) {
-		case *MessageThreadID:
-			params.ThreadID = v
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-		case *ReplyParameters:
-			params.ReplyParameters = v
 		case PollType:
 			params.Type = &v
 		case *PollType:
@@ -37,10 +31,6 @@ func (b *bot) SendPoll(to Recipient, question string, answerOptions []string, op
 			params.CorrectOptionID = toPtr(v)
 		case string:
 			params.Explanation = toPtr(v)
-		case []Entity:
-			params.ExplanationEntities = v
-		case ParseMode:
-			params.ExplanationParseMode = &v
 		case time.Duration:
 			if v.Seconds() > 600 || v.Seconds() < 5 {
 				panic("telebot: open period must be between 5 and 600 seconds")
@@ -62,7 +52,9 @@ func (b *bot) SendPoll(to Recipient, question string, answerOptions []string, op
 			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendPoll.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendPoll))
+			}
 		}
 	}
 

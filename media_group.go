@@ -7,9 +7,9 @@ type InputMedia struct {
 	MediaType InputMediaType `json:"type"`
 	Media     *File          `json:"media"`
 
-	Caption   *string    `json:"caption,omitempty"`
-	ParseMode *ParseMode `json:"parse_mode,omitempty"`
-	Entities  []Entity   `json:"caption_entities,omitempty"`
+	Caption   *string   `json:"caption,omitempty"`
+	ParseMode ParseMode `json:"parse_mode,omitempty"`
+	Entities  []Entity  `json:"caption_entities,omitempty"`
 
 	HasSpoiler *bool `json:"has_spoiler,omitempty"`
 

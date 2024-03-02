@@ -14,20 +14,8 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMe
 
 	for _, option := range options {
 		switch v := option.(type) {
-		case *MessageThreadID:
-			params.ThreadID = v
-		case *string:
-			params.Caption = v
 		case string:
 			params.Caption = &v
-		case *ParseMode:
-			params.ParseMode = v
-		case []Entity:
-			params.Entities = v
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-		case *ReplyParameters:
-			params.ReplyParameters = v
 
 		case time.Duration:
 			params.Duration = toPtr(int(v.Seconds()))
@@ -54,7 +42,9 @@ func (b *bot) SendVideo(to Recipient, video File, options ...any) (*AccessibleMe
 			}
 
 		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in SendVideo.")
+			if !b.format(&params, options...) {
+				panic(fmt.Errorf(GeneralBadInputError, v, methodSendVideo))
+			}
 		}
 	}
 

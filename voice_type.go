@@ -6,7 +6,7 @@ type sendVoiceRequest struct {
 
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
-	ParseMode           *ParseMode       `json:"parse_mode,omitempty"`
+	ParseMode           ParseMode        `json:"parse_mode,omitempty"`
 	Entities            []Entity         `json:"caption_entities,omitempty"`
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protected           *bool            `json:"protect_content,omitempty"`
