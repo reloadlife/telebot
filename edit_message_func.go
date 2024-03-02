@@ -14,21 +14,8 @@ func (b *bot) EditMessageText(msg Message, text string, options ...any) (*Access
 	}
 
 	for _, opt := range options {
-		switch v := opt.(type) {
-		case ParseMode:
-			params.ParseMode = &v
-
-		case []Entity:
-			params.Entities = v
-
-		case *LinkPreviewOptions:
-			params.LinkPreviewOptions = v
-
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-
-		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in EditMessageText.")
+		if !b.format(&params, options...) {
+			panic(fmt.Errorf(GeneralBadInputError, opt, methodEditMessageText))
 		}
 	}
 
@@ -50,21 +37,8 @@ func (b *bot) EditMessageTextInline(inlineMessageID string, text string, options
 	}
 
 	for _, opt := range options {
-		switch v := opt.(type) {
-		case ParseMode:
-			params.ParseMode = &v
-
-		case []Entity:
-			params.Entities = v
-
-		case *LinkPreviewOptions:
-			params.LinkPreviewOptions = v
-
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-
-		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in EditMessageText (inline).")
+		if !b.format(&params, options...) {
+			panic(fmt.Errorf(GeneralBadInputError, opt, methodEditMessageText))
 		}
 	}
 
@@ -84,18 +58,8 @@ func (b *bot) EditMessageCaption(msg Message, caption string, options ...any) (*
 	}
 
 	for _, opt := range options {
-		switch v := opt.(type) {
-		case ParseMode:
-			params.ParseMode = &v
-
-		case []Entity:
-			params.Entities = v
-
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-
-		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in EditMessageCaption.")
+		if !b.format(&params, options...) {
+			panic(fmt.Errorf(GeneralBadInputError, opt, methodEditMessageCaption))
 		}
 	}
 
@@ -117,18 +81,8 @@ func (b *bot) EditMessageCaptionInline(inlineMessageID string, caption string, o
 	}
 
 	for _, opt := range options {
-		switch v := opt.(type) {
-		case ParseMode:
-			params.ParseMode = &v
-
-		case []Entity:
-			params.Entities = v
-
-		case ReplyMarkup:
-			params.ReplyMarkup = v
-
-		default:
-			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in EditMessageCaption (inline).")
+		if !b.format(&params, options...) {
+			panic(fmt.Errorf(GeneralBadInputError, opt, methodEditMessageCaption))
 		}
 	}
 
