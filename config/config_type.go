@@ -3,7 +3,7 @@ package config
 import tele "go.mamad.dev/telebot"
 
 type Config interface {
-	L(locale, key string) string
+	L(locale, key string, args ...any) string
 	GetDefaultLocale() string
 	GetLocales() []string
 

@@ -21,3 +21,5 @@ commandAbout: "About"
 help_text: "Need help?"
 
 about_text: "About this bot"
+
+hello_text: "hello {{.}}"

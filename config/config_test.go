@@ -68,4 +68,6 @@ func TestNewConfigFromFile(t *testing.T) {
 		t.Logf("Commands: %v, Keyboard: %s, Text: %s", h.GetCommand(c.GetLocales()...), j, han.GetText("en"))
 	}
 
+	t.Logf("%s", c.L("en", "hello_text", "hello! hello hello "))
+
 }

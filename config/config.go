@@ -6,6 +6,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"strings"
+	"text/template"
 )
 
 type config struct {
@@ -17,6 +18,8 @@ type config struct {
 	conf *parsedConf
 
 	keyboards Keyboards
+
+	mapFunctions template.FuncMap
 }
 
 func NewConfigFromFile(path string) Config {
@@ -26,9 +29,10 @@ func NewConfigFromFile(path string) Config {
 	}
 
 	c := &config{
-		filePath: path,
-		conf:     &parsedConf{},
-		locales:  make(localeMap),
+		filePath:     path,
+		conf:         &parsedConf{},
+		locales:      make(localeMap),
+		mapFunctions: make(template.FuncMap),
 	}
 
 	err = yaml.Unmarshal(yamlRaw, c.conf)
@@ -47,7 +51,22 @@ func NewConfigFromFile(path string) Config {
 	_k := c.GetKeyboards()
 	c.keyboards = _k
 
+	c.mapFunctions = template.FuncMap{
+		"locale": func() string { return "" },
+		"config": func(string) string { return "" },
+		"text":   func(string, ...interface{}) string { return "" },
+	}
+
 	return c
+}
+
+func (c *config) parse(tpl *template.Template, locale string) *template.Template {
+	funcs := make(template.FuncMap)
+
+	funcs["text"] = func(k string, args ...interface{}) string { return c.L(locale, k, args...) }
+	funcs["locale"] = func() string { return locale }
+
+	return tpl.Funcs(funcs)
 }
 
 func parseEnvironmentIntoConfig(c *parsedConf) {
