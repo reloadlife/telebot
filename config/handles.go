@@ -55,6 +55,20 @@ func (h *handle) GetCommand(l ...string) []any {
 				}
 			}
 		}
+	case []any:
+		for _, c := range hc {
+			switch c := c.(type) {
+			case string:
+				if strings.HasPrefix(c, "locale:") {
+					lKey := strings.TrimPrefix(c, "locale:")
+					commands = append(commands, h.conf.L(locale, lKey))
+				} else {
+					commands = append(commands, c)
+				}
+			default:
+				panic(fmt.Errorf("`cmd` should be either string or array of strings, but got %T", c))
+			}
+		}
 	default:
 		panic(fmt.Errorf("`cmd` should be either string or array of strings, but got %T", hc))
 	}
