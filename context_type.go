@@ -27,6 +27,8 @@ type Context interface {
 	Reply(text string, options ...any) (Message, error)
 
 	Send(s any, options ...any) (Message, error)
+	EditOrReply(text string, options ...any) (Message, error)
+	Edit(text string, options ...any) (Message, error)
 
 	Text() string
 

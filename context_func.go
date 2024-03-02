@@ -41,3 +41,14 @@ func (c *nativeContext) Send(s any, options ...any) (Message, error) {
 
 	panic("telebot: invalid Sendable type")
 }
+
+func (c *nativeContext) Edit(text string, options ...any) (Message, error) {
+	return c.b.EditMessageText(c.Message(), text, options...)
+}
+
+func (c *nativeContext) EditOrReply(text string, options ...any) (Message, error) {
+	if c.Query() == nil {
+		return c.Reply(text, options...)
+	}
+	return c.Edit(text, options...)
+}
