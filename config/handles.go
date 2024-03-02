@@ -11,7 +11,7 @@ type Handler interface {
 }
 
 type Handle interface {
-	GetCommand(l ...string) []string
+	GetCommand(l ...string) []any
 	GetHandler() Handler
 }
 
@@ -28,7 +28,7 @@ type handler struct {
 	Text     string `yaml:"text" json:"text"`
 }
 
-func (h *handle) GetCommand(l ...string) []string {
+func (h *handle) GetCommand(l ...string) []any {
 	locale := h.conf.GetDefaultLocale()
 	if len(l) > 0 {
 		locale = l[0]
