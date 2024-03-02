@@ -63,7 +63,7 @@ func TestNewConfigFromFile(t *testing.T) {
 		key := han.GetKeyboard("en")
 		require.False(t, strings.HasPrefix(han.GetText("en"), "locale:"))
 		j, _ := key.MarshalJSON()
-		t.Logf("Command: %s, Keyboard: %s, Text: %s", h.GetCommand(), j, han.GetText("en"))
+		t.Logf("Commands: %v, Keyboard: %s, Text: %s", h.GetCommand(), j, han.GetText("en"))
 	}
 
 }

@@ -17,3 +17,7 @@ commandHelp: "Help"
 commandSettings: "Settings"
 
 commandAbout: "About"
+
+help_text: "Need help?"
+
+about_text: "About this bot"

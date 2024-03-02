@@ -17,3 +17,7 @@ commandHelp: "راهنما"
 commandSettings: "تنظیمات"
 
 commandAbout: "درباره"
+
+help_text: "آیا به راهنمایی نیاز دارید؟"
+
+about_text: "درباره این ربات"

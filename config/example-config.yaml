@@ -84,6 +84,19 @@ handles:
     handlerResponse:
       text: "locale:start_text"
       keyboard: default_menu
+  - cmd:
+      - /help
+      - /help_2
+    handlerResponse:
+      text: "locale:help_text"
+      keyboard: default_menu
+
+  - cmd:
+      - /about
+      - /about_2
+    handlerResponse:
+      text: "locale:about_text"
+      keyboard: default_menu
 
 buttons:
   button_1:
