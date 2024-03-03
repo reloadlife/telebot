@@ -53,8 +53,11 @@ func NewConfigFromFile(path string) Config {
 
 	c.mapFunctions = template.FuncMap{
 		"locale": func() string { return "" },
-		"config": func(string) string { return "" },
 		"text":   func(string, ...interface{}) string { return "" },
+
+		"toUpper": strings.ToUpper,
+		"toLower": strings.ToLower,
+		"trim":    strings.Trim,
 	}
 
 	return c
