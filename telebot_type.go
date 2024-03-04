@@ -246,6 +246,10 @@ type Bot interface {
 	// Returns UserProfilePhotos and error on failure.
 	GetUserProfilePhotos(userID int64, offset, limit int) (*UserProfilePhotos, error)
 
+	Forward(to Recipient, From Recipient, messageID int, opts ...any) (*AccessibleMessage, error)
+	Forwards(to Recipient, From Recipient, messageIDs []int, opts ...any) ([]int, error)
+	Copy(to Recipient, from Recipient, messageIDs []int, opts ...any) ([]int, error)
+
 	// GetFile retrieves information about a file from its file_id.
 	//
 	// fileID is the ID of the file to get info about.
