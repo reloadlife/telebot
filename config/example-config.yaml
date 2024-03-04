@@ -84,12 +84,14 @@ handles:
     handlerResponse:
       text: "locale:start_text"
       keyboard: default_menu
+      linkPreview: false
   - cmd:
       - /help
       - "locale:button1"
     handlerResponse:
       text: "locale:help_text"
       keyboard: default_menu
+      linkPreview: true
 
   - cmd:
       - /about
@@ -97,6 +99,10 @@ handles:
     handlerResponse:
       text: "locale:about_text"
       keyboard: default_menu
+      parseMode: "markdownv2"
+      linkPreview: true
+
+
 
 buttons:
   button_1:

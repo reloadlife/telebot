@@ -3,12 +3,16 @@ package config
 import (
 	"fmt"
 	tele "go.mamad.dev/telebot"
+	"go.mamad.dev/telebot/log"
 	"strings"
 )
 
 type Handler interface {
 	GetKeyboard(l ...string) tele.ReplyMarkup
 	GetText(l ...string) string
+
+	GetParseMode() string
+	GetLinkPreview() bool
 }
 
 type Handle interface {
@@ -27,6 +31,9 @@ type handler struct {
 
 	Keyboard string `yaml:"keyboard" json:"keyboard"`
 	Text     string `yaml:"text" json:"text"`
+
+	ParseMode   string `yaml:"parseMode" json:"parse_mode"`
+	LinkPreview bool   `yaml:"linkPreview" json:"link_preview"`
 }
 
 func (h *handle) GetCommand(l ...string) []any {
@@ -69,7 +76,23 @@ func (h *handle) GetHandler() Handler {
 	return &g
 }
 
+func (h *handler) GetParseMode() string {
+	if h.ParseMode == "" {
+		return "-"
+	}
+	return h.ParseMode
+}
+
+func (h *handler) GetLinkPreview() bool {
+	return h.LinkPreview
+}
+
 func (h *handler) GetKeyboard(l ...string) tele.ReplyMarkup {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Error getting keyboard: %v", r)
+		}
+	}()
 	locale := h.conf.GetDefaultLocale()
 	if len(l) > 0 {
 		locale = l[0]

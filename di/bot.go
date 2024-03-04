@@ -129,7 +129,23 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 				h := handle.GetHandler()
 				bot.Handle(handle.GetCommand(conf.GetLocales()...), func(c tele.Context) error {
 					locale := c.Get("locale").(string)
-					_, err := c.Reply(h.GetText(locale), h.GetKeyboard(locale))
+					var options []any
+
+					if h.GetKeyboard(locale) != nil {
+						options = append(options, h.GetKeyboard(locale))
+					}
+
+					if h.GetParseMode() != "-" {
+						options = append(options, tele.ParseMode(h.GetParseMode()))
+					}
+
+					if !h.GetLinkPreview() {
+						p := h.GetLinkPreview()
+						options = append(options, tele.LinkPreviewOptions{
+							IsDisabled: &p,
+						})
+					}
+					_, err := c.Reply(h.GetText(locale), options...)
 					return err
 				})
 			}
