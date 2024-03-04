@@ -7,5 +7,5 @@ type answerInlineQueryRequest struct {
 	CacheTime  int               `json:"cache_time,omitempty"`
 	IsPersonal bool              `json:"is_personal,omitempty"`
 	NextOffset string            `json:"next_offset,omitempty"`
-	Button     InlineQueryButton `json:"switch_pm_text,omitempty"`
+	Button     InlineQueryButton `json:"button,omitempty"`
 }
