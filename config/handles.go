@@ -85,9 +85,9 @@ func (h *handler) GetParseMode() string {
 
 func (h *handler) GetLinkPreview() *tele.LinkPreviewOptions {
 	t := true
-	switch h.LinkPreview.(type) {
+	switch l := h.LinkPreview.(type) {
 	case *tele.LinkPreviewOptions:
-		return h.LinkPreview.(*tele.LinkPreviewOptions)
+		return l
 	case bool:
 		t = h.LinkPreview.(bool)
 		return &tele.LinkPreviewOptions{
