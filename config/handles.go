@@ -12,7 +12,7 @@ type Handler interface {
 	GetText(l ...string) string
 
 	GetParseMode() string
-	GetLinkPreview() bool
+	GetLinkPreview() *tele.LinkPreviewOptions
 }
 
 type Handle interface {
@@ -33,7 +33,7 @@ type handler struct {
 	Text     string `yaml:"text" json:"text"`
 
 	ParseMode   string `yaml:"parseMode" json:"parse_mode"`
-	LinkPreview bool   `yaml:"linkPreview" json:"link_preview"`
+	LinkPreview any    `yaml:"linkPreview" json:"link_preview"`
 }
 
 func (h *handle) GetCommand(l ...string) []any {
@@ -83,8 +83,36 @@ func (h *handler) GetParseMode() string {
 	return h.ParseMode
 }
 
-func (h *handler) GetLinkPreview() bool {
-	return h.LinkPreview
+func (h *handler) GetLinkPreview() *tele.LinkPreviewOptions {
+	t := true
+	switch h.LinkPreview.(type) {
+	case *tele.LinkPreviewOptions:
+		return h.LinkPreview.(*tele.LinkPreviewOptions)
+	case bool:
+		t = h.LinkPreview.(bool)
+		return &tele.LinkPreviewOptions{
+			IsDisabled: &t,
+		}
+	case string:
+		switch h.LinkPreview.(string) {
+		case "true":
+			t = false
+			return &tele.LinkPreviewOptions{
+				IsDisabled: &t,
+			}
+		case "false":
+			t = true
+			return &tele.LinkPreviewOptions{
+				IsDisabled: &t,
+			}
+		default:
+			return nil
+		}
+	default:
+		return &tele.LinkPreviewOptions{
+			IsDisabled: &t,
+		}
+	}
 }
 
 func (h *handler) GetKeyboard(l ...string) tele.ReplyMarkup {

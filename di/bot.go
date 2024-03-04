@@ -139,12 +139,7 @@ func BotService(configFilePath string, registerRouteFunction RouteRegisterFunc) 
 						options = append(options, tele.ParseMode(h.GetParseMode()))
 					}
 
-					if !h.GetLinkPreview() {
-						p := h.GetLinkPreview()
-						options = append(options, tele.LinkPreviewOptions{
-							IsDisabled: &p,
-						})
-					}
+					options = append(options, h.GetLinkPreview())
 					_, err := c.Reply(h.GetText(locale), options...)
 					return err
 				})
