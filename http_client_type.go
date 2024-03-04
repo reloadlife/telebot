@@ -159,6 +159,8 @@ func (m method) String() string {
 		return "stopPoll"
 	case methodDeleteMessages:
 		return "deleteMessages"
+	case methodForwardMessage:
+		return "forwardMessage"
 	case methodForwardMessages:
 		return "forwardMessages"
 	case methodCopyMessages:
