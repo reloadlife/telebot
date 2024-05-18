@@ -170,6 +170,9 @@ func (b *bot) EditMessageLiveLocation(msg Message, location Location, options ..
 		case ReplyMarkup:
 			params.ReplyMarkup = v
 
+		case int:
+			params.LivePeriod = &v
+
 		default:
 			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in EditMessageLiveLocation.")
 		}
@@ -200,6 +203,9 @@ func (b *bot) EditMessageLiveLocationInline(inlineMessageID string, location Loc
 		switch v := opt.(type) {
 		case ReplyMarkup:
 			params.ReplyMarkup = v
+
+		case int:
+			params.LivePeriod = &v
 
 		default:
 			panic("telebot: unknown option type " + fmt.Sprintf("%T", v) + " in EditMessageLiveLocation (inline).")

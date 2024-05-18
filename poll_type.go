@@ -21,6 +21,8 @@ type sendPollRequest struct {
 	BusinessID *BusinessID      `json:"business_connection_id,omitempty"`
 	ThreadID   *MessageThreadID `json:"message_thread_id,omitempty"`
 
+	ParseMode           ParseMode        `json:"question_parse_mode,omitempty"`
+	Entities            []Entity         `json:"question_entities,omitempty"`
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protected           *bool            `json:"protect_content,omitempty"`
 	ReplyParameters     *ReplyParameters `json:"reply_parameters,omitempty"`
@@ -31,6 +33,8 @@ type sendPollRequest struct {
 type PollOption struct {
 	// Text is the text of the option.
 	Text string `json:"text"`
+
+	TextEntities []Entity `json:"text_entities,omitempty"`
 
 	// VoterCount is the number of users who voted for this option.
 	VoterCount int `json:"voter_count"`

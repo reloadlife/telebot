@@ -24,6 +24,8 @@ type ChatMemberUpdated struct {
 
 	// ViaChatFolderInviteLink is true if the user joined the chat via a chat folder invite link (optional).
 	ViaChatFolderInviteLink bool `json:"via_chat_folder_invite_link,omitempty"`
+
+	ViaJoinRequest bool `json:"via_join_request,omitempty"`
 }
 
 func (c *ChatMemberUpdated) ReflectType() string {

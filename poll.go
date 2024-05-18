@@ -43,6 +43,8 @@ type Poll struct {
 
 	// CloseDate is the point in time (Unix timestamp) when the poll will be automatically closed (optional).
 	CloseDate int `json:"close_date,omitempty"`
+
+	QuestionEntities []Entity `json:"question_entities,omitempty"`
 }
 
 func (p *Poll) ReflectType() string {

@@ -45,6 +45,13 @@ type editMessageLiveLocationParams struct {
 	InlineMessageID string      `json:"inline_message_id,omitempty"`
 	ReplyMarkup     ReplyMarkup `json:"reply_markup,omitempty"`
 
+	// LivePeriod new period in seconds during which the location can be updated,
+	// starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever.
+	// Otherwise, the new value must not exceed the current live_period by more than a day,
+	// and the live location expiration date must remain within the next 90 days.
+	// If not specified, then live_period remains unchanged
+	LivePeriod *int `json:"live_period,omitempty"`
+
 	Latitude  float64 `json:"latitude" validate:"required"`
 	Longitude float64 `json:"longitude" validate:"required"`
 
