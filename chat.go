@@ -152,9 +152,12 @@ type Chat struct {
 	// Returned only in getChat.
 	CustomEmojiStickerSetName *string `json:"custom_emoji_sticker_set_name,omitempty"`
 
+	PersonalChat     *Chat                 `json:"personal_chat,omitempty"`
 	BusinessIntro    *BusinessIntro        `json:"business_intro,omitempty"`
 	BusinessLocation *BusinessLocation     `json:"business_location,omitempty"`
 	BusinessHours    *BusinessOpeningHours `json:"business_opening_hours,omitempty"`
+
+	BirthDate *BirthDate `json:"birthdate,omitempty"`
 }
 
 func (c *Chat) ReflectType() string {

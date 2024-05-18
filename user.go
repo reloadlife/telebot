@@ -31,6 +31,8 @@ type User struct {
 	// IsPremium is optional and indicates whether this user is a Telegram Premium user.
 	IsPremium *bool `json:"is_premium,omitempty"`
 
+	CanConnectToBusiness *bool `json:"can_connect_to_businesscp,omitempty"`
+
 	// AddedToAttachmentMenu is optional and indicates whether this user added
 	// the bot to the attachment menu.
 	AddedToAttachmentMenu *bool `json:"added_to_attachment_menu,omitempty"`

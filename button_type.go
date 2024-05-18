@@ -44,6 +44,10 @@ type KeyboardButtonRequestChat struct {
 	BotRights Rights `json:"bot_administrator_rights,omitempty" yaml:"bot_rights,omitempty"`
 	// BotIsMember Optional. Pass true to request a chat with the bot as a member. Otherwise, no additional restrictions are applied
 	BotIsMember bool `json:"bot_is_member,omitempty" yaml:"bot_is_member,omitempty"`
+
+	RequestTitle    *bool `json:"request_name,omitempty" yaml:"request_name,omitempty"`
+	RequestUsername *bool `json:"request_username,omitempty" yaml:"request_username,omitempty"`
+	RequestPhoto    *bool `json:"request_photo,omitempty" yaml:"request_photo,omitempty"`
 }
 
 // KeyboardButtonRequestUsers defines the criteria used to request suitable users.
@@ -56,6 +60,10 @@ type KeyboardButtonRequestUsers struct {
 	UserIsPremium *bool `json:"user_is_premium,omitempty" yaml:"user_is_premium,omitempty"`
 	// MaxQuantity. Maximum number of users to be selected; 1-10. Defaults to 1.
 	MaxQuantity *int `json:"max_quantity,omitempty" yaml:"max_quantity,omitempty"`
+
+	RequestName     *bool `json:"request_name,omitempty" yaml:"request_name,omitempty"`
+	RequestUsername *bool `json:"request_username,omitempty" yaml:"request_username,omitempty"`
+	RequestPhoto    *bool `json:"request_photo,omitempty" yaml:"request_photo,omitempty"`
 }
 
 // KeyboardButtonPollType represents the type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
