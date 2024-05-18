@@ -103,7 +103,7 @@ func (b *bot) UploadStickerFile(user Userable, sticker File, format StickerForma
 // CreateNewStickerSet
 // todo: this function needs to be tests via uploading files (it works with URL and fileID)
 // if it didn't work, either provide a fix or Open an issue at https://github.com/reloadlife/telebot/issues/new
-func (b *bot) CreateNewStickerSet(user Userable, name, title string, stickers []InputSticker, format StickerFormat, options ...any) error {
+func (b *bot) CreateNewStickerSet(user Userable, name, title string, stickers []InputSticker, options ...any) error {
 	if len(stickers) < 1 || len(stickers) > 50 {
 		panic("telebot: stickers count must be between 1 and 50")
 	}
@@ -124,11 +124,10 @@ func (b *bot) CreateNewStickerSet(user Userable, name, title string, stickers []
 	}
 
 	params := createNewStickerSetParams{
-		UserID:        user,
-		Name:          name,
-		Title:         title,
-		Stickers:      stickers,
-		StickerFormat: format,
+		UserID:   user,
+		Name:     name,
+		Title:    title,
+		Stickers: stickers,
 	}
 
 	for _, option := range options {
@@ -273,15 +272,17 @@ func (b *bot) SetStickerSetTitle(sticker, title string) error {
 	return err
 }
 
-func (b *bot) SetStickerSetThumbnail(name string, user Userable, thumbnail File) error {
+func (b *bot) SetStickerSetThumbnail(name string, user Userable, thumbnail File, format StickerFormat) error {
 	params := struct {
-		Name      string `json:"name"`
-		UserID    any    `json:"user_id"`
-		Thumbnail *File  `json:"thumbnail"`
+		Name      string        `json:"name"`
+		UserID    any           `json:"user_id"`
+		Thumbnail *File         `json:"thumbnail"`
+		Format    StickerFormat `json:"format"`
 	}{
 		Name:      name,
 		UserID:    user,
 		Thumbnail: &thumbnail,
+		Format:    format,
 	}
 
 	_, err := b.sendMethodRequest(methodSetStickerSetThumbnail, params)

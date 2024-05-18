@@ -26,7 +26,6 @@ type createNewStickerSetParams struct {
 	Name            string         `json:"name"`
 	Title           string         `json:"title"`
 	Stickers        []InputSticker `json:"stickers"`
-	StickerFormat   StickerFormat  `json:"sticker_format,omitempty"`
 	StickerType     StickerType    `json:"sticker_type"`
 	NeedsRepainting bool           `json:"needs_repainting,omitempty"`
 }
@@ -48,12 +47,6 @@ type StickerSet struct {
 	// StickerType represents the type of stickers in the set, currently one of "regular", "mask", "custom_emoji".
 	StickerType string `json:"sticker_type"`
 
-	// IsAnimated is true if the sticker set contains animated stickers.
-	IsAnimated bool `json:"is_animated"`
-
-	// IsVideo is true if the sticker set contains video stickers.
-	IsVideo bool `json:"is_video"`
-
 	// Stickers is a list of all set stickers.
 	Stickers []Sticker `json:"stickers"`
 
@@ -69,6 +62,7 @@ type InputSticker struct {
 	EmojiList    []StickerEmoji `json:"emoji_list,omitempty"`
 	MaskPosition *MaskPosition  `json:"mask_position,omitempty"`
 	Keywords     []string       `json:"keywords,omitempty"`
+	Format       StickerFormat  `json:"format,omitempty"`
 	Repr         string         `json:"-"`
 }
 

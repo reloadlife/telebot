@@ -869,7 +869,7 @@ type Bot interface {
 
 	// CreateNewStickerSet creates a new sticker set owned by a user.
 	// Returns any error that occurred.
-	CreateNewStickerSet(user Userable, name, title string, stickers []InputSticker, format StickerFormat, options ...any) error
+	CreateNewStickerSet(user Userable, name, title string, stickers []InputSticker, options ...any) error
 
 	// AddStickerToSet adds a new sticker to an existing set.
 	// Returns any error that occurred.
@@ -901,7 +901,7 @@ type Bot interface {
 
 	// SetStickerSetThumbnail updates the thumbnail for a set.
 	// Returns any error that occurred.
-	SetStickerSetThumbnail(name string, user Userable, thumbnail File) error
+	SetStickerSetThumbnail(name string, user Userable, thumbnail File, format StickerFormat) error
 
 	// SetCustomEmojiStickerSetThumbnail updates emoji set thumbnail.
 	// Returns any error that occurred.
@@ -980,5 +980,5 @@ type Bot interface {
 	// GetBusinessConnection
 	// Use this method to get information about the connection of the bot with a business account.
 	// Returns a *BusinessConnection object on success.
-	GetBusinessConnection(BusinessConnectionID string) (*BusinessConnection, error)
+	GetBusinessConnection(BusinessConnectionID BusinessID) (*BusinessConnection, error)
 }
