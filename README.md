@@ -25,7 +25,7 @@ rich in features and utilities, making Telegram Bot development not just a task 
 
 Refer to the [Wiki](https://github.com/reloadlife/telebot/wiki) for comprehensive documentation.
 
-- Current TelegramBot API Layer: 7.1
+- Current TelegramBot API Layer: 7.1 -> 7.2
 
 ## Overview
 

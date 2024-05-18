@@ -123,6 +123,8 @@ const (
 	methodSendGame
 	methodSetGameScore
 	methodGetGameHighScores
+
+	methodGetBusinessConnection
 )
 
 func (m method) String() string {
@@ -363,6 +365,8 @@ func (m method) String() string {
 		return "setStickerMaskPosition"
 	case methodSetCustomEmojiStickerSetThumbnail:
 		return "setCustomEmojiStickerSetThumbnail"
+	case methodGetBusinessConnection:
+		return "getBusinessConnection"
 	default:
 		panic("telebot: unknown method")
 	}

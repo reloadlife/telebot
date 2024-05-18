@@ -21,6 +21,18 @@ type Update struct {
 	// EditedMessage is the new version of a message that is known to the bot and was edited (optional).
 	EditedMessage *AccessibleMessage `json:"edited_message,omitempty"`
 
+	// BusinessConnection is the new incoming business connection (optional).
+	BusinessConnection *BusinessConnection `json:"business_connection,omitempty"`
+
+	// BusinessMessage is the new incoming business message (optional).
+	BusinessMessage *AccessibleMessage `json:"business_message,omitempty"`
+
+	// BusinessEditedMessage is the new version of a business message that is known to the bot and was edited (optional).
+	BusinessEditedMessage *AccessibleMessage `json:"edited_business_message,omitempty"`
+
+	// BusinessDeletedMessage is the new version of a business message that is known to the bot and was deleted (optional).
+	BusinessDeletedMessage *BusinessMessagesDeleted `json:"deleted_business_messages,omitempty"`
+
 	// ChannelPost is the new incoming channel post of any kind – text, photo, sticker, etc. (optional).
 	ChannelPost *AccessibleMessage `json:"channel_post,omitempty"`
 

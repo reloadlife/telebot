@@ -976,4 +976,9 @@ type Bot interface {
 	// 	log.Println(chatBoosts)
 	// ```
 	GetUserChatBoosts(chatID Recipient, userID Userable) (*UserChatBoosts, error)
+
+	// GetBusinessConnection
+	// Use this method to get information about the connection of the bot with a business account.
+	// Returns a *BusinessConnection object on success.
+	GetBusinessConnection(BusinessConnectionID string) (*BusinessConnection, error)
 }

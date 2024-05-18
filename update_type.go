@@ -23,6 +23,9 @@ func (u *Update) UpdateType() UpdateType {
 	case u.EditedChannelPost != nil:
 		return UpdateTypeEditedChannelPost
 
+	case u.BusinessConnection != nil:
+		return UpdateTypeBusinessConnection
+
 	case u.Reaction != nil:
 		return UpdateTypeMessageReaction
 
