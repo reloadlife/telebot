@@ -151,6 +151,10 @@ type Chat struct {
 	// Custom emoji from this set can be used by all users and bots in the group.
 	// Returned only in getChat.
 	CustomEmojiStickerSetName *string `json:"custom_emoji_sticker_set_name,omitempty"`
+
+	BusinessIntro    *BusinessIntro        `json:"business_intro,omitempty"`
+	BusinessLocation *BusinessLocation     `json:"business_location,omitempty"`
+	BusinessHours    *BusinessOpeningHours `json:"business_opening_hours,omitempty"`
 }
 
 func (c *Chat) ReflectType() string {
