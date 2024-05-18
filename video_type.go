@@ -4,6 +4,7 @@ type sendVideoParams struct {
 	ChatID any   `json:"chat_id"`
 	Video  *File `json:"video" file:"1"`
 
+	BusinessID          *BusinessID      `json:"business_connection_id,omitempty"`
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
 	ParseMode           ParseMode        `json:"parse_mode,omitempty"`

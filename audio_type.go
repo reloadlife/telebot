@@ -9,6 +9,7 @@ type sendAudioRequest struct {
 	ChatID any   `json:"chat_id"`
 	Audio  *File `json:"audio" file:"1"`
 
+	BusinessID          *BusinessID      `json:"business_connection_id,omitempty"`
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
 	ParseMode           ParseMode        `json:"parse_mode,omitempty"`

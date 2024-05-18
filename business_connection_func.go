@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func (b *bot) GetBusinessConnection(BusinessConnectionID string) (*BusinessConnection, error) {
+func (b *bot) GetBusinessConnection(BusinessConnectionID BusinessID) (*BusinessConnection, error) {
 	params := getBusinessConnectionRequest{
 		ID: BusinessConnectionID,
 	}

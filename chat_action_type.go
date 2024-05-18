@@ -17,7 +17,8 @@ const (
 )
 
 type sendChatActionRequest struct {
-	ChatID   string           `json:"chat_id"`
-	Action   ChatAction       `json:"action"`
-	ThreadID *MessageThreadID `json:"thread_id,omitempty"`
+	ChatID     string           `json:"chat_id"`
+	Action     ChatAction       `json:"action"`
+	BusinessID *BusinessID      `json:"business_connection_id,omitempty"`
+	ThreadID   *MessageThreadID `json:"thread_id,omitempty"`
 }

@@ -5,6 +5,7 @@ type sendLocationRequest struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 
+	BusinessID           *BusinessID      `json:"business_connection_id,omitempty"`
 	ThreadID             *MessageThreadID `json:"message_thread_id,omitempty"`
 	HorizontalAccuracy   *float64         `json:"horizontal_accuracy,omitempty"`
 	LivePeriod           *int             `json:"live_period,omitempty"`

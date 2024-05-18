@@ -12,7 +12,8 @@ type sendVenueRequest struct {
 	GooglePlaceID   *string `json:"google_place_id,omitempty"`
 	GooglePlaceType *string `json:"google_place_type,omitempty"`
 
-	ThreadID *MessageThreadID `json:"message_thread_id,omitempty"`
+	BusinessID *BusinessID      `json:"business_connection_id,omitempty"`
+	ThreadID   *MessageThreadID `json:"message_thread_id,omitempty"`
 
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protected           *bool            `json:"protect_content,omitempty"`

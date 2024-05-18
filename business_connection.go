@@ -1,8 +1,10 @@
 package telebot
 
+type BusinessID string
+
 type BusinessConnection struct {
 	// ID  Unique identifier of the business connection
-	ID string `json:"id"`
+	ID BusinessID `json:"id"`
 
 	// User  Business account user that created the business connection
 	User User `json:"user"`

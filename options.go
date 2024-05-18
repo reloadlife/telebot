@@ -90,6 +90,11 @@ func (b *bot) format(params any, options ...any) bool {
 			if err == nil {
 				hasAnythingChanged = true
 			}
+		case *BusinessID:
+			err = setFieldByName(params, "BusinessID", v)
+			if err == nil {
+				hasAnythingChanged = true
+			}
 		case ReplyMarkup:
 			err = setFieldByName(params, "ReplyMarkup", v)
 			if err == nil {

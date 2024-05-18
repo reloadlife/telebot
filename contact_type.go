@@ -8,6 +8,7 @@ type sendContactRequest struct {
 	LastName    *string `json:"last_name,omitempty"`
 	VCard       *string `json:"vcard,omitempty"`
 
+	BusinessID          *BusinessID      `json:"business_connection_id,omitempty"`
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	DisableNotification *bool            `json:"disable_notification,omitempty"`
 	Protected           *bool            `json:"protect_content,omitempty"`

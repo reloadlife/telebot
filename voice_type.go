@@ -4,6 +4,7 @@ type sendVoiceRequest struct {
 	ChatID any   `json:"chat_id"`
 	Voice  *File `json:"voice" file:"1"`
 
+	BusinessID          *BusinessID      `json:"business_connection_id,omitempty"`
 	ThreadID            *MessageThreadID `json:"message_thread_id,omitempty"`
 	Caption             *string          `json:"caption,omitempty"`
 	ParseMode           ParseMode        `json:"parse_mode,omitempty"`

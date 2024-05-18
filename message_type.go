@@ -2,6 +2,7 @@ package telebot
 
 type sendMessageParams struct {
 	ChatID              any                 `json:"chat_id" validate:"required"`
+	BusinessID          *BusinessID         `json:"business_connection_id,omitempty"`
 	MessageThreadID     *MessageThreadID    `json:"message_thread_id,omitempty"`
 	Text                string              `json:"text" validate:"required,max=4096"`
 	ParseMode           ParseMode           `json:"parse_mode,omitempty"`

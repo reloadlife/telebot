@@ -196,6 +196,10 @@ type AccessibleMessage struct {
 	Date       int64  `json:"date"`
 	Chat       *Chat  `json:"chat"`
 
+	BusinessBot          *User  `json:"sender_business_bot,omitempty"`
+	BusinessConnectionID *int64 `json:"business_connection_id,omitempty"`
+	IsFromOffline        *bool  `json:"is_from_offline,omitempty"`
+
 	ForwardOrigin      *MessageOrigin `json:"forward_origin,omitempty"`
 	IsTopic            *bool          `json:"is_topic_message,omitempty"`
 	IsAutomaticForward *bool          `json:"is_automatic_forward,omitempty"`
