@@ -124,3 +124,7 @@ func (f *File) ReflectType() string {
 func (f *File) Type() string {
 	return "File"
 }
+
+func (f *File) SetFileName(fileName string) {
+	f.fileName = fileName
+}
