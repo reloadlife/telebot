@@ -384,7 +384,7 @@ func (f *ProximityAlertTriggered) String() string {
 }
 
 func (f *UsersShared) String() string {
-	return fmt.Sprintf("%s{%d %v}", f.ReflectType(), f.RequestID, f.UserIDs)
+	return fmt.Sprintf("%s{%d}", f.ReflectType(), f.RequestID)
 }
 
 func (f *ChatShared) String() string {
